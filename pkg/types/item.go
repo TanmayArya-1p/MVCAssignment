@@ -1,7 +1,9 @@
 package types
 
+type ItemID int
+
 type Item struct {
-	ID          int
+	ID          ItemID
 	Name        string
 	Description string
 	Price       float64
