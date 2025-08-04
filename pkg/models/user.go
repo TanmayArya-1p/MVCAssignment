@@ -5,6 +5,7 @@ import (
 	"errors"
 	types "inorder/pkg/types"
 	utils "inorder/pkg/utils"
+	"time"
 )
 
 func CreateUser(user *types.User) (*types.User, error) {
@@ -24,7 +25,7 @@ func CreateUser(user *types.User) (*types.User, error) {
 	}
 	user.HashedPassword = hashedPassword
 
-	res, err := db.Exec("INSERT INTO users (username,password,role) VALUES (?,?,?)", user.Username, hashedPassword, user.Role)
+	res, err := db.Exec("INSERT INTO users username,password,role VALUES (?,?,?)", user.Username, hashedPassword, user.Role)
 	if err != nil {
 		return nil, err
 	}
@@ -40,11 +41,17 @@ func GetUserByID(id types.UserID) (*types.User, error) {
 	var user types.User
 	var row *sql.Row
 
-	row = db.QueryRow("SELECT (id,username,password,role,created_at) FROM users WHERE id = ?", id)
-	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &user.CreatedAt)
+	row = db.QueryRow("SELECT id,username,password,role,created_at FROM users WHERE id = ?", id)
+	var temp []uint8
+	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp)
 	if err != nil {
 		return nil, err
 	}
+	user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
+	if err != nil {
+		return nil, err
+	}
+
 	return &user, nil
 }
 
@@ -52,20 +59,32 @@ func GetAllUsers(page types.Page) ([]*types.User, error) {
 	var rows *sql.Rows
 	var err error
 	if page.Limit == types.DefaultLimit {
-		rows, err = db.Query("SELECT (id,username,password,role,created_at) FROM users OFFSET ?", page.Offset)
+		rows, err = db.Query("SELECT id,username,password,role,created_at FROM users OFFSET ?", page.Offset)
 	} else {
-		rows, err = db.Query("SELECT (id,username,password,role,created_at) FROM users LIMIT ? OFFSET ?", page.Limit, page.Offset)
+		rows, err = db.Query("SELECT id,username,password,role,created_at FROM users LIMIT ? OFFSET ?", page.Limit, page.Offset)
 	}
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var otpt []*types.User
+	var ifAny bool = rows.Next()
+	if !ifAny {
+		return otpt, nil
+	}
 	for {
 		var user types.User
-		if err := rows.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &user.CreatedAt); err != nil {
+		var temp []uint8
+		if err := rows.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp); err != nil {
 			if err == sql.ErrNoRows {
 				break
 			}
+			return nil, err
+		}
+
+		var err error
+		user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
+		if err != nil {
 			return nil, err
 		}
 		otpt = append(otpt, &user)
@@ -81,8 +100,14 @@ func GetUserByUsername(username string) (*types.User, error) {
 	var user types.User
 	var row *sql.Row
 
-	row = db.QueryRow("SELECT (id,username,password,role,created_at) FROM users WHERE username = ?", username)
-	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &user.CreatedAt)
+	row = db.QueryRow("SELECT id,username,password,role,created_at FROM users WHERE username = ?", username)
+
+	var temp []uint8
+	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp)
+	if err != nil {
+		return nil, err
+	}
+	user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
 	if err != nil {
 		return nil, err
 	}
@@ -123,9 +148,9 @@ func UpdateUser(upd *UserUpdateInstruction) (*types.User, error) {
 
 	var err error
 	if upd.PlaintextPassword != "" {
-		_, err = db.Exec("UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?", upd.User.Username, upd.User.HashedPassword, upd.User.Role, upd.User.ID)
+		_, err = db.Exec("UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?", upd.User.Username, upd.User.HashedPassword, string(upd.User.Role), upd.User.ID)
 	} else {
-		_, err = db.Exec("UPDATE users SET username = ?, role = ? WHERE id = ?", upd.User.Username, upd.User.Role, upd.User.ID)
+		_, err = db.Exec("UPDATE users SET username = ?, role = ? WHERE id = ?", upd.User.Username, string(upd.User.Role), upd.User.ID)
 	}
 	if err != nil {
 		return nil, err
