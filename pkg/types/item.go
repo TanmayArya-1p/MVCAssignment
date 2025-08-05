@@ -8,4 +8,5 @@ type Item struct {
 	Description string
 	Price       float64
 	Image       string
+	Tags        []TagName
 }
