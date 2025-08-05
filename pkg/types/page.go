@@ -1,7 +1,7 @@
 package types
 
 const (
-	DefaultLimit  = -1
+	DefaultLimit  = 1000000000000000000
 	DefaultOffset = 0
 )
 

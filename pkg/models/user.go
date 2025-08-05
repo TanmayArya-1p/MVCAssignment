@@ -58,11 +58,7 @@ func GetUserByID(id types.UserID) (*types.User, error) {
 func GetAllUsers(page types.Page) ([]*types.User, error) {
 	var rows *sql.Rows
 	var err error
-	if page.Limit == types.DefaultLimit {
-		rows, err = db.Query("SELECT id,username,password,role,created_at FROM users OFFSET ?", page.Offset)
-	} else {
-		rows, err = db.Query("SELECT id,username,password,role,created_at FROM users LIMIT ? OFFSET ?", page.Limit, page.Offset)
-	}
+	rows, err = db.Query("SELECT id,username,password,role,created_at FROM users LIMIT ? OFFSET ?", page.Limit, page.Offset)
 	if err != nil {
 		return nil, err
 	}

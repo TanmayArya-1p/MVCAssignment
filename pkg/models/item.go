@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-func CreateItem(item *types.Item) (*types.Item, error) {
+func CreateItem(item *types.Item) error {
 	if item.Name == "" || item.Description == "" || item.Price == 0 {
-		return item, errors.New("Invalid Parameters")
+		return errors.New("Invalid Parameters")
 	}
 
 	var row sql.Result
@@ -25,12 +25,12 @@ func CreateItem(item *types.Item) (*types.Item, error) {
 			item.Name, item.Description, item.Price)
 	}
 	if err != nil {
-		return item, err
+		return err
 	}
 	var temp int64
 	temp, err = row.LastInsertId()
 	if err != nil {
-		return item, err
+		return err
 	}
 	item.ID = types.ItemID(temp)
 
@@ -39,17 +39,20 @@ func CreateItem(item *types.Item) (*types.Item, error) {
 		if !exists {
 			tag, err = CreateTag(tagName)
 			if err != nil {
-				return item, err
+				return err
 			}
 		}
 		GiveItemTag(tag, item.ID)
 	}
-	return item, nil
+	return nil
 }
 
 func DeleteItem(item *types.Item) (*types.Item, error) {
-
-	_, err := db.Exec("DELETE FROM order_items WHERE item_id = ?", item.ID)
+	err := DeleteAllItemTags(item.ID)
+	if err != nil {
+		return item, err
+	}
+	_, err = db.Exec("DELETE FROM order_items WHERE item_id = ?", item.ID)
 	if err != nil {
 		return item, err
 	}
@@ -66,7 +69,7 @@ func GetItemByID(itemID types.ItemID) (*types.Item, error) {
 
 	var item types.Item
 
-	row = db.QueryRow("SELECT (id,name, description, price, image)  FROM items WHERE id = ?", itemID)
+	row = db.QueryRow("SELECT id,name, description, price, image  FROM items WHERE id = ?", itemID)
 	err = row.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.Image)
 
 	var tempTags []*types.Tag
@@ -87,11 +90,7 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 
 	var otpt []*types.Item
 
-	if page.Limit != types.DefaultLimit {
-		rows, err = db.Query("SELECT (id,name, description, price, image) FROM items LIMIT ? OFFSET ?", page.Limit, page.Offset)
-	} else {
-		rows, err = db.Query("SELECT (id,name, description, price, image) FROM items OFFSET ?", page.Offset)
-	}
+	rows, err = db.Query("SELECT id,name, description, price, image FROM items LIMIT ? OFFSET ?", page.Limit, page.Offset)
 	if err != nil {
 		return otpt, err
 	}
@@ -133,7 +132,13 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 
 	var prep string = strings.Join(inPl, ",")
 	var queryString string = fmt.Sprintf("SELECT DISTINCT  items.id,items.name,items.description,items.price,items.image FROM items INNER JOIN tag_rel ON items.id=tag_rel.item_id LEFT JOIN tags ON tags.id=tag_rel.tag_id WHERE tags.name IN (%s)", prep)
-	rows, err := db.Query(queryString, tags)
+
+	var args []interface{}
+	for _, tag := range tags {
+		args = append(args, tag)
+	}
+
+	rows, err := db.Query(queryString, args...)
 	if err != nil {
 		return otpt, err
 	}

@@ -1,10 +1,9 @@
 package main
 
 import (
-	conf "inorder/pkg/config"
 	"log"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber"
 )
 
 func main() {
@@ -17,4 +16,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }

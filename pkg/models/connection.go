@@ -13,6 +13,8 @@ import (
 
 var db *sql.DB
 
+const MYSQL_MAX_BIG_INT string = "18446744073709551610"
+
 func init() {
 	var dsn string = getDSN()
 	var err error
