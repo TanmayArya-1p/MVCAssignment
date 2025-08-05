@@ -187,7 +187,6 @@ func ResolveBillableAmount(order *types.Order, toBill bool) error {
 	return UpdateOrder(order, &OrderUpdateInstruction{
 		Status:         changeStatus,
 		BillableAmount: &amt,
-		TableNo:        nil,
 	})
 }
 

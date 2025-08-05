@@ -17,13 +17,14 @@ type Order struct {
 	Tip            float32
 }
 
+type OrderItemID int
 type OrderItem struct {
-	ID           ItemID
+	ID           OrderItemID
 	OrderID      OrderID
 	ItemID       ItemID
 	Instructions string
 	Quantity     int
 	Price        float32
 	IssuedAt     time.Time
-	Status       OrderStatus
+	Status       OrderItemStatus
 }
