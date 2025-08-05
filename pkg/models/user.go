@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-func CreateUser(user *types.User) (*types.User, error) {
+func CreateUser(user *types.User) (types.UserID, error) {
 	if user.Username == "" || user.Password == "" {
-		return nil, errors.New("username and password cannot be empty")
+		return 0, errors.New("username and password cannot be empty")
 	}
 
 	if user.Role == "" {
@@ -21,20 +21,20 @@ func CreateUser(user *types.User) (*types.User, error) {
 	var err error
 	hashedPassword, err = utils.HashPassword(user.Password)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	user.HashedPassword = hashedPassword
 
 	res, err := db.Exec("INSERT INTO users username,password,role VALUES (?,?,?)", user.Username, hashedPassword, user.Role)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	id, err := res.LastInsertId()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	user.ID = types.UserID(id)
-	return user, nil
+	return user.ID, nil
 }
 
 func GetUserByID(id types.UserID) (*types.User, error) {

@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-func CreateItem(item *types.Item) error {
+func CreateItem(item *types.Item) (types.ItemID, error) {
 	if item.Name == "" || item.Description == "" || item.Price == 0 {
-		return errors.New("Invalid Parameters")
+		return 0, errors.New("Invalid Parameters")
 	}
 
 	var row sql.Result
@@ -25,12 +25,12 @@ func CreateItem(item *types.Item) error {
 			item.Name, item.Description, item.Price)
 	}
 	if err != nil {
-		return err
+		return 0, err
 	}
 	var temp int64
 	temp, err = row.LastInsertId()
 	if err != nil {
-		return err
+		return 0, err
 	}
 	item.ID = types.ItemID(temp)
 
@@ -39,12 +39,12 @@ func CreateItem(item *types.Item) error {
 		if !exists {
 			tag, err = CreateTag(tagName)
 			if err != nil {
-				return err
+				return 0, err
 			}
 		}
 		GiveItemTag(tag, item.ID)
 	}
-	return nil
+	return item.ID, nil
 }
 
 func DeleteItem(item *types.Item) (*types.Item, error) {
