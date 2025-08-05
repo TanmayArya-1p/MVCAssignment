@@ -1,21 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"inorder/pkg/models"
-	"inorder/pkg/types"
+	"inorder/pkg/api"
+
+	"log"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	it, err := models.GetAllUsers(types.Page{
-		Limit:  types.DefaultLimit,
-		Offset: types.DefaultOffset,
-	})
-	if err != nil {
-		fmt.Println("HERER")
-		panic(err)
-	}
-	for _, item := range it {
-		fmt.Println(item)
-	}
+	log.Println("Starting InOrder Server")
+	godotenv.Load()
+	api.Serve()
 }
