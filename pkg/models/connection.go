@@ -20,14 +20,15 @@ func init() {
 	var err error
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
+		fmt.Println("Error opening database connection:", err)
 		panic(err)
 	}
-	var connLifetime time.Duration = time.Duration(conf.Config.MYSQL_CONN_MAX_LIFETIME) * time.Second
+	var connLifetime time.Duration = time.Duration(conf.Config.MySQL.CONN_MAX_LIFETIME) * time.Second
 	db.SetConnMaxLifetime(connLifetime)
-	db.SetMaxOpenConns(conf.Config.MYSQL_MAX_OPEN_CONNS)
-	db.SetMaxIdleConns(conf.Config.MYSQL_MAX_IDLE_CONNS)
+	db.SetMaxOpenConns(conf.Config.MySQL.MAX_OPEN_CONNS)
+	db.SetMaxIdleConns(conf.Config.MySQL.MAX_IDLE_CONNS)
 }
 
 func getDSN() string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", config.Config.MYSQL_USERNAME, config.Config.MYSQL_PASSWORD, config.Config.MYSQL_HOST, config.Config.MYSQL_DATABASE)
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s", config.Config.MySQL.USERNAME, config.Config.MySQL.PASSWORD, config.Config.MySQL.HOST, config.Config.MySQL.DATABASE)
 }

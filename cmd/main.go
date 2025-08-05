@@ -1,20 +1,21 @@
 package main
 
 import (
-	"log"
-
-	"github.com/gofiber/fiber"
+	"fmt"
+	"inorder/pkg/models"
+	"inorder/pkg/types"
 )
 
 func main() {
-	app := fiber.New()
-	app.Get("/ping", func(c fiber.Ctx) error {
-		return c.SendString("pong")
+	it, err := models.GetAllUsers(types.Page{
+		Limit:  types.DefaultLimit,
+		Offset: types.DefaultOffset,
 	})
-
-	err := app.Listen(conf.Config.INORDER_PORT)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("HERER")
+		panic(err)
 	}
-
+	for _, item := range it {
+		fmt.Println(item)
+	}
 }

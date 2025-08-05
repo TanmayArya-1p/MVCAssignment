@@ -42,7 +42,7 @@ func CheckJTIValidity(jti JTI, userID types.UserID, DeleteJTI bool) (bool, error
 }
 
 func IssueJTI(userID types.UserID) (JTI, error) {
-	expiresAt := time.Now().Unix() + int64(config.Config.INORDER_JTI_CLEANUP_INTERVAL.Seconds())
+	expiresAt := time.Now().Unix() + int64(config.Config.InOrder.JTI_CLEANUP_INTERVAL)
 	jti := JTI(uuid.New().String())
 
 	_, err := db.Exec("INSERT INTO refresh_jti (jti,issued_by,expires_at) VALUES (?, ?, ?)", jti, userID, expiresAt)
