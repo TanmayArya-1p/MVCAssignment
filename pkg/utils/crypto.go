@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"inorder/pkg/types"
 
 	bcrypt "golang.org/x/crypto/bcrypt"
@@ -25,7 +24,7 @@ func VerifyPassword(hashedPassword, password string) (bool, error) {
 
 func VerifyUser(user *types.User, password string) (bool, error) {
 	if user == nil {
-		return false, errors.New("user is nil")
+		return false, ErrUserNotFound
 	}
 	return VerifyPassword(user.HashedPassword, password)
 }

@@ -1,8 +1,8 @@
 package models
 
 import (
-	"errors"
 	"inorder/pkg/types"
+	"inorder/pkg/utils"
 )
 
 func CreateTag(name types.TagName) (*types.Tag, error) {
@@ -63,7 +63,7 @@ func GiveItemTag(tag *types.Tag, itemID types.ItemID) error {
 func GiveItemTagByName(tag_name types.TagName, itemID types.ItemID) error {
 	exists, tag := TagExists(tag_name)
 	if !exists {
-		return errors.New("Tag does not exist")
+		return utils.ErrTagNotFound
 	}
 	return GiveItemTag(tag, itemID)
 }
@@ -79,7 +79,7 @@ func RemoveItemTag(tag *types.Tag, itemID types.ItemID) error {
 func RemoveItemTagByName(itemID types.ItemID, tagName types.TagName) error {
 	exists, tag := TagExists(tagName)
 	if !exists {
-		return errors.New("Tag does not exist")
+		return utils.ErrTagNotFound
 	}
 	return RemoveItemTag(tag, itemID)
 }

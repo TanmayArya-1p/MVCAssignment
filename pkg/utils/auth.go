@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"inorder/pkg/types"
 	"net/http"
 	"strings"
@@ -20,17 +19,17 @@ func ExtractAuthToken(req *http.Request) (JSONWebToken, error) {
 	if headerAuth == "" {
 		cookie, err := req.Cookie("authToken")
 		if err != nil {
-			return "", err
+			return "", ErrInvalidToken
 		}
 		if cookie.Value != "" {
 			return JSONWebToken(cookie.Value), nil
 		} else {
-			return "", errors.New("Invalid Auth Token")
+			return "", ErrInvalidToken
 		}
 	}
 	tokens := strings.Split(headerAuth, " ")
 	if len(tokens) != 2 {
-		return "", errors.New("Invalid Auth Token")
+		return "", ErrInvalidToken
 	}
 	return JSONWebToken(tokens[1]), nil
 }
@@ -40,17 +39,17 @@ func ExtractRefreshToken(req *http.Request) (JSONWebToken, error) {
 	if headerAuth == "" {
 		cookie, err := req.Cookie("refreshToken")
 		if err != nil {
-			return "", err
+			return "", ErrInvalidToken
 		}
 		if cookie.Value != "" {
 			return JSONWebToken(cookie.Value), nil
 		} else {
-			return "", errors.New("Invalid Refresh Token")
+			return "", ErrInvalidToken
 		}
 	}
 	tokens := strings.Split(headerAuth, " ")
 	if len(tokens) != 2 {
-		return "", errors.New("Invalid Refresh Token")
+		return "", ErrInvalidToken
 	}
 	return JSONWebToken(tokens[1]), nil
 }

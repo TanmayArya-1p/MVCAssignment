@@ -15,7 +15,7 @@ func RegisterController(w http.ResponseWriter, r *http.Request) {
 	var body map[string]any
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		log.Println(err.Error())
-		http.Error(w, "Internal Server Error", http.StatusBadRequest)
+		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	username := body["username"].(string)
@@ -49,7 +49,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 	var body map[string]any
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		log.Println(err.Error())
-		http.Error(w, "Internal Server Error", http.StatusBadRequest)
+		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	username := body["username"].(string)
@@ -62,7 +62,11 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 
 	user, err := models.GetUserByUsername(username)
 	if err != nil {
-		http.Error(w, "Internal Server Error :"+err.Error(), http.StatusInternalServerError)
+		if err == utils.ErrUserNotFound {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(w, "Internal Server Error :"+err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -92,6 +96,7 @@ func LoginController(w http.ResponseWriter, r *http.Request) {
 		Value:    strAuth,
 		HttpOnly: true,
 		Secure:   true,
+		Path:     "/",
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",
@@ -113,7 +118,7 @@ func LogoutController(w http.ResponseWriter, r *http.Request) {
 	refreshToken, err := utils.ExtractRefreshToken(r)
 	if err != nil {
 		log.Println(err.Error())
-		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Invalid refresh token", http.StatusInternalServerError)
 		return
 	}
 
@@ -125,6 +130,7 @@ func LogoutController(w http.ResponseWriter, r *http.Request) {
 		Value:    "",
 		HttpOnly: true,
 		Secure:   true,
+		Path:     "/",
 	})
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refreshToken",

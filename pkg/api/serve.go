@@ -4,6 +4,7 @@ import (
 	"inorder/pkg/config"
 	"inorder/pkg/controllers"
 	"inorder/pkg/middleware"
+	"inorder/pkg/types"
 	"log"
 	"net/http"
 
@@ -18,9 +19,18 @@ func Serve() error {
 	var authRouter *mux.Router = root.PathPrefix("/api/auth").Subrouter()
 	authRouter.HandleFunc("/register", controllers.RegisterController).Methods("POST")
 	authRouter.HandleFunc("/login", controllers.LoginController).Methods("POST")
-	authRouter.Handle("/verify", middleware.AuthenticationMiddleware(http.HandlerFunc(controllers.VerifyController), true)).Methods("GET")
-	authRouter.Handle("/refresh", middleware.AuthenticationMiddleware(http.HandlerFunc(controllers.RefreshController), true)).Methods("GET")
-	authRouter.Handle("/logout", middleware.AuthenticationMiddleware(http.HandlerFunc(controllers.LogoutController), true)).Methods("POST")
+	authRouter.Handle("/verify", middleware.AuthenticationMiddleware(true)(http.HandlerFunc(controllers.VerifyController))).Methods("GET")
+	authRouter.Handle("/refresh/lmao", middleware.AuthenticationMiddleware(true)(http.HandlerFunc(controllers.RefreshController))).Methods("GET")
+	authRouter.Handle("/logout", middleware.AuthenticationMiddleware(true)(http.HandlerFunc(controllers.LogoutController))).Methods("POST")
+
+	var userRouter *mux.Router = root.PathPrefix("/api/users").Subrouter()
+	userRouter.Use(middleware.AuthenticationMiddleware(false))
+	userRouter.Use(middleware.AuthorizationMiddleware(types.AdminRole))
+	userRouter.HandleFunc("", controllers.GetAllUsersController).Methods("GET")
+	userRouter.HandleFunc("", controllers.CreateUserController).Methods("POST")
+	userRouter.HandleFunc("/{userid}", controllers.DeleteUserController).Methods("DELETE")
+	userRouter.HandleFunc("/{userid}", controllers.GetUserByIDController).Methods("GET")
+	userRouter.HandleFunc("/{userid}", controllers.UpdateUserController).Methods("PUT")
 
 	log.Println("Serving HTTP Server on Port", config.Config.InOrder.PORT)
 	err := http.ListenAndServe(":"+config.Config.InOrder.PORT, root)

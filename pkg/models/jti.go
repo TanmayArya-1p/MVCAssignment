@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"inorder/pkg/config"
 	"inorder/pkg/types"
 	"inorder/pkg/utils"
@@ -20,7 +19,7 @@ type JTI string
 
 func CheckJTIValidity(jti JTI, userID types.UserID, DeleteJTI bool) (bool, error) {
 	if jti == "" {
-		return false, errors.New("Invalid JTI")
+		return false, utils.ErrInvalidJTI
 	}
 
 	row := db.QueryRow("SELECT jti, issued_by, expires_at FROM refresh_jti WHERE jti = ? AND issued_by = ?", jti, userID)
@@ -34,7 +33,7 @@ func CheckJTIValidity(jti JTI, userID types.UserID, DeleteJTI bool) (bool, error
 	}
 
 	if expiresAt < time.Now().Unix() {
-		return false, errors.New("Expired JTI")
+		return false, utils.ErrExpiredJTI
 	}
 
 	if DeleteJTI {
@@ -94,7 +93,7 @@ func VerifyRefreshToken(token utils.JSONWebToken, user *types.User, DeleteJTI bo
 		return err, utils.JWTClaimVerification{}
 	}
 	if !jtistat {
-		return errors.New("Invalid JTI"), utils.JWTClaimVerification{}
+		return utils.ErrInvalidJTI, utils.JWTClaimVerification{}
 	}
 
 	return nil, utils.JWTClaimVerification{

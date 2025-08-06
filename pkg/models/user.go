@@ -45,7 +45,7 @@ func GetUserByID(id types.UserID) (*types.User, error) {
 	var temp []uint8
 	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp)
 	if err != nil {
-		return nil, err
+		return nil, utils.ErrUserNotFound
 	}
 	user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
 	if err != nil {
@@ -101,7 +101,7 @@ func GetUserByUsername(username string) (*types.User, error) {
 	var temp []uint8
 	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp)
 	if err != nil {
-		return nil, errors.New("User not found")
+		return nil, utils.ErrUserNotFound
 	}
 	user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
 	if err != nil {
@@ -119,7 +119,7 @@ type UserUpdateInstruction struct {
 
 func UpdateUser(upd *UserUpdateInstruction) (*types.User, error) {
 	if upd.User == nil {
-		return nil, errors.New("User Not Passed Into Update Instruction")
+		return nil, utils.ErrUserNotFound
 	}
 	if upd.Username != "" {
 		upd.User.Username = upd.Username
