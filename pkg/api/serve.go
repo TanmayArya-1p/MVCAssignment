@@ -32,6 +32,18 @@ func Serve() error {
 	userRouter.HandleFunc("/{userid}", controllers.GetUserByIDController).Methods("GET")
 	userRouter.HandleFunc("/{userid}", controllers.UpdateUserController).Methods("PUT")
 
+	var itemRouter *mux.Router = root.PathPrefix("/api/items").Subrouter()
+	itemRouter.Use(middleware.AuthenticationMiddleware(false))
+	itemRouter.HandleFunc("", controllers.GetAllItemsController).Methods("GET")
+	itemRouter.Handle("", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.CreateItemController))).Methods("POST")
+	itemRouter.HandleFunc("/tags", controllers.GetAllTagsController).Methods("GET")
+	itemRouter.Handle("/{itemid}", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.DeleteItemController))).Methods("DELETE")
+	itemRouter.HandleFunc("/{itemid}", controllers.GetItemByIDController).Methods("GET")
+	itemRouter.Handle("/{itemid}", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.UpdateItemController))).Methods("PUT")
+	itemRouter.Handle("/upload", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.UploadImageController))).Methods("POST")
+
+	root.Handle("/public/images/", http.StripPrefix("/public/images/", http.FileServer(http.Dir(config.Config.InOrder.ITEM_IMAGE_DIRECTORY))))
+
 	log.Println("Serving HTTP Server on Port", config.Config.InOrder.PORT)
 	err := http.ListenAndServe(":"+config.Config.InOrder.PORT, root)
 	if err != nil {

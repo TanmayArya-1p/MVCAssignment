@@ -9,4 +9,5 @@ var (
 	ErrInvalidJTI   = errors.New("invalid jti")
 	ErrExpiredJTI   = errors.New("expired jti")
 	ErrTagNotFound  = errors.New("tag not found")
+	ErrItemNotFound = errors.New("item not found")
 )

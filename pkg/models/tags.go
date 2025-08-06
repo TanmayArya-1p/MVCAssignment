@@ -62,8 +62,12 @@ func GiveItemTag(tag *types.Tag, itemID types.ItemID) error {
 
 func GiveItemTagByName(tag_name types.TagName, itemID types.ItemID) error {
 	exists, tag := TagExists(tag_name)
+	var err error
 	if !exists {
-		return utils.ErrTagNotFound
+		tag, err = CreateTag(tag_name)
+		if err != nil {
+			return err
+		}
 	}
 	return GiveItemTag(tag, itemID)
 }

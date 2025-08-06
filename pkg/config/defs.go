@@ -17,5 +17,6 @@ type config struct {
 		JWT_SECRET           string `yaml:"JWT_SECRET"`
 		AUTH_TOKEN_EXPIRY    int    `yaml:"AUTH_TOKEN_EXPIRY"`
 		REFRESH_TOKEN_EXPIRY int    `yaml:"REFRESH_TOKEN_EXPIRY"`
+		ITEM_IMAGE_DIRECTORY string `yaml:"ITEM_IMAGE_DIRECTORY"`
 	} `yaml:"InOrder"`
 }

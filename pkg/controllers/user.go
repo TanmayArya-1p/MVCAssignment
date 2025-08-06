@@ -22,7 +22,7 @@ func GetAllUsersController(w http.ResponseWriter, r *http.Request) {
 		pg.Limit = 10
 	} else {
 		pg.Limit, err = strconv.Atoi(limit)
-		if err != nil {
+		if err != nil || pg.Limit <= 0 {
 			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
 			return
 		}
@@ -32,7 +32,7 @@ func GetAllUsersController(w http.ResponseWriter, r *http.Request) {
 		pg.Offset = types.DefaultOffset
 	} else {
 		pg.Offset, err = strconv.Atoi(offset)
-		if err != nil {
+		if err != nil || pg.Offset < 0 {
 			http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
 			return
 		}
@@ -75,31 +75,26 @@ func GetUserByIDController(w http.ResponseWriter, r *http.Request) {
 func CreateUserController(w http.ResponseWriter, r *http.Request) {
 	var user types.User
 
-	var body map[string]string = make(map[string]string)
+	var body UserCRUDRequest
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	username := body["username"]
-	password := body["password"]
-	bodyRole := body["role"]
-
-	if username == "" || password == "" || bodyRole == "" {
+	if body.Username == "" || body.Password == "" {
 		http.Error(w, "Missing required fields", http.StatusBadRequest)
 		return
 	}
 
-	role := types.Role(bodyRole)
-	if role != types.AdminRole && role != types.ChefRole && role != types.UserRole {
+	if body.Role != types.AdminRole && body.Role != types.ChefRole && body.Role != types.UserRole {
 		http.Error(w, utils.ErrInvalidRole.Error(), http.StatusBadRequest)
 		return
 	}
 
-	user.Username = username
-	user.Password = password
-	user.Role = role
+	user.Username = body.Username
+	user.Password = body.Password
+	user.Role = body.Role
 
 	_, err = models.CreateUser(&user)
 	if err != nil {
@@ -145,24 +140,22 @@ func UpdateUserController(w http.ResponseWriter, r *http.Request) {
 	}
 	uid := types.UserID(uidInt)
 
-	var body map[string]string = make(map[string]string)
+	var body UserCRUDRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	username := body["username"]
-	password := body["password"]
-	bodyRole := body["role"]
+	username := body.Username
+	password := body.Password
 
-	if username == "" && password == "" && bodyRole == "" {
+	if username == "" && password == "" {
 		http.Error(w, "Missing atleast 1 field to update", http.StatusBadRequest)
 		return
 	}
 
-	role := types.Role(bodyRole)
-	if role != types.AdminRole && role != types.UserRole && role != types.ChefRole {
+	if body.Role != types.AdminRole && body.Role != types.UserRole && body.Role != types.ChefRole {
 		http.Error(w, utils.ErrInvalidRole.Error(), http.StatusBadRequest)
 		return
 	}
@@ -183,7 +176,7 @@ func UpdateUserController(w http.ResponseWriter, r *http.Request) {
 		User:              user,
 		Username:          username,
 		PlaintextPassword: password,
-		Role:              role,
+		Role:              body.Role,
 	})
 	if err != nil {
 		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)

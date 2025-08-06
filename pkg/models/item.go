@@ -39,28 +39,31 @@ func CreateItem(item *types.Item) (types.ItemID, error) {
 		if !exists {
 			tag, err = CreateTag(tagName)
 			if err != nil {
-				return 0, err
+				return item.ID, err
 			}
 		}
-		GiveItemTag(tag, item.ID)
+		err = GiveItemTag(tag, item.ID)
+		if err != nil {
+			return item.ID, err
+		}
 	}
 	return item.ID, nil
 }
 
-func DeleteItem(item *types.Item) (*types.Item, error) {
+func DeleteItem(item *types.Item) error {
 	err := DeleteAllItemTags(item.ID)
 	if err != nil {
-		return item, err
+		return err
 	}
 	_, err = db.Exec("DELETE FROM order_items WHERE item_id = ?", item.ID)
 	if err != nil {
-		return item, err
+		return err
 	}
 	_, err = db.Exec("DELETE FROM items WHERE id = ?", item.ID)
 	if err != nil {
-		return item, err
+		return err
 	}
-	return item, nil
+	return nil
 }
 
 func GetItemByID(itemID types.ItemID) (*types.Item, error) {
@@ -71,6 +74,9 @@ func GetItemByID(itemID types.ItemID) (*types.Item, error) {
 
 	row = db.QueryRow("SELECT id,name, description, price, image  FROM items WHERE id = ?", itemID)
 	err = row.Scan(&item.ID, &item.Name, &item.Description, &item.Price, &item.Image)
+	if err != nil {
+		return &item, utils.ErrItemNotFound
+	}
 
 	var tempTags []*types.Tag
 	tempTags, err = GetAllItemTags(itemID)
@@ -78,6 +84,7 @@ func GetItemByID(itemID types.ItemID) (*types.Item, error) {
 		return &item, err
 	}
 
+	item.Tags = []types.TagName{}
 	for _, tag := range tempTags {
 		item.Tags = append(item.Tags, tag.Name)
 	}
@@ -108,6 +115,7 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 			return otpt, err
 		}
 
+		curr.Tags = []types.TagName{}
 		for _, tag := range tempTags {
 			curr.Tags = append(curr.Tags, tag.Name)
 		}
