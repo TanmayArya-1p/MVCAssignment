@@ -3,6 +3,8 @@ package models
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"os"
 	"time"
 
 	"inorder/pkg/config"
@@ -30,5 +32,13 @@ func init() {
 }
 
 func getDSN() string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", config.Config.MySQL.USERNAME, config.Config.MySQL.PASSWORD, config.Config.MySQL.HOST, config.Config.MySQL.DATABASE)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s", config.Config.MySQL.USERNAME, config.Config.MySQL.PASSWORD, config.Config.MySQL.HOST, config.Config.MySQL.DATABASE)
+
+	err := os.WriteFile(".dsn", []byte(dsn), 0644)
+	if err != nil {
+		log.Fatal("Error writing DSN file:", err)
+		panic(err)
+	}
+
+	return dsn
 }
