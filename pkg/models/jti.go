@@ -80,13 +80,13 @@ func CreateRefreshToken(user *types.User) (utils.JSONWebToken, error) {
 	return utils.JSONWebToken(res), nil
 }
 
-func VerifyRefreshToken(token utils.JSONWebToken, user *types.User) (error, utils.JWTClaimVerification) {
+func VerifyRefreshToken(token utils.JSONWebToken, user *types.User, DeleteJTI bool) (error, utils.JWTClaimVerification) {
 	err, res := utils.VerifyJWT(token)
 	if err != nil {
 		return err, utils.JWTClaimVerification{}
 	}
 
-	jtistat, err := CheckJTIValidity(JTI(res.Content["jti"].(string)), user.ID, false)
+	jtistat, err := CheckJTIValidity(JTI(res.Content["jti"].(string)), user.ID, DeleteJTI)
 	if err != nil {
 		return err, utils.JWTClaimVerification{}
 	}

@@ -15,7 +15,7 @@ var RolePrivs map[types.Role]Priority = map[types.Role]Priority{
 	types.UserRole:  Priority(1),
 }
 
-func ExtractAuthToken(req *http.Request) (string, error) {
+func ExtractAuthToken(req *http.Request) (JSONWebToken, error) {
 	headerAuth := req.Header.Get("Authorization")
 	if headerAuth == "" {
 		cookie, err := req.Cookie("authToken")
@@ -24,16 +24,16 @@ func ExtractAuthToken(req *http.Request) (string, error) {
 		}
 		if cookie.Value != "" {
 			token := strings.Split(cookie.Value, " ")[1]
-			return token, nil
+			return JSONWebToken(token), nil
 		} else {
 			return "", errors.New("Invalid Auth Token")
 		}
 	}
 	token := strings.Split(headerAuth, " ")[1]
-	return token, nil
+	return JSONWebToken(token), nil
 }
 
-func ExtractRefreshToken(req *http.Request) (string, error) {
+func ExtractRefreshToken(req *http.Request) (JSONWebToken, error) {
 	headerAuth := req.Header.Get("refreshToken")
 	if headerAuth == "" {
 		cookie, err := req.Cookie("refreshToken")
@@ -42,11 +42,11 @@ func ExtractRefreshToken(req *http.Request) (string, error) {
 		}
 		if cookie.Value != "" {
 			token := strings.Split(cookie.Value, " ")[1]
-			return token, nil
+			return JSONWebToken(token), nil
 		} else {
 			return "", errors.New("Invalid Refresh Token")
 		}
 	}
 	token := strings.Split(headerAuth, " ")[1]
-	return token, nil
+	return JSONWebToken(token), nil
 }
