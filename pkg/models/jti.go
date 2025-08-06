@@ -23,12 +23,15 @@ func CheckJTIValidity(jti JTI, userID types.UserID, DeleteJTI bool) (bool, error
 		return false, errors.New("Invalid JTI")
 	}
 
-	row := db.QueryRow("SELECT * FROM jti WHERE jti = ? AND issued_by = ?", jti, userID)
+	row := db.QueryRow("SELECT jti, issued_by, expires_at FROM refresh_jti WHERE jti = ? AND issued_by = ?", jti, userID)
 
 	var expiresAt int64
 	var issuedBy types.UserID
 
-	row.Scan(&jti, &expiresAt, &issuedBy)
+	err := row.Scan(&jti, &issuedBy, &expiresAt)
+	if err != nil {
+		return false, err
+	}
 
 	if expiresAt < time.Now().Unix() {
 		return false, errors.New("Expired JTI")
@@ -91,7 +94,7 @@ func VerifyRefreshToken(token utils.JSONWebToken, user *types.User, DeleteJTI bo
 		return err, utils.JWTClaimVerification{}
 	}
 	if !jtistat {
-		return errors.New("invalid jti"), utils.JWTClaimVerification{}
+		return errors.New("Invalid JTI"), utils.JWTClaimVerification{}
 	}
 
 	return nil, utils.JWTClaimVerification{

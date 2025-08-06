@@ -2,4 +2,4 @@ config.yaml
 main
 backup.sql
 inorder
-.DSN
+.dsn

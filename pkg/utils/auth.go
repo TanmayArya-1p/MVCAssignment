@@ -23,14 +23,16 @@ func ExtractAuthToken(req *http.Request) (JSONWebToken, error) {
 			return "", err
 		}
 		if cookie.Value != "" {
-			token := strings.Split(cookie.Value, " ")[1]
-			return JSONWebToken(token), nil
+			return JSONWebToken(cookie.Value), nil
 		} else {
 			return "", errors.New("Invalid Auth Token")
 		}
 	}
-	token := strings.Split(headerAuth, " ")[1]
-	return JSONWebToken(token), nil
+	tokens := strings.Split(headerAuth, " ")
+	if len(tokens) != 2 {
+		return "", errors.New("Invalid Auth Token")
+	}
+	return JSONWebToken(tokens[1]), nil
 }
 
 func ExtractRefreshToken(req *http.Request) (JSONWebToken, error) {
@@ -41,12 +43,14 @@ func ExtractRefreshToken(req *http.Request) (JSONWebToken, error) {
 			return "", err
 		}
 		if cookie.Value != "" {
-			token := strings.Split(cookie.Value, " ")[1]
-			return JSONWebToken(token), nil
+			return JSONWebToken(cookie.Value), nil
 		} else {
 			return "", errors.New("Invalid Refresh Token")
 		}
 	}
-	token := strings.Split(headerAuth, " ")[1]
-	return JSONWebToken(token), nil
+	tokens := strings.Split(headerAuth, " ")
+	if len(tokens) != 2 {
+		return "", errors.New("Invalid Refresh Token")
+	}
+	return JSONWebToken(tokens[1]), nil
 }

@@ -25,7 +25,7 @@ func CreateUser(user *types.User) (types.UserID, error) {
 	}
 	user.HashedPassword = hashedPassword
 
-	res, err := db.Exec("INSERT INTO users username,password,role VALUES (?,?,?)", user.Username, hashedPassword, user.Role)
+	res, err := db.Exec("INSERT INTO users (username,password,role) VALUES (?,?,?)", user.Username, hashedPassword, user.Role)
 	if err != nil {
 		return 0, err
 	}
@@ -101,7 +101,7 @@ func GetUserByUsername(username string) (*types.User, error) {
 	var temp []uint8
 	err := row.Scan(&user.ID, &user.Username, &user.HashedPassword, &user.Role, &temp)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("User not found")
 	}
 	user.CreatedAt, err = time.Parse(time.DateTime, string(temp))
 	if err != nil {
