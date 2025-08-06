@@ -42,7 +42,7 @@ func Serve() error {
 	itemRouter.Handle("/{itemid}", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.UpdateItemController))).Methods("PUT")
 	itemRouter.Handle("/upload", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.UploadImageController))).Methods("POST")
 
-	root.Handle("/public/images/", http.StripPrefix("/public/images/", http.FileServer(http.Dir(config.Config.InOrder.ITEM_IMAGE_DIRECTORY))))
+	root.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
 	log.Println("Serving HTTP Server on Port", config.Config.InOrder.PORT)
 	err := http.ListenAndServe(":"+config.Config.InOrder.PORT, root)
