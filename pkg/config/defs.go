@@ -14,5 +14,8 @@ type config struct {
 		PORT                 string `yaml:"PORT"`
 		REFRESH_TOKEN_EXPIRE int    `yaml:"REFRESH_TOKEN_EXPIRE"`
 		JTI_CLEANUP_INTERVAL int    `yaml:"JTI_CLEANUP_INTERVAL"`
+		JWT_SECRET           string `yaml:"JWT_SECRET"`
+		AUTH_TOKEN_EXPIRY    int    `yaml:"AUTH_TOKEN_EXPIRY"`
+		REFRESH_TOKEN_EXPIRY int    `yaml:"REFRESH_TOKEN_EXPIRY"`
 	} `yaml:"InOrder"`
 }

@@ -4,8 +4,10 @@ import (
 	"errors"
 	"inorder/pkg/config"
 	"inorder/pkg/types"
+	"inorder/pkg/utils"
 	"time"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 )
 
@@ -58,4 +60,42 @@ func DeleteExpiredJTIs() error {
 		return err
 	}
 	return nil
+}
+
+func CreateRefreshToken(user *types.User) (utils.JSONWebToken, error) {
+	jti, err := IssueJTI(user.ID)
+	if err != nil {
+		return "", err
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"jti": jti,
+		"exp": time.Now().Add(time.Duration(config.Config.InOrder.REFRESH_TOKEN_EXPIRY) * time.Second).Unix(),
+	})
+
+	res, err := token.SignedString([]byte(config.Config.InOrder.JWT_SECRET))
+	if err != nil {
+		return "", err
+	}
+	return utils.JSONWebToken(res), nil
+}
+
+func VerifyRefreshToken(token utils.JSONWebToken, user *types.User) (error, utils.JWTClaimVerification) {
+	err, res := utils.VerifyJWT(token)
+	if err != nil {
+		return err, utils.JWTClaimVerification{}
+	}
+
+	jtistat, err := CheckJTIValidity(JTI(res.Content["jti"].(string)), user.ID, false)
+	if err != nil {
+		return err, utils.JWTClaimVerification{}
+	}
+	if !jtistat {
+		return errors.New("invalid jti"), utils.JWTClaimVerification{}
+	}
+
+	return nil, utils.JWTClaimVerification{
+		Expired: res.Expired,
+		Content: res.Content,
+	}
 }

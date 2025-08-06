@@ -10,7 +10,7 @@ import (
 func StartCleanupWorker() (chan bool, error) {
 	exitChan := make(chan bool)
 
-	var ticker *time.Ticker = time.NewTicker(time.Duration(config.Config.InOrder.JTI_CLEANUP_INTERVAL * int(time.Second)))
+	var ticker *time.Ticker = time.NewTicker(time.Duration(config.Config.InOrder.JTI_CLEANUP_INTERVAL) * time.Second)
 
 	go cleanupWorker(exitChan, ticker)
 	return exitChan, nil
