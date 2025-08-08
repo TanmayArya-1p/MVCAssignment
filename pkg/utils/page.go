@@ -1,15 +1,9 @@
 package utils
 
 import (
-	"errors"
 	"inorder/pkg/types"
 	"net/http"
 	"strconv"
-)
-
-var (
-	ErrInvalidLimit  = errors.New("invalid limit parameter")
-	ErrInvalidOffset = errors.New("invalid offset parameter")
 )
 
 func Paginate(r *http.Request) (types.Page, error) {

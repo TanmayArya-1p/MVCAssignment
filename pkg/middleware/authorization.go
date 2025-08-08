@@ -9,7 +9,7 @@ import (
 func AuthorizationMiddleware(PrivsLowerBound types.Role) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			user := r.Context().Value("user").(*types.User)
+			user := r.Context().Value(types.UserContextKey).(*types.User)
 
 			if utils.RolePrivs[user.Role] < utils.RolePrivs[PrivsLowerBound] {
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)

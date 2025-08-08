@@ -54,7 +54,7 @@ func GetOrderController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 		return
 	}
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
 	orderIDx, err := strconv.Atoi(tempID)
 	if err != nil {
@@ -87,7 +87,7 @@ func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 	userOrders, err := models.GetAllOrdersByUser(user, &pg)
 
 	if err != nil {
@@ -99,7 +99,7 @@ func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateOrderController(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
 	var body CreateOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -175,8 +175,6 @@ func UpdateOrderController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//TODO: INTERNAL SERVER ERROR UTIL FUNCTIONS
-
 	order, err := models.GetOrderByID(types.OrderID(orderID))
 	if err != nil {
 		if err == utils.ErrOrderNotFound {
@@ -207,7 +205,7 @@ func UpdateOrderController(w http.ResponseWriter, r *http.Request) {
 
 func GetAllOrderItemsController(w http.ResponseWriter, r *http.Request) {
 	tempID, ok := mux.Vars(r)["orderid"]
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
 	if !ok {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
@@ -244,7 +242,7 @@ func GetAllOrderItemsController(w http.ResponseWriter, r *http.Request) {
 
 func OrderNewItemController(w http.ResponseWriter, r *http.Request) {
 	tempID, ok := mux.Vars(r)["orderid"]
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
 	if !ok {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
@@ -288,9 +286,8 @@ func OrderNewItemController(w http.ResponseWriter, r *http.Request) {
 
 func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
 	tempID, ok := mux.Vars(r)["orderid"]
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
-	//TODO: MAKE CONTEXT KEY A CONST
 	if !ok {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 		return
@@ -337,7 +334,7 @@ func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
 
 func PayOrderController(w http.ResponseWriter, r *http.Request) {
 	tempID, ok := mux.Vars(r)["orderid"]
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 
 	if !ok {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)

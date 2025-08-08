@@ -42,7 +42,7 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 				http.Error(w, err.Error(), http.StatusUnauthorized)
 				return
 			}
-			ctx := context.WithValue(r.Context(), "user", user)
+			ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 
 			if RefreshAuthToken {
 				refreshToken, err := utils.ExtractRefreshToken(r)

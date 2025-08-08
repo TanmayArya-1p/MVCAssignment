@@ -122,7 +122,7 @@ func LogoutController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := r.Context().Value("user").(*types.User)
+	user := r.Context().Value(types.UserContextKey).(*types.User)
 	models.VerifyRefreshToken(refreshToken, user, true)
 
 	http.SetCookie(w, &http.Cookie{
