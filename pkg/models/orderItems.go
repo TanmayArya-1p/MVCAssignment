@@ -64,25 +64,25 @@ func GetOrderedItemByID(id types.OrderItemID) (*types.OrderItem, error) {
 	return item, nil
 }
 
-func BumpOrderItemStatus(id types.OrderItemID) error {
+func BumpOrderItemStatus(id types.OrderItemID) (*types.OrderItem, error) {
 	item, err := GetOrderedItemByID(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if item.Status == types.OrderItemStatusServed {
-		return errors.New("Order item already served")
+		return nil, errors.New("Order item already served")
 	}
 
 	newStatus, _ := bumpMap[item.Status]
 
 	_, err = db.Exec("UPDATE order_items SET status = ? WHERE id = ?", newStatus, id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	item.Status = newStatus
-	return nil
+	return item, nil
 }
 
 func EvaluateOrderStatus(id types.OrderID) error {

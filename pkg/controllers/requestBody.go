@@ -15,3 +15,9 @@ type UserCRUDRequest struct {
 	Password string     `json:"password"`
 	Role     types.Role `json:"role"`
 }
+
+type OrderItemCRUDRequest struct {
+	ItemID       types.ItemID `json:"item_id"`
+	Quantity     int          `json:"quantity"`
+	Instructions string       `json:"instructions"`
+}

@@ -74,6 +74,8 @@ func CreateOrder(order *types.Order) (types.OrderID, error) {
 		return 0, err
 	}
 	order.ID = types.OrderID(id)
+	order.IssuedAt = time.Now()
+	order.Status = types.OrderStatusPending
 	return order.ID, nil
 }
 
@@ -127,7 +129,7 @@ func GetAllOrders(page types.Page) ([]*types.Order, error) {
 	return otpt, nil
 }
 
-func PayBill(order types.Order, waiter types.UserID, tip float32) error {
+func PayBill(order *types.Order, waiter types.UserID, tip float32) error {
 	if order.Status != types.OrderStatusBilled {
 		return errors.New("Order is not billed yet")
 	}
@@ -209,8 +211,46 @@ func OrderNewItem(order *types.Order, itemID types.ItemID, quantity int, instruc
 	if err != nil {
 		return err
 	}
-	UpdateOrder(order, &OrderUpdateInstruction{
+	err = UpdateOrder(order, &OrderUpdateInstruction{
 		Status: &types.OrderStatusPending,
 	})
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func GetAllOrdersByUser(user *types.User, pg *types.Page) ([]*types.Order, error) {
+	rows, err := db.Query("SELECT * FROM orders WHERE issued_by = ? LIMIT ? OFFSET ?", user.ID, pg.Limit, pg.Offset)
+	var otpt []*types.Order
+	if err != nil {
+		return otpt, err
+	}
+	defer rows.Close()
+
+	if exists := rows.Next(); !exists {
+		return otpt, err
+	}
+	for {
+		var curr types.Order
+		var issuedAtTemp, paidAtTemp []uint8
+		err := rows.Scan(&curr.ID, &curr.IssuedBy, &issuedAtTemp, &curr.Status, &curr.BillableAmount, &curr.TableNo, &curr.Waiter, &paidAtTemp, &curr.Tip)
+		if err != nil {
+			return otpt, err
+		}
+		curr.IssuedAt, err = time.Parse(time.DateTime, string(issuedAtTemp))
+		if err != nil {
+			return otpt, err
+		}
+		curr.PaidAt, err = time.Parse(time.DateTime, string(paidAtTemp))
+		if err != nil {
+			return otpt, err
+		}
+		otpt = append(otpt, &curr)
+
+		if isNext := rows.Next(); !isNext {
+			break
+		}
+	}
+	return otpt, nil
 }
