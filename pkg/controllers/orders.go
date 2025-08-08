@@ -34,32 +34,11 @@ func BumpOrderItemStatusController(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllOrdersController(w http.ResponseWriter, r *http.Request) {
-	limit := r.URL.Query().Get("limit")
-	offset := r.URL.Query().Get("offset")
-
-	var pg types.Page
-	var err error
-
-	if limit == "" {
-		pg.Limit = 10
-	} else {
-		pg.Limit, err = strconv.Atoi(limit)
-		if err != nil || pg.Limit <= 0 {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-			return
-		}
+	pg, err := utils.Paginate(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-
-	if offset == "" {
-		pg.Offset = types.DefaultOffset
-	} else {
-		pg.Offset, err = strconv.Atoi(offset)
-		if err != nil || pg.Offset < 0 {
-			http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
-			return
-		}
-	}
-
 	orders, err := models.GetAllOrders(pg)
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
@@ -103,33 +82,11 @@ func GetOrderController(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
-	limit := r.URL.Query().Get("limit")
-	offset := r.URL.Query().Get("offset")
-
-	var pg types.Page
-	var err error
-
-	if limit == "" {
-		pg.Limit = 10
-	} else {
-		pg.Limit, err = strconv.Atoi(limit)
-		if err != nil || pg.Limit <= 0 {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-			return
-		}
+	pg, err := utils.Paginate(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
-
-	if offset == "" {
-		pg.Offset = types.DefaultOffset
-	} else {
-		pg.Offset, err = strconv.Atoi(offset)
-		if err != nil || pg.Offset < 0 {
-			http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
-			return
-		}
-	}
-	//TODO: PAGIFY UTILS
-
 	user := r.Context().Value("user").(*types.User)
 	userOrders, err := models.GetAllOrdersByUser(user, &pg)
 

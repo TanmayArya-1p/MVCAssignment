@@ -12,30 +12,10 @@ import (
 )
 
 func GetAllUsersController(w http.ResponseWriter, r *http.Request) {
-	limit := r.URL.Query().Get("limit")
-	offset := r.URL.Query().Get("offset")
-
-	var pg types.Page
-	var err error
-
-	if limit == "" {
-		pg.Limit = 10
-	} else {
-		pg.Limit, err = strconv.Atoi(limit)
-		if err != nil || pg.Limit <= 0 {
-			http.Error(w, "Invalid limit parameter", http.StatusBadRequest)
-			return
-		}
-	}
-
-	if offset == "" {
-		pg.Offset = types.DefaultOffset
-	} else {
-		pg.Offset, err = strconv.Atoi(offset)
-		if err != nil || pg.Offset < 0 {
-			http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
-			return
-		}
+	pg, err := utils.Paginate(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	users, err := models.GetAllUsers(pg)
