@@ -1,5 +1,6 @@
 dsn := $(shell cat .dsn)
 
+.PHONY: db-down db-up run build clean up
 
 help:
 	@echo "Commands:"
@@ -8,6 +9,16 @@ help:
 	@echo " make db-down - Run database migrations down"
 	@echo " make db-up - Run database migrations up"
 	@echo " make test - Run unit tests"
+	@echo " make clean - Clean up builds"
+
+clean:
+	rm -f inorder
+
+up:
+	docker compose up -d --build
+
+down:
+	docker compose down
 
 db-down:
 	migrate -path database/migrations/ -database "mysql://${dsn}" -verbose down
@@ -27,5 +38,3 @@ build:
 
 test:
 	@env INORDER_CONFIG=../../config.yaml go test -v ./...
-
-.PHONY: db-down db-up run build
