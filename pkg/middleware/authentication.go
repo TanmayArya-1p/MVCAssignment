@@ -35,10 +35,6 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 
 			user, err := models.GetUserByID(userID)
 			if err != nil {
-				if err == utils.ErrUserNotFound {
-					http.Error(w, utils.ErrUserNotFound.Error(), http.StatusNotFound)
-					return
-				}
 				http.Error(w, err.Error(), http.StatusUnauthorized)
 				return
 			}
