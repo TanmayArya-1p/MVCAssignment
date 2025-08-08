@@ -3,4 +3,4 @@ main
 backup.sql
 inorder
 .dsn
-database/mysql-init/backup.sql
+database/mysql-init/*
