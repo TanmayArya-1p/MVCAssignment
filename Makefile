@@ -7,6 +7,7 @@ help:
 	@echo " make build - Build the InOrder server into a binary"
 	@echo " make db-down - Run database migrations down"
 	@echo " make db-up - Run database migrations up"
+	@echo " make test - Run unit tests"
 
 db-down:
 	migrate -path database/migrations/ -database "mysql://${dsn}" -verbose down
@@ -23,5 +24,8 @@ run:
 
 build:
 	go build -o inorder cmd/main.go
+
+test:
+	@env INORDER_CONFIG=../../config.yaml go test -v ./...
 
 .PHONY: db-down db-up run build

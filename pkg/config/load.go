@@ -23,7 +23,11 @@ func LoadConfig() (*config, error) {
 	var configBuffer []byte
 	var err error
 
-	configBuffer, err = os.ReadFile("config.yaml")
+	var configPath string = "config.yaml"
+	if os.Getenv("INORDER_CONFIG") != "" {
+		configPath = os.Getenv("INORDER_CONFIG")
+	}
+	configBuffer, err = os.ReadFile(configPath)
 	if err != nil {
 		log.Fatal("Failed to Read Config:" + err.Error())
 		return nil, err

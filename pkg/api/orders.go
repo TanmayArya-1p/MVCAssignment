@@ -11,16 +11,18 @@ import (
 
 func SetupOrdersRoutes(root *mux.Router) {
 	var orderRouter = root.PathPrefix("/api/orders").Subrouter()
+	chefAuth := middleware.AuthorizationMiddleware(types.ChefRole)
+
 	orderRouter.Use(middleware.AuthenticationMiddleware(false))
-	orderRouter.Handle("", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.GetAllOrdersController))).Methods("GET")
+	orderRouter.Handle("", chefAuth(http.HandlerFunc(controllers.GetAllOrdersController))).Methods("GET")
 	orderRouter.Handle("", http.HandlerFunc(controllers.CreateOrderController)).Methods("POST")
 	orderRouter.Handle("/my", http.HandlerFunc(controllers.GetUserOrdersController)).Methods("GET")
-	orderRouter.Handle("/item/{itemid}/bump", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.BumpOrderItemStatusController))).Methods("POST")
-	orderRouter.Handle("/{orderid}", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.DeleteOrderController))).Methods("DELETE")
+	orderRouter.Handle("/item/{itemid}/bump", chefAuth(http.HandlerFunc(controllers.BumpOrderItemStatusController))).Methods("POST")
+	orderRouter.Handle("/{orderid}", chefAuth(http.HandlerFunc(controllers.DeleteOrderController))).Methods("DELETE")
 	orderRouter.Handle("/{orderid}", http.HandlerFunc(controllers.GetOrderController)).Methods("GET")
-	orderRouter.Handle("/{orderid}", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.UpdateOrderController))).Methods("PUT")
+	orderRouter.Handle("/{orderid}", chefAuth(http.HandlerFunc(controllers.UpdateOrderController))).Methods("PUT")
 	orderRouter.Handle("/{orderid}/items", http.HandlerFunc(controllers.GetAllOrderItemsController)).Methods("GET")
 	orderRouter.Handle("/{orderid}/items", http.HandlerFunc(controllers.OrderNewItemController)).Methods("POST")
 	orderRouter.Handle("/{orderid}/bill", http.HandlerFunc(controllers.GetOrderBillController)).Methods("GET")
-	orderRouter.Handle("/{orderid}/bill/pay", middleware.AuthorizationMiddleware(types.ChefRole)(http.HandlerFunc(controllers.PayOrderController))).Methods("POST")
+	orderRouter.Handle("/{orderid}/bill/pay", chefAuth(http.HandlerFunc(controllers.PayOrderController))).Methods("POST")
 }

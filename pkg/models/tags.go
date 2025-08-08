@@ -18,7 +18,6 @@ func CreateTag(name types.TagName) (*types.Tag, error) {
 }
 
 func GetTag(id types.TagID) (*types.Tag, error) {
-	//cachable
 	var tag types.Tag
 	err := db.QueryRow("SELECT id, name FROM tags WHERE id = ?", id).Scan(&tag.ID, &tag.Name)
 	if err != nil {
@@ -28,7 +27,6 @@ func GetTag(id types.TagID) (*types.Tag, error) {
 }
 
 func TagExists(name types.TagName) (bool, *types.Tag) {
-	//cachable
 	var tag types.Tag
 	err := db.QueryRow("SELECT id,name FROM tags WHERE name = ?", name).Scan(&tag.ID, &tag.Name)
 	if err != nil {
@@ -38,7 +36,6 @@ func TagExists(name types.TagName) (bool, *types.Tag) {
 }
 
 func DeleteTag(tag *types.Tag) error {
-	//need todelete cache if user calls
 	_, err := db.Exec("DELETE FROM tags WHERE id = ?", tag.ID)
 	if err != nil {
 		return err
@@ -47,7 +44,6 @@ func DeleteTag(tag *types.Tag) error {
 }
 
 func DeleteTagByID(tagid types.TagID) error {
-	//delete cache
 	var temp types.Tag = types.Tag{ID: tagid}
 	return DeleteTag(&temp)
 }
