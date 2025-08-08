@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"errors"
 	"inorder/pkg/types"
 	"time"
@@ -13,7 +14,7 @@ func GetOrderedItems(orderID types.OrderID) ([]*types.OrderItem, error) {
 	}
 	defer rows.Close()
 
-	var otpt []*types.OrderItem
+	var otpt []*types.OrderItem = make([]*types.OrderItem, 0)
 	if exists := rows.Next(); !exists {
 		return otpt, nil
 	}
@@ -43,25 +44,34 @@ func GetOrderedItems(orderID types.OrderID) ([]*types.OrderItem, error) {
 }
 
 func GetOrderByID(orderID types.OrderID) (*types.Order, error) {
-	var order types.Order
+	var curr types.Order
+	var rd types.MYSQLOrder
 
-	var issuedAtTemp []uint8
-	var paidAtTemp []uint8
-
-	err := db.QueryRow("SELECT * FROM orders WHERE id = ?", orderID).Scan(&order.ID, &order.IssuedBy, &issuedAtTemp, &order.Status, &order.BillableAmount, &order.TableNo, &order.Waiter, &paidAtTemp, &order.Tip)
+	err := db.QueryRow("SELECT * FROM orders WHERE id = ?", orderID).Scan(&curr.ID, &curr.IssuedBy, &rd.IssuedAt, &curr.Status, &rd.BillableAmount, &curr.TableNo, &rd.Waiter, &rd.PaidAt, &rd.Tip)
 	if err != nil {
 		return nil, err
 	}
-	order.IssuedAt, err = time.Parse(time.DateTime, string(issuedAtTemp))
+	curr.IssuedAt, err = time.Parse(time.DateTime, string(rd.IssuedAt))
 	if err != nil {
 		return nil, err
 	}
-	order.PaidAt, err = time.Parse(time.DateTime, string(paidAtTemp))
-	if err != nil {
-		return nil, err
+	if len(rd.PaidAt) != 0 {
+		curr.PaidAt, err = time.Parse(time.DateTime, string(rd.PaidAt))
+		if err != nil {
+			return nil, err
+		}
+	}
+	if rd.BillableAmount.Valid {
+		curr.BillableAmount = float32(rd.BillableAmount.Float64)
+	}
+	if rd.Waiter.Valid {
+		curr.Waiter = types.UserID(rd.Waiter.Int64)
+	}
+	if rd.Tip.Valid {
+		curr.Tip = float32(rd.Tip.Float64)
 	}
 
-	return &order, nil
+	return &curr, nil
 }
 
 func CreateOrder(order *types.Order) (types.OrderID, error) {
@@ -95,43 +105,15 @@ func DeleteOrder(orderID types.OrderID) error {
 
 func GetAllOrders(page types.Page) ([]*types.Order, error) {
 	rows, err := db.Query("SELECT * FROM orders LIMIT ? OFFSET ?", page.Limit, page.Offset)
-
-	var otpt []*types.Order
 	if err != nil {
-		return otpt, err
+		return []*types.Order{}, err
 	}
-	defer rows.Close()
-
-	if exists := rows.Next(); !exists {
-		return otpt, err
-	}
-	for {
-		var curr types.Order
-		var issuedAtTemp, paidAtTemp []uint8
-		err := rows.Scan(&curr.ID, &curr.IssuedBy, &issuedAtTemp, &curr.Status, &curr.BillableAmount, &curr.TableNo, &curr.Waiter, &paidAtTemp, &curr.Tip)
-		if err != nil {
-			return otpt, err
-		}
-		curr.IssuedAt, err = time.Parse(time.DateTime, string(issuedAtTemp))
-		if err != nil {
-			return otpt, err
-		}
-		curr.PaidAt, err = time.Parse(time.DateTime, string(paidAtTemp))
-		if err != nil {
-			return otpt, err
-		}
-		otpt = append(otpt, &curr)
-
-		if isNext := rows.Next(); !isNext {
-			break
-		}
-	}
-	return otpt, nil
+	return parseOrderRows(rows)
 }
 
 func PayBill(order *types.Order, waiter types.UserID, tip float32) error {
 	if order.Status != types.OrderStatusBilled {
-		return errors.New("Order is not billed yet")
+		return errors.New("Order is not in billed state")
 	}
 	_, err := db.Exec("UPDATE orders SET status= ?,waiter = ?, tip = ?, paid_at = NOW() WHERE id = ?", types.OrderStatusPaid, waiter, tip, order.ID)
 	if err != nil {
@@ -144,9 +126,9 @@ func PayBill(order *types.Order, waiter types.UserID, tip float32) error {
 }
 
 type OrderUpdateInstruction struct {
-	Status         *types.OrderStatus
-	TableNo        *types.TableID
-	BillableAmount *float32
+	Status         *types.OrderStatus `json:"status"`
+	TableNo        *types.TableID     `json:"table_no"`
+	BillableAmount *float32           `json:"billable_amount"`
 }
 
 func UpdateOrder(order *types.Order, instruction *OrderUpdateInstruction) error {
@@ -192,60 +174,81 @@ func ResolveBillableAmount(order *types.Order, toBill bool) error {
 	})
 }
 
-func OrderNewItem(order *types.Order, itemID types.ItemID, quantity int, instructions string) error {
+func OrderNewItem(order *types.Order, itemID types.ItemID, quantity int, instructions string) (types.OrderItemID, error) {
 	if quantity < 1 {
-		return errors.New("Quantity must be greater than or equal to 1")
+		return -1, errors.New("Quantity must be greater than or equal to 1")
 	}
 	if order.Status == types.OrderStatusBilled || order.Status == types.OrderStatusPaid {
-		return errors.New("Order status not open to item orders")
+		return -1, errors.New("Order status not open to item orders")
 	}
 
 	item, err := GetItemByID(itemID)
 	if err != nil {
-		return err
+		return -1, err
 	}
 
 	var price float32 = float32(item.Price) * float32(quantity)
 
-	_, err = db.Exec("INSERT INTO order_items (order_id, item_id, quantity, price,instructions) VALUES (?, ?, ?, ?, ?)", order.ID, item.ID, quantity, price, instructions)
+	res, err := db.Exec("INSERT INTO order_items (order_id, item_id, quantity, price,instructions) VALUES (?, ?, ?, ?, ?)", order.ID, item.ID, quantity, price, instructions)
 	if err != nil {
-		return err
+		return -1, err
 	}
 	err = UpdateOrder(order, &OrderUpdateInstruction{
 		Status: &types.OrderStatusPending,
 	})
 	if err != nil {
-		return err
+		return -1, err
 	}
-	return nil
+	id, err := res.LastInsertId()
+	if err != nil {
+		return -1, err
+	}
+
+	return types.OrderItemID(id), nil
 }
 
 func GetAllOrdersByUser(user *types.User, pg *types.Page) ([]*types.Order, error) {
 	rows, err := db.Query("SELECT * FROM orders WHERE issued_by = ? LIMIT ? OFFSET ?", user.ID, pg.Limit, pg.Offset)
-	var otpt []*types.Order
 	if err != nil {
-		return otpt, err
+		return []*types.Order{}, err
 	}
+	return parseOrderRows(rows)
+}
+
+func parseOrderRows(rows *sql.Rows) ([]*types.Order, error) {
+	var otpt []*types.Order = make([]*types.Order, 0)
 	defer rows.Close()
 
 	if exists := rows.Next(); !exists {
-		return otpt, err
+		return otpt, nil
 	}
 	for {
 		var curr types.Order
-		var issuedAtTemp, paidAtTemp []uint8
-		err := rows.Scan(&curr.ID, &curr.IssuedBy, &issuedAtTemp, &curr.Status, &curr.BillableAmount, &curr.TableNo, &curr.Waiter, &paidAtTemp, &curr.Tip)
+		var rd types.MYSQLOrder
+		err := rows.Scan(&curr.ID, &curr.IssuedBy, &rd.IssuedAt, &curr.Status, &rd.BillableAmount, &curr.TableNo, &rd.Waiter, &rd.PaidAt, &rd.Tip)
 		if err != nil {
 			return otpt, err
 		}
-		curr.IssuedAt, err = time.Parse(time.DateTime, string(issuedAtTemp))
+		curr.IssuedAt, err = time.Parse(time.DateTime, string(rd.IssuedAt))
 		if err != nil {
 			return otpt, err
 		}
-		curr.PaidAt, err = time.Parse(time.DateTime, string(paidAtTemp))
-		if err != nil {
-			return otpt, err
+		if len(rd.PaidAt) != 0 {
+			curr.PaidAt, err = time.Parse(time.DateTime, string(rd.PaidAt))
+			if err != nil {
+				return otpt, err
+			}
 		}
+		if rd.BillableAmount.Valid {
+			curr.BillableAmount = float32(rd.BillableAmount.Float64)
+		}
+		if rd.Waiter.Valid {
+			curr.Waiter = types.UserID(rd.Waiter.Int64)
+		}
+		if rd.Tip.Valid {
+			curr.Tip = float32(rd.Tip.Float64)
+		}
+
 		otpt = append(otpt, &curr)
 
 		if isNext := rows.Next(); !isNext {

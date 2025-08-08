@@ -30,7 +30,6 @@ func BumpOrderItemStatusController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to bump order item status: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
 	json.NewEncoder(w).Encode(map[string]string{"message": "Bumped status to " + string(item.Status)})
 }
 
@@ -132,8 +131,8 @@ func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
 	//TODO: PAGIFY UTILS
 
 	user := r.Context().Value("user").(*types.User)
-
 	userOrders, err := models.GetAllOrdersByUser(user, &pg)
+
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -145,18 +144,14 @@ func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
 func CreateOrderController(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value("user").(*types.User)
 
-	var body map[string]string
+	var body CreateOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	if body["table_no"] == "" {
-		http.Error(w, "Missing table_no parameter", http.StatusBadRequest)
-		return
-	}
-	tableNo, err := strconv.Atoi(body["table_no"])
-	if err != nil || !(tableNo <= 100 && tableNo >= 0) {
+	tableNo := body.TableNo
+	if !(tableNo <= 100 && tableNo > 0) {
 		http.Error(w, "Invalid table_no parameter", http.StatusBadRequest)
 		return
 	}
@@ -165,9 +160,7 @@ func CreateOrderController(w http.ResponseWriter, r *http.Request) {
 	order.IssuedBy = user.ID
 	order.TableNo = types.TableID(tableNo)
 
-	//TODO: VERIFY CREATE MODELS FOR ALL TABLES WITH DEFAULT VALUES IN SCHEMA
-
-	_, err = models.CreateOrder(&order)
+	_, err := models.CreateOrder(&order)
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -327,13 +320,13 @@ func OrderNewItemController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = models.OrderNewItem(order, body.ItemID, body.Quantity, body.Instructions)
+	orderItemID, err := models.OrderNewItem(order, body.ItemID, body.Quantity, body.Instructions)
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(map[string]any{"message": "Item ordered successfully"})
+	json.NewEncoder(w).Encode(map[string]any{"message": "Item ordered successfully", "order_item_id": orderItemID})
 }
 
 func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
@@ -414,9 +407,18 @@ func PayOrderController(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	amount := body["amount"].(float32)
+	amount64, ok := body["amount"].(float64)
+	amount := float32(amount64)
+	if !ok {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+	if amount <= 0 || amount < order.BillableAmount {
+		http.Error(w, "Invalid amount", http.StatusBadRequest)
+		return
+	}
 
-	err = models.PayBill(order, user.ID, amount)
+	err = models.PayBill(order, user.ID, amount-order.BillableAmount)
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return

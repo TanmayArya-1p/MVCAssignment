@@ -19,7 +19,7 @@ func GetAllOrderedItems() ([]*types.OrderItem, error) {
 	}
 	defer rows.Close()
 
-	var items []*types.OrderItem
+	var items []*types.OrderItem = make([]*types.OrderItem, 0)
 
 	for rows.Next() {
 		item := &types.OrderItem{}
@@ -54,7 +54,7 @@ func GetOrderedItemByID(id types.OrderItemID) (*types.OrderItem, error) {
 	item := &types.OrderItem{}
 
 	var temp []byte
-	if err := row.Scan(&item.ID, &item.OrderID, &item.ItemID, &item.Instructions, &item.Quantity, &item.Price, temp, &item.Status); err != nil {
+	if err := row.Scan(&item.ID, &item.OrderID, &item.ItemID, &item.Instructions, &item.Quantity, &item.Price, &temp, &item.Status); err != nil {
 		return nil, err
 	}
 	item.IssuedAt, err = time.Parse(time.DateTime, string(temp))
@@ -69,7 +69,6 @@ func BumpOrderItemStatus(id types.OrderItemID) (*types.OrderItem, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	if item.Status == types.OrderItemStatusServed {
 		return nil, errors.New("Order item already served")
 	}
@@ -82,6 +81,7 @@ func BumpOrderItemStatus(id types.OrderItemID) (*types.OrderItem, error) {
 	}
 
 	item.Status = newStatus
+	EvaluateOrderStatus(item.OrderID)
 	return item, nil
 }
 

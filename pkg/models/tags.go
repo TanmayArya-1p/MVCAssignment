@@ -105,7 +105,7 @@ func DeleteAllItemTags(itemID types.ItemID) error {
 }
 
 func GetAllTags() ([]*types.Tag, error) {
-	var tags []*types.Tag
+	var tags []*types.Tag = make([]*types.Tag, 0)
 	rows, err := db.Query("SELECT id,name FROM tags")
 	if err != nil {
 		return nil, err
@@ -136,7 +136,7 @@ func GetAllItemTags(itemID types.ItemID) ([]*types.Tag, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var otpt []*types.Tag
+	var otpt []*types.Tag = make([]*types.Tag, 0)
 	if exists := rows.Next(); !exists {
 		return otpt, nil
 	}

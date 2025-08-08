@@ -1,6 +1,9 @@
 package types
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type OrderID int
 type TableID int
@@ -15,6 +18,14 @@ type Order struct {
 	Waiter         UserID
 	PaidAt         time.Time
 	Tip            float32
+}
+
+type MYSQLOrder struct {
+	IssuedAt       []byte
+	BillableAmount sql.NullFloat64
+	Waiter         sql.NullInt64
+	PaidAt         []byte
+	Tip            sql.NullFloat64
 }
 
 type OrderItemID int

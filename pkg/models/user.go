@@ -63,7 +63,7 @@ func GetAllUsers(page types.Page) ([]*types.User, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var otpt []*types.User
+	var otpt []*types.User = make([]*types.User, 0)
 	var ifAny bool = rows.Next()
 	if !ifAny {
 		return otpt, nil

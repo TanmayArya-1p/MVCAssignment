@@ -78,7 +78,7 @@ func GetItemByID(itemID types.ItemID) (*types.Item, error) {
 		return &item, utils.ErrItemNotFound
 	}
 
-	var tempTags []*types.Tag
+	var tempTags []*types.Tag = make([]*types.Tag, 0)
 	tempTags, err = GetAllItemTags(itemID)
 	if err != nil {
 		return &item, err
@@ -95,7 +95,7 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 	var rows *sql.Rows
 	var err error
 
-	var otpt []*types.Item
+	var otpt []*types.Item = make([]*types.Item, 0)
 
 	rows, err = db.Query("SELECT id,name, description, price, image FROM items LIMIT ? OFFSET ?", page.Limit, page.Offset)
 	if err != nil {
@@ -109,7 +109,7 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 		var curr types.Item
 		rows.Scan(&curr.ID, &curr.Name, &curr.Description, &curr.Price, &curr.Image)
 
-		var tempTags []*types.Tag
+		var tempTags []*types.Tag = make([]*types.Tag, 0)
 		tempTags, err = GetAllItemTags(curr.ID)
 		if err != nil {
 			return otpt, err
@@ -136,7 +136,7 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 		inPl = append(inPl, "?")
 	}
 
-	var otpt []*types.Item
+	var otpt []*types.Item = make([]*types.Item, 0)
 
 	var prep string = strings.Join(inPl, ",")
 	var queryString string = fmt.Sprintf("SELECT DISTINCT  items.id,items.name,items.description,items.price,items.image FROM items INNER JOIN tag_rel ON items.id=tag_rel.item_id LEFT JOIN tags ON tags.id=tag_rel.tag_id WHERE tags.name IN (%s)", prep)
@@ -158,7 +158,7 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 		var curr types.Item
 		rows.Scan(&curr.ID, &curr.Name, &curr.Description, &curr.Price, &curr.Image)
 
-		var tempTags []*types.Tag
+		var tempTags []*types.Tag = make([]*types.Tag, 0)
 		tempTags, err = GetAllItemTags(curr.ID)
 		if err != nil {
 			return otpt, err
@@ -175,7 +175,7 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 		}
 	}
 
-	var andRes []*types.Item
+	var andRes []*types.Item = make([]*types.Item, 0)
 	for _, item := range otpt {
 		if utils.SubsetOf(item.Tags, tags) {
 			andRes = append(andRes, item)

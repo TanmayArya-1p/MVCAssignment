@@ -21,3 +21,7 @@ type OrderItemCRUDRequest struct {
 	Quantity     int          `json:"quantity"`
 	Instructions string       `json:"instructions"`
 }
+
+type CreateOrderRequest struct {
+	TableNo int `json:"table_no"`
+}
