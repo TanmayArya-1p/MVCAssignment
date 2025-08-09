@@ -73,7 +73,7 @@ func GetOrderController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if order.IssuedBy != user.ID {
+	if user.Role == types.UserRole && order.IssuedBy != user.ID {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -226,7 +226,7 @@ func GetAllOrderItemsController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if order.IssuedBy != user.ID {
+	if user.Role == types.UserRole && user.ID != order.IssuedBy {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -270,7 +270,7 @@ func OrderNewItemController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if order.IssuedBy != user.ID {
+	if user.Role == types.UserRole && user.ID != order.IssuedBy {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
@@ -308,7 +308,7 @@ func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if user.ID != order.IssuedBy {
+	if user.Role == types.UserRole && user.ID != order.IssuedBy {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
