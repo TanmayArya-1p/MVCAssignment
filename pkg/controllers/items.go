@@ -57,7 +57,7 @@ func GetItemByIDController(w http.ResponseWriter, r *http.Request) {
 
 func CreateItemController(w http.ResponseWriter, r *http.Request) {
 
-	var body ItemCRUDRequest
+	var body types.ItemCRUDRequest
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -139,7 +139,7 @@ func UpdateItemController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var body ItemCRUDRequest
+	var body types.ItemCRUDRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)

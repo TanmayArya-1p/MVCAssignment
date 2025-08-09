@@ -14,7 +14,7 @@ func Paginate(r *http.Request) (types.Page, error) {
 	var err error
 
 	if limit == "" {
-		pg.Limit = 10
+		pg.Limit = DefaultPageLimit
 	} else {
 		pg.Limit, err = strconv.Atoi(limit)
 		if err != nil || pg.Limit <= 0 {

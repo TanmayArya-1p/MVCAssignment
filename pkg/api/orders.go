@@ -14,8 +14,8 @@ func SetupOrdersRoutes(root *mux.Router) {
 	chefAuth := middleware.AuthorizationMiddleware(types.ChefRole)
 
 	orderRouter.Use(middleware.AuthenticationMiddleware(false))
-	orderRouter.Handle("", chefAuth(http.HandlerFunc(controllers.GetAllOrdersController))).Methods("GET")
-	orderRouter.Handle("", http.HandlerFunc(controllers.CreateOrderController)).Methods("POST")
+	orderRouter.Handle("", chefAuth(http.HandlerFunc(controllers.GetAllOrdersController))).Methods("GET") // GET /api/orders -> Get all orders
+	orderRouter.Handle("", http.HandlerFunc(controllers.CreateOrderController)).Methods("POST")           // POST /api/orders -> Create a new order
 	orderRouter.Handle("/my", http.HandlerFunc(controllers.GetUserOrdersController)).Methods("GET")
 	orderRouter.Handle("/item/{itemid}/bump", chefAuth(http.HandlerFunc(controllers.BumpOrderItemStatusController))).Methods("POST")
 	orderRouter.Handle("/{orderid}", chefAuth(http.HandlerFunc(controllers.DeleteOrderController))).Methods("DELETE")

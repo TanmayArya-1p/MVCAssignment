@@ -1,6 +1,4 @@
-package controllers
-
-import "inorder/pkg/types"
+package types
 
 type ItemCRUDRequest struct {
 	Name        string   `json:"name"`
@@ -11,15 +9,15 @@ type ItemCRUDRequest struct {
 }
 
 type UserCRUDRequest struct {
-	Username string     `json:"username"`
-	Password string     `json:"password"`
-	Role     types.Role `json:"role"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Role     Role   `json:"role"`
 }
 
 type OrderItemCRUDRequest struct {
-	ItemID       types.ItemID `json:"item_id"`
-	Quantity     int          `json:"quantity"`
-	Instructions string       `json:"instructions"`
+	ItemID       ItemID `json:"item_id"`
+	Quantity     int    `json:"quantity"`
+	Instructions string `json:"instructions"`
 }
 
 type CreateOrderRequest struct {

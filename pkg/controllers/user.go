@@ -55,7 +55,7 @@ func GetUserByIDController(w http.ResponseWriter, r *http.Request) {
 func CreateUserController(w http.ResponseWriter, r *http.Request) {
 	var user types.User
 
-	var body UserCRUDRequest
+	var body types.UserCRUDRequest
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
@@ -120,7 +120,7 @@ func UpdateUserController(w http.ResponseWriter, r *http.Request) {
 	}
 	uid := types.UserID(uidInt)
 
-	var body UserCRUDRequest
+	var body types.UserCRUDRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)

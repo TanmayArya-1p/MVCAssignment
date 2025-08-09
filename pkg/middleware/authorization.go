@@ -11,7 +11,7 @@ func AuthorizationMiddleware(PrivsLowerBound types.Role) func(http.Handler) http
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			user := r.Context().Value(types.UserContextKey).(*types.User)
 
-			if utils.RolePrivs[user.Role] < utils.RolePrivs[PrivsLowerBound] {
+			if utils.RolePrivileges[user.Role] < utils.RolePrivileges[PrivsLowerBound] {
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}

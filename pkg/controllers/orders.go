@@ -101,7 +101,7 @@ func GetUserOrdersController(w http.ResponseWriter, r *http.Request) {
 func CreateOrderController(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(types.UserContextKey).(*types.User)
 
-	var body CreateOrderRequest
+	var body types.CreateOrderRequest
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
@@ -254,7 +254,7 @@ func OrderNewItemController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var body OrderItemCRUDRequest
+	var body types.OrderItemCRUDRequest
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return

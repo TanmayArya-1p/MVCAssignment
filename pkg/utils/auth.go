@@ -8,7 +8,7 @@ import (
 
 type Priority uint
 
-var RolePrivs map[types.Role]Priority = map[types.Role]Priority{
+var RolePrivileges map[types.Role]Priority = map[types.Role]Priority{
 	types.AdminRole: Priority(3),
 	types.ChefRole:  Priority(2),
 	types.UserRole:  Priority(1),
