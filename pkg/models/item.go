@@ -185,15 +185,7 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 	return andRes, nil
 }
 
-type UpdateItemInstruction struct {
-	Name        string
-	Description string
-	Price       float64
-	Image       string
-	Tags        []types.TagName
-}
-
-func UpdateItem(item *types.Item, upd *UpdateItemInstruction) error {
+func UpdateItem(item *types.Item, upd *types.UpdateItemInstruction) error {
 	var updTags bool = true
 	if upd.Name != "" {
 		item.Name = upd.Name

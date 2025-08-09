@@ -47,7 +47,7 @@ func TestItemsCRUD(t *testing.T) {
 		t.Errorf("Error creating item: %v", err)
 	}
 	//update the item
-	err = UpdateItem(&item, &UpdateItemInstruction{
+	err = UpdateItem(&item, &types.UpdateItemInstruction{
 		Name:        "item_" + uuid.New().String(),
 		Description: "newdesc",
 		Price:       20.0,

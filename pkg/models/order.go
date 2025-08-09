@@ -1,9 +1,9 @@
 package models
 
 import (
-	"database/sql"
 	"errors"
 	"inorder/pkg/types"
+	"inorder/pkg/utils"
 	"time"
 )
 
@@ -108,7 +108,7 @@ func GetAllOrders(page types.Page) ([]*types.Order, error) {
 	if err != nil {
 		return []*types.Order{}, err
 	}
-	return parseOrderRows(rows)
+	return utils.ParseOrderRows(rows)
 }
 
 func PayBill(order *types.Order, waiter types.UserID, tip float32) error {
@@ -152,28 +152,6 @@ func UpdateOrder(order *types.Order, instruction *OrderUpdateInstruction) error 
 	return nil
 }
 
-func ResolveBillableAmount(order *types.Order, toBill bool) error {
-	items, err := GetOrderedItems(order.ID)
-	if err != nil {
-		return err
-	}
-
-	var amt float32
-	for _, item := range items {
-		amt += item.Price
-	}
-
-	var changeStatus *types.OrderStatus = nil
-	if toBill {
-		changeStatus = &types.OrderStatusBilled
-	}
-
-	return UpdateOrder(order, &OrderUpdateInstruction{
-		Status:         changeStatus,
-		BillableAmount: &amt,
-	})
-}
-
 func OrderNewItem(order *types.Order, itemID types.ItemID, quantity int, instructions string) (types.OrderItemID, error) {
 	if quantity < 1 {
 		return -1, errors.New("Quantity must be greater than or equal to 1")
@@ -212,48 +190,5 @@ func GetAllOrdersByUser(user *types.User, pg *types.Page) ([]*types.Order, error
 	if err != nil {
 		return []*types.Order{}, err
 	}
-	return parseOrderRows(rows)
-}
-
-func parseOrderRows(rows *sql.Rows) ([]*types.Order, error) {
-	var otpt []*types.Order = make([]*types.Order, 0)
-	defer rows.Close()
-
-	if exists := rows.Next(); !exists {
-		return otpt, nil
-	}
-	for {
-		var curr types.Order
-		var rd types.MYSQLOrder
-		err := rows.Scan(&curr.ID, &curr.IssuedBy, &rd.IssuedAt, &curr.Status, &rd.BillableAmount, &curr.TableNo, &rd.Waiter, &rd.PaidAt, &rd.Tip)
-		if err != nil {
-			return otpt, err
-		}
-		curr.IssuedAt, err = time.Parse(time.DateTime, string(rd.IssuedAt))
-		if err != nil {
-			return otpt, err
-		}
-		if len(rd.PaidAt) != 0 {
-			curr.PaidAt, err = time.Parse(time.DateTime, string(rd.PaidAt))
-			if err != nil {
-				return otpt, err
-			}
-		}
-		if rd.BillableAmount.Valid {
-			curr.BillableAmount = float32(rd.BillableAmount.Float64)
-		}
-		if rd.Waiter.Valid {
-			curr.Waiter = types.UserID(rd.Waiter.Int64)
-		}
-		if rd.Tip.Valid {
-			curr.Tip = float32(rd.Tip.Float64)
-		}
-
-		otpt = append(otpt, &curr)
-
-		if isNext := rows.Next(); !isNext {
-			break
-		}
-	}
-	return otpt, nil
+	return utils.ParseOrderRows(rows)
 }

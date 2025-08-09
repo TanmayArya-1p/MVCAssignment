@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"inorder/pkg/controllers"
 	"inorder/pkg/models"
 	"inorder/pkg/types"
 	"inorder/pkg/utils"
@@ -46,7 +47,7 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 					http.Error(w, err.Error(), http.StatusUnauthorized)
 					return
 				}
-				err, refreshClaim := models.VerifyRefreshToken(refreshToken, user, true)
+				err, refreshClaim := controllers.VerifyRefreshToken(refreshToken, user, true)
 				if err != nil || refreshClaim.Expired {
 					http.Error(w, "Unauthorized", http.StatusUnauthorized)
 					return
@@ -56,7 +57,7 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 					http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 					return
 				}
-				newRefreshToken, err := models.CreateRefreshToken(user)
+				newRefreshToken, err := controllers.CreateRefreshToken(user)
 				if err != nil {
 					http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 					return

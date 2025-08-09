@@ -162,7 +162,7 @@ func UpdateItemController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var upd models.UpdateItemInstruction
+	var upd types.UpdateItemInstruction
 	upd.Name = body.Name
 	upd.Description = body.Description
 	upd.Price = body.Price

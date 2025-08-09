@@ -10,3 +10,11 @@ type Item struct {
 	Image       string
 	Tags        []TagName
 }
+
+type UpdateItemInstruction struct {
+	Name        string
+	Description string
+	Price       float64
+	Image       string
+	Tags        []TagName
+}

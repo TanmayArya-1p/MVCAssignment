@@ -315,9 +315,9 @@ func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
 
 	resolveStat := r.URL.Query().Get("resolve")
 	if resolveStat == "true" {
-		err = models.ResolveBillableAmount(order, true)
+		err = ResolveBillableAmount(order, true)
 	} else {
-		err = models.ResolveBillableAmount(order, false)
+		err = ResolveBillableAmount(order, false)
 	}
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
