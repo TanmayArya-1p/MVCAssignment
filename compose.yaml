@@ -15,4 +15,4 @@ services:
             - MYSQL_ROOT_PASSWORD=pass
             - MYSQL_DATABASE=mvc
         volumes:
-            - ./database/mysql-init:/docker-entrypoint-initdb.d
+            - ./database/migrations:/docker-entrypoint-initdb.d

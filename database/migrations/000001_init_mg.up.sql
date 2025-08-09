@@ -33,3 +33,6 @@ CREATE TABLE IF NOT EXISTS orders (
 
 SET GLOBAL wait_timeout = 31536000;
 SET GLOBAL interactive_timeout = 31536000;
+
+INSERT INTO users (username,password,role) VALUES ("admin","$2b$10$bk4Kk88nnC2IaWLpSy57LuaX1U6CrYmwSn.xYbF3wVqb69y1mh0wC","admin");
+INSERT INTO users (username,password,role) VALUES ("chef","$2a$10$EZTo3z0HI59Oo06Wbd8zcO6fnzfzIsDIthVYLswFv8tv8WpVa5twO","chef");
