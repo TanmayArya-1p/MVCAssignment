@@ -1,5 +1,8 @@
 export const roles = {
     ADMIN: "admin",
-    USER: "user",
+    CUSTOMER: "customer",
     CHEF: "chef",
 }
+
+
+export const ONBOARDING_PATHS = ["/login", "/register", "/"];

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as auth from '../api/auth';
 import useAuthStore from '../stores/authStore';
 import toast, { Toaster } from 'react-hot-toast';
-
+import VerifySignedIn from '../utils/verify';
 
 
 export default function RegisterScreen() {
@@ -11,6 +11,11 @@ export default function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
     const {setUsername: setStoreUsername, setAuthToken, setRefreshToken} = useAuthStore.getState();
+
+    useEffect(() => {VerifySignedIn()}, [])
+    
+
+
 
     const handleRegister = async (e) => {
         e.preventDefault();

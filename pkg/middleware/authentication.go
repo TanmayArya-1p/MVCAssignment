@@ -28,10 +28,9 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 			}
 
 			if !RefreshAuthToken && claim.Expired {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				http.Error(w, "Unauthorized: Token expired", http.StatusUnauthorized)
 				return
 			}
-
 			userID := types.UserID(claim.Content["userID"].(float64))
 
 			user, err := models.GetUserByID(userID)

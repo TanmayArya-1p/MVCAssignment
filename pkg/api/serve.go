@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func Serve() error {
@@ -21,7 +22,14 @@ func Serve() error {
 	SetupStaticFileRoutes(root)
 
 	log.Println("Serving HTTP Server on Port", config.Config.InOrder.PORT)
-	err := http.ListenAndServe(":"+config.Config.InOrder.PORT, root)
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
+	err := http.ListenAndServe(":"+config.Config.InOrder.PORT, c.Handler(root))
 	if err != nil {
 		log.Fatal(err)
 	}

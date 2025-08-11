@@ -159,7 +159,9 @@ func VerifyController(w http.ResponseWriter, r *http.Request) {
 func RefreshController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]any{
-		"message": "tokens refreshed",
+		"message":      "tokens refreshed",
+		"authToken":    r.Context().Value("authToken"),
+		"refreshToken": r.Context().Value("refreshToken"),
 	})
 }
 

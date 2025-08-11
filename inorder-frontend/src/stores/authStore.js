@@ -1,15 +1,17 @@
 import { create, createStore } from "zustand";
 import { roles } from "../utils/const";
+import { persist } from "zustand/middleware";
 
 
-const useAuthStore = create((set) => ({
+const useAuthStore = create(persist((set) => ({
   username: "",
   authToken: "",
   refreshToken: "",
-  roles : roles.USER,
+  role : roles.USER,
+  setRole : (role) => set({ role: role }),
   setUsername: (username) => set({ username }),
   setAuthToken: (authToken) => set({ authToken }),
   setRefreshToken: (refreshToken) => set({ refreshToken }),
-}));
+})));
 
 export default useAuthStore;

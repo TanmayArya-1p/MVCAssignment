@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as auth from '../api/auth';
 import useAuthStore from '../stores/authStore';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { jwtDecode } from "jwt-decode";
+import { roles } from '../utils/const';
+import VerifySignedIn from '../utils/verify';
 
 export default function LoginScreen() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const {setUsername: setStoreUsername, setAuthToken, setRefreshToken} = useAuthStore.getState();
+    const {setUsername: setStoreUsername, setAuthToken, setRefreshToken, setRole} = useAuthStore.getState();
+
+    useEffect(() => {VerifySignedIn()}, [])
+
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -17,6 +22,7 @@ export default function LoginScreen() {
             setStoreUsername(username);
             setAuthToken(resp.authToken);
             setRefreshToken(resp.refreshToken);
+            setRole(jwtDecode(resp.authToken).role);
             toast.success("Successfully logged in");
             setTimeout(() => {
                 window.location.href = "/home";
