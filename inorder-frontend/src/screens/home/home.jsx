@@ -21,8 +21,8 @@ export default function HomeScreen() {
     useEffect(() => {VerifySignedIn()} , [])
 
     let homeScreen = roleScreens[role] || <NotFoundScreen />;
-    return <>
+    return <div className="h-screen w-screen flex flex-col">
         <Navbar role={role} />
         {homeScreen}
-    </>
+    </div>
 }

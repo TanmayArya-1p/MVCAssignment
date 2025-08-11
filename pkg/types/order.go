@@ -9,15 +9,15 @@ type OrderID int
 type TableID int
 
 type Order struct {
-	ID             OrderID
-	IssuedBy       UserID
-	IssuedAt       time.Time
-	Status         OrderStatus
-	BillableAmount float32
-	TableNo        TableID
-	Waiter         UserID
-	PaidAt         time.Time
-	Tip            float32
+	ID             OrderID     `json:"id"`
+	IssuedBy       UserID      `json:"issued_by"`
+	IssuedAt       time.Time   `json:"issued_at"`
+	Status         OrderStatus `json:"status"`
+	BillableAmount float32     `json:"billable_amount"`
+	TableNo        TableID     `json:"table_no"`
+	Waiter         UserID      `json:"waiter"`
+	PaidAt         time.Time   `json:"paid_at"`
+	Tip            float32     `json:"tip"`
 }
 
 type MYSQLOrder struct {

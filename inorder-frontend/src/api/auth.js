@@ -78,7 +78,7 @@ export async function RefreshToken() {
     }
 }
 
-
+//TODO: REMOVE LOGS
 export async function VerifyToken() {
 
     let config = {
@@ -97,6 +97,8 @@ export async function VerifyToken() {
         throw(error);
     }
 }
+
+//TODO: MAKE IT SO THAT FIRST TOKENS VERIFIED THEN REFRESHED
 
 export async function LogoutUser() {
 

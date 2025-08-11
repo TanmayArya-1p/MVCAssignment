@@ -1,5 +1,9 @@
 export default function NotFoundScreen() {
     return  <div class="min-h-screen min-w-screen flex flex-col items-center justify-center gap-10">
+        <a class="text-red-500"></a>
+        <a class="text-yellow-500"></a>
+        <a class="text-teal-500"></a>
+        <a class="text-green-500"></a>
       <div class="ubuntu-bold text-7xl">Oops!</div>
       <div class="ubuntu-bold text-4xl">Page Not Found</div>
       <div class="ubuntu-bold text-xl">The page you are looking for does not exist.</div>

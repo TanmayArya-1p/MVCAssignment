@@ -4,7 +4,7 @@ import { useEffect } from "react";
 export default function LandingScreen() {
 
     useEffect(() => {VerifySignedIn()}, [])
-    
+    //TODO: ADD LOADING TILL VERIFIED
 
     return <>
         <div className="h-screen w-screen flex flex-col justify-center items-center">

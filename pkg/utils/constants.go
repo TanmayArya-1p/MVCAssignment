@@ -1,3 +1,3 @@
 package utils
 
-const DefaultPageLimit = 10
+const DefaultPageLimit int = 1000000000000000

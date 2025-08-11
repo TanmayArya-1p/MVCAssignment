@@ -130,3 +130,45 @@ button:hover {
     border-radius: 1rem;
     padding: 2rem;
 }
+
+
+.order-card {
+  background-color: white;
+  border-radius: 0.25rem;
+  border-width: 2px;
+  padding: 1rem;
+  box-shadow: white;
+  transition: transform 0.1s linear;
+  cursor: pointer;
+  flex-direction: row;
+  display: flex;
+  gap:1rem;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 22rem;
+}
+
+.order-card:hover {
+  transform: translateY(-0.2rem);
+  transition: transform 0.1s linear;
+}
+
+
+
+.tag {
+  border: 2px solid;
+  border-radius: 0.25rem;
+  text-align: center;
+  font-family: "Ubuntu", sans-serif;
+  padding: 0.1rem 0.5rem;
+  transition: transform 0.1s linear;
+}
+
+.tag:hover {
+  transform: translateY(-0.1rem);
+  transition: transform 0.1s linear;
+}
+
+.tag-selected {
+  background-color: rgb(243, 251, 255)
+}
