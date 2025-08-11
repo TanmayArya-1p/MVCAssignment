@@ -30,12 +30,13 @@ type MYSQLOrder struct {
 
 type OrderItemID int
 type OrderItem struct {
-	ID           OrderItemID
-	OrderID      OrderID
-	ItemID       ItemID
-	Instructions string
-	Quantity     int
-	Price        float32
-	IssuedAt     time.Time
-	Status       OrderItemStatus
+	ID           OrderItemID     `json:"id"`
+	Name         string          `json:"name"`
+	OrderID      OrderID         `json:"order_id"`
+	ItemID       ItemID          `json:"item_id"`
+	Instructions string          `json:"instructions"`
+	Quantity     int             `json:"quantity"`
+	Price        float32         `json:"price"`
+	IssuedAt     time.Time       `json:"issued_at"`
+	Status       OrderItemStatus `json:"status"`
 }

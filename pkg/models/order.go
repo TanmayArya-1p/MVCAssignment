@@ -165,7 +165,7 @@ func OrderNewItem(order *types.Order, itemID types.ItemID, quantity int, instruc
 		return -1, err
 	}
 
-	var price float32 = float32(item.Price) * float32(quantity)
+	var price float32 = float32(item.Price)
 
 	res, err := db.Exec("INSERT INTO order_items (order_id, item_id, quantity, price,instructions) VALUES (?, ?, ?, ?, ?)", order.ID, item.ID, quantity, price, instructions)
 	if err != nil {

@@ -22,7 +22,7 @@ export default function HomeScreen() {
 
     let homeScreen = roleScreens[role] || <NotFoundScreen />;
     return <div className="h-screen w-screen flex flex-col">
-        <Navbar role={role} />
+        <Navbar/>
         {homeScreen}
     </div>
 }

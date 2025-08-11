@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"inorder/pkg/types"
 	"inorder/pkg/utils"
 	"net/http"
@@ -12,6 +13,8 @@ func AuthorizationMiddleware(PrivilegesLowerBound types.Role) func(http.Handler)
 			user := r.Context().Value(types.UserContextKey).(*types.User)
 
 			if utils.RolePrivileges[user.Role] < utils.RolePrivileges[PrivilegesLowerBound] {
+				fmt.Println("failed authorization")
+
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}

@@ -10,3 +10,22 @@ export async function getMyOrders(limit, offset) {
     console.log(response.data);
     return response.data;   
 }
+
+
+export async function getOrder(orderId) {
+    const response = await axios.get(`${API_URL}/api/orders/${orderId}`, {withCredentials: true});
+    console.log(response.data);
+    return response.data;
+}
+
+export async function resolveBill(orderID,markAsBilled=false) {
+    const response = await axios.get(`${API_URL}/api/orders/${orderID}/bill?resolve=`+markAsBilled, {withCredentials: true});
+    console.log(response.data);
+    return response.data;
+}
+
+export async function markAsPaid(orderID, amountPaid) {
+    const response = await axios.post(`${API_URL}/api/orders/${orderID}/bill/pay`, {"amount": parseInt(amountPaid)}, {withCredentials: true});
+    console.log(response.data);
+    return response.data;
+}

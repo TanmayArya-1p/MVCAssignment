@@ -314,16 +314,25 @@ func GetOrderBillController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resolveStat := r.URL.Query().Get("resolve")
+	var orderItems []*types.OrderItem
 	if resolveStat == "true" {
-		err = ResolveBillableAmount(order, true)
+		orderItems, err = ResolveBillableAmount(order, true)
 	} else {
-		err = ResolveBillableAmount(order, false)
+		orderItems, err = ResolveBillableAmount(order, false)
 	}
+	for ind, item := range orderItems {
+		curr, err := models.GetItemByID(item.ItemID)
+		if err != nil {
+			http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		orderItems[ind].Name = curr.Name
+	}
+
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	orderItems, err := models.GetOrderedItems(order.ID)
 	if err != nil {
 		http.Error(w, "Internal server error: "+err.Error(), http.StatusInternalServerError)
 		return

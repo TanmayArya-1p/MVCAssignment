@@ -5,15 +5,15 @@ import (
 	"inorder/pkg/types"
 )
 
-func ResolveBillableAmount(order *types.Order, toBill bool) error {
+func ResolveBillableAmount(order *types.Order, toBill bool) ([]*types.OrderItem, error) {
 	items, err := models.GetOrderedItems(order.ID)
 	if err != nil {
-		return err
+		return []*types.OrderItem{}, err
 	}
 
 	var amt float32
 	for _, item := range items {
-		amt += item.Price
+		amt += item.Price * float32(item.Quantity)
 	}
 
 	var changeStatus *types.OrderStatus = nil
@@ -21,8 +21,9 @@ func ResolveBillableAmount(order *types.Order, toBill bool) error {
 		changeStatus = &types.OrderStatusBilled
 	}
 
-	return models.UpdateOrder(order, &models.OrderUpdateInstruction{
+	err = models.UpdateOrder(order, &models.OrderUpdateInstruction{
 		Status:         changeStatus,
 		BillableAmount: &amt,
 	})
+	return items, err
 }

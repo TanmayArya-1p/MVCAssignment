@@ -1,11 +1,12 @@
 import * as auth from "../api/auth";
 import useAuthStore from "../stores/authStore";
 
-export default function Navbar({role}) {
+export default function Navbar() {
+    const { role } = useAuthStore.getState();
+
 
 
     const logoutHandler = async () => {
-
         if(!window.confirm("Are you sure you want to logout?")) {
             return
         }

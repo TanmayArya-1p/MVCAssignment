@@ -17,7 +17,7 @@ export default function ItemCard({item,setItemOrders,itemOrders}) {
 
                 </div>
                 {itemOrders &&
-                    <div class="relative flex items-center text-xl">
+                    <div className="relative flex items-center text-xl">
                         <button className="ubuntu-bold !p-0.5 w-10 disabled:text-gray-400" onClick={() => {
                             setItemOrders((prevOrders) => ({
                                 ...prevOrders,
