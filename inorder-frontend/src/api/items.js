@@ -1,10 +1,20 @@
+import { API_URL } from "../config";
+import axios from "axios";
 
 export async function getAllItems(limit,offset) {
-    try {
-        const response = await axios.get(`/api/items?limit=${limit}&offset=${offset}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching items:", error);
-        throw error;
-    }
+    const params = {};
+    if (limit != null) params.limit = limit;
+    if (offset != null) params.offset = offset;
+
+    const response = await axios.get(`${API_URL}/api/items`, {params,withCredentials: true});
+    console.log(response.data);
+    return response.data;
+}
+
+
+
+export async function getItemsOfTags(tags) {
+    const response = await axios.get(`${API_URL}/api/items/bytags?tags=`+tags.join(","), {withCredentials: true});
+    console.log(response.data);
+    return response.data;
 }

@@ -4,6 +4,6 @@ type TagID int
 type TagName string
 
 type Tag struct {
-	ID   TagID
-	Name TagName
+	ID   TagID   `json:"id"`
+	Name TagName `json:"name"`
 }

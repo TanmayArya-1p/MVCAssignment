@@ -164,11 +164,39 @@ button:hover {
   transition: transform 0.1s linear;
 }
 
+
+.tag-no-hover {
+  border: 2px solid;
+  border-radius: 0.25rem;
+  text-align: center;
+  font-family: "Ubuntu", sans-serif;
+  padding: 0.1rem 0.5rem;
+  transition: transform 0.1s linear;
+}
+
 .tag:hover {
   transform: translateY(-0.1rem);
   transition: transform 0.1s linear;
 }
 
+
+
 .tag-selected {
   background-color: rgb(243, 251, 255)
+}
+
+
+.item-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  border-width: 2px;
+  padding: 1rem;
+  box-shadow: white;
+  flex-direction: column;
+  justify-content: space-between;
+  display: flex;
+  gap:1rem;
+  height: 20rem;
+  width: 12rem;
+  align-items: center;
 }

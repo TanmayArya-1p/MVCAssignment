@@ -17,6 +17,7 @@ func SetupItemsRoutes(root *mux.Router) {
 	itemRouter.HandleFunc("", controllers.GetAllItemsController).Methods("GET")                         // GET /api/items -> Get all items in the menu
 	itemRouter.Handle("", chefAuth(http.HandlerFunc(controllers.CreateItemController))).Methods("POST") // POST /api/items -> Create and add a new item to the menu
 	itemRouter.HandleFunc("/tags", controllers.GetAllTagsController).Methods("GET")
+	itemRouter.HandleFunc("/bytags", controllers.GetItemsOfTagsController).Methods("GET")
 	itemRouter.Handle("/{itemid}", chefAuth(http.HandlerFunc(controllers.DeleteItemController))).Methods("DELETE")
 	itemRouter.HandleFunc("/{itemid}", controllers.GetItemByIDController).Methods("GET")
 	itemRouter.Handle("/{itemid}", chefAuth(http.HandlerFunc(controllers.UpdateItemController))).Methods("PUT")

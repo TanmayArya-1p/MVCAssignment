@@ -11,6 +11,7 @@ import (
 	"os"
 	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -210,4 +211,21 @@ func UploadImageController(w http.ResponseWriter, r *http.Request) {
 		"url":     fileURL,
 	})
 	return
+}
+
+func GetItemsOfTagsController(w http.ResponseWriter, r *http.Request) {
+	var tags []types.TagName
+	if r.URL.Query().Get("tags") != "" {
+		for _, tag := range strings.Split(r.URL.Query().Get("tags"), ",") {
+			tags = append(tags, types.TagName(tag))
+		}
+	}
+
+	items, err := models.GetAllItemsOfTag(tags)
+	if err != nil {
+		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(items)
 }
