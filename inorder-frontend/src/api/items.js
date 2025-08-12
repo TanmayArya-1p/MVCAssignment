@@ -7,7 +7,6 @@ export async function getAllItems(limit,offset) {
     if (offset != null) params.offset = offset;
 
     const response = await axios.get(`${API_URL}/api/items`, {params,withCredentials: true});
-    console.log(response.data);
     return response.data;
 }
 
@@ -15,26 +14,22 @@ export async function getAllItems(limit,offset) {
 
 export async function getItemsOfTags(tags) {
     const response = await axios.get(`${API_URL}/api/items/bytags?tags=`+tags.join(","), {withCredentials: true});
-    console.log(response.data);
     return response.data;
 }
 
 
 export async function getAllOrderedItems() {
     const response = await axios.get(`${API_URL}/api/orders/items`, {withCredentials: true});
-    console.log(response.data);
     return response.data;
 }
 
 export async function bumpOrderItemStatus(itemId) {
     const response = await axios.post(`${API_URL}/api/orders/item/${itemId}/bump`,{}, { withCredentials: true });
-    console.log(response.data);
     return response.data;
 }
 
 export async function deleteItem(itemId) {
     const response = await axios.delete(`${API_URL}/api/items/${itemId}`, { withCredentials: true });
-    console.log(response.data);
     return response.data;
 }
 
@@ -48,7 +43,6 @@ export async function uploadImage(image) {
         },
         withCredentials: true
     });
-    console.log(response.data);
     return response.data;
 }
 
@@ -61,7 +55,6 @@ export async function createItem({name,price,description,tags,image}) {
         tags: tags,
         image
     }, { withCredentials: true });
-    console.log(response.data);
     return response.data;
 }   
 
@@ -73,6 +66,5 @@ export async function updateItem({name,price,description,tags,image,itemId}) {
         tags: tags,
         image
     }, { withCredentials: true });
-    console.log(response.data);
     return response.data;
 }

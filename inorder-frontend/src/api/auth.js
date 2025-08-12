@@ -21,7 +21,6 @@ export async function RegisterUser(username, password) {
     };
     try {
         const response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
         return response.data;
     } catch (error) {
         console.error(error);
@@ -50,7 +49,6 @@ export async function LoginUser(username, password) {
 
     try {
         const response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
         return response.data;
     }
     catch (error) {
@@ -70,7 +68,6 @@ export async function RefreshToken() {
 
     try {
         let response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
         return response.data;
     }
     catch (error) {
@@ -78,7 +75,6 @@ export async function RefreshToken() {
     }
 }
 
-//TODO: REMOVE LOGS
 export async function VerifyToken() {
 
     let config = {
@@ -90,15 +86,12 @@ export async function VerifyToken() {
 
     try {
         let response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
         return response.data;
     }
     catch (error) {
         throw(error);
     }
 }
-
-//TODO: MAKE IT SO THAT FIRST TOKENS VERIFIED THEN REFRESHED
 
 export async function LogoutUser() {
 
@@ -111,7 +104,6 @@ export async function LogoutUser() {
 
     try {
         let response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
         return response.data;
     }
     catch (error) {

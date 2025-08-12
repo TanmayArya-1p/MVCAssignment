@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as auth from '../api/auth';
 import useAuthStore from '../stores/authStore';
 import toast, { Toaster } from 'react-hot-toast';
 import { jwtDecode } from "jwt-decode";
 import { roles } from '../utils/const';
 import VerifySignedIn from '../utils/verify';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginScreen() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const {setUsername: setStoreUsername, setAuthToken, setRefreshToken, setRole} = useAuthStore.getState();
-
+    const navigate = useNavigate();
     useEffect(() => {VerifySignedIn()}, [])
 
 
@@ -25,7 +26,7 @@ export default function LoginScreen() {
             setRole(jwtDecode(resp.authToken).role);
             toast.success("Successfully logged in");
             setTimeout(() => {
-                window.location.href = "/home";
+                navigate("/home");
             }, 1000);
         } catch(err) {
             console.error("Login failed:", err);
@@ -37,7 +38,7 @@ export default function LoginScreen() {
     return (
         <>
         <Toaster />
-
+        <title>Login - InOrder</title>
         <div className="h-screen w-screen flex justify-center items-center">
             <div className="flex flex-col justify-center py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">

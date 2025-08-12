@@ -1,10 +1,9 @@
 import {useEffect, useState} from "react"
 import {deleteUser, updateUserRole} from "../api/users"
 import {toast} from "react-hot-toast"
-import {bumpRoleMap} from "../utils/const"
+import {bumpRoleMap,bumpDownRoleMap} from "../utils/const"
 
-export default function UserList({ users,setUsers }) {
-
+export default function UserList({ users,setUsers, authUserID }) {
     const [filteredUsers,setFilteredUsers] = useState(users)
     const [indexedUsers, setIndexedUsers] = useState(users)
     const [query, setQuery] = useState("")
@@ -25,9 +24,31 @@ export default function UserList({ users,setUsers }) {
             toast.success("Successfully deleted user")
 
         } catch(error) {
-            console.log("error deleting user:",error)
             toast.error("Failed to delete user")
         }
+
+    }
+
+
+    const bumpDownUserHandler = async (userID) => {
+        const user = users.find(user => user.id === userID);
+        if(!user) return;
+
+        if(user.role === "customer") {
+            toast.error("Cannot bump down customer role");
+            return;
+        }
+
+        if(!window.confirm(`Are you sure you want to bump down this user's role to ${user.role === "chef" ? "customer" : "chef"}?`)) {
+            return;
+        }
+        try {
+            await updateUserRole(userID, bumpDownRoleMap[user.role]);
+            setUsers((prev) => prev.map(u => u.id === userID ? {...u, role: bumpDownRoleMap[u.role]} : u));
+        } catch (error) {
+            toast.error("Failed to bump user role");
+        }
+
 
     }
 
@@ -47,7 +68,6 @@ export default function UserList({ users,setUsers }) {
             await updateUserRole(userID, bumpRoleMap[user.role]);
             setUsers((prev) => prev.map(u => u.id === userID ? {...u, role: bumpRoleMap[u.role]} : u));
         } catch (error) {
-            console.log("error bumping user role:", error);
             toast.error("Failed to bump user role");
         }
 
@@ -117,6 +137,8 @@ export default function UserList({ users,setUsers }) {
                         <th className="px-4 py-2">Username</th>
                         <th className="px-4 py-2">Role</th>
                         <th className="px-4 py-2">Created At</th>
+                        <th className="px-4 py-2">Delete / Change Role</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -126,17 +148,21 @@ export default function UserList({ users,setUsers }) {
                             <td className="px-4 py-2 text-center ubuntu-bold truncate">{user.role}</td>
                             <td className="px-4 py-2 text-center truncate">{new Date(user.created_at).toLocaleDateString()}</td>
                             <td className="px-4 py-2 text-center flex flex-row gap-2">
-                                <button className="delete-button" onClick={() => deleteUserHandler(user.id)}>
+                                <button className="delete-button disabled:opacity-30" disabled={user.id === authUserID} onClick={() => deleteUserHandler(user.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                     </svg>
                                 </button>
-                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role==="admin"} onClick={() => bumpUserHandler(user.id)}>
+                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role==="admin" || user.id === authUserID} onClick={() => bumpUserHandler(user.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
                                     </svg>
-                                    Bump Role
+                                </button>
+                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role==="customer" || user.id === authUserID} onClick={() => bumpDownUserHandler(user.id)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+                                    </svg>
                                 </button>
                             </td>
                         </tr>

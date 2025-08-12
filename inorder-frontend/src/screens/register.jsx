@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as auth from '../api/auth';
 import useAuthStore from '../stores/authStore';
 import toast, { Toaster } from 'react-hot-toast';
 import VerifySignedIn from '../utils/verify';
-
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterScreen() {
-
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
@@ -14,12 +14,8 @@ export default function RegisterScreen() {
 
     useEffect(() => {VerifySignedIn()}, [])
     
-
-
-
     const handleRegister = async (e) => {
         e.preventDefault();
-        console.log("Registering user:", username);
         try {
             if (password !== repeatPassword) {
                 toast.error("Passwords do not match");
@@ -40,10 +36,9 @@ export default function RegisterScreen() {
             setStoreUsername(username);
             toast.success("Successfully registered");
             setTimeout(() => {
-                window.location.href = "/login";
+                navigate("/login");
             }, 1000);
         } catch(err) {
-            console.log("failed to register",err)
             toast.error("User already exists or an error occurred", {
                 style: {
                     minWidth: '250px',
@@ -55,7 +50,7 @@ export default function RegisterScreen() {
 
     return (<>
         <Toaster />
-        
+        <title>Register - InOrder</title>
         <div className="h-screen w-screen flex justify-center items-center">
             <div className="flex flex-col justify-center py-12 w-[25%] min-w-2xs">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">

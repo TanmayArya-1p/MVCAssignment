@@ -3,8 +3,6 @@ import useAuthStore from '../stores/authStore';
 import { ONBOARDING_PATHS } from './const';
 
 
-
-
 export default async function VerifySignedIn() {
     try {
         let resp =await auth.RefreshToken();

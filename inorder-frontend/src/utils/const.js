@@ -28,6 +28,11 @@ export const bumpRoleMap = {
     customer: "chef",
 }
 
+export const bumpDownRoleMap = {
+    admin: "chef",
+    chef: "customer",
+}
+
 export const modalStyle = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.25)',

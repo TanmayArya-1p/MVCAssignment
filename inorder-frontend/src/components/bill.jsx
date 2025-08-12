@@ -2,7 +2,12 @@ import { markAsPaid, resolveBill } from "../api/orders";
 import { useEffect, useState } from "react";
 import { orderColourMap } from "../utils/const";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+
+
 export default function Bill({order, setBillLoading, billLoading, role}) {
+    const navigate = useNavigate();
     const [orderItems, setOrderItems] = useState([]);
     const [billableAmount, setBillableAmount] = useState(0);
     const [amountPaid, setAmountPaid] = useState(0);
@@ -13,7 +18,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
         }
         await resolveBill(order.id, true)
         toast.success("Order billed successfully");
-        window.location.reload()
+        navigate(0)
     }
 
     const payHandler = async (orderId) => {
@@ -31,14 +36,13 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
         }
         try {
             await markAsPaid(orderId, paidAmount);
-            window.location.reload();
+            navigate(0);
 
         } catch (error) {
             toast.error("Failed to mark order as paid.");
         }
     }
 
-    //TODO: REPLACE ROLE LITERALS EVERYWHEREzx`
     useEffect(() => {
         const fetchBill = async () => {
             setBillLoading(true);
@@ -48,7 +52,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
                 setBillableAmount(bill.billable_amount);
             } catch (error) {
                 console.error("error fetching order items:", error);
-                window.location.href = "/notfound";
+                navigate("/notfound");
             } finally {
                 setBillLoading(false);
             }
@@ -61,7 +65,6 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
     }
 
     return (<div>
-            <Toaster></Toaster>
         
             <div className="relative overflow-x-auto mt-2 w-fit bg-white rounded-xl shadow-md border">
             <table className="w-fit bg-white p-2">
@@ -126,7 +129,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
                                 </>
                             )}
                             {order.status==="paid" && (
-                                <span>Tip: ₹{order.tip}</span>
+                                <span className="bg-white border-2 rounded-sm p-2">Tip: ₹{order.tip}</span>
                             )}
                         </td>
                     </tr>

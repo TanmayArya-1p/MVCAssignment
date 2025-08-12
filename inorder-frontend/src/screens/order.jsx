@@ -12,11 +12,11 @@ import { modalStyle } from '../utils/const';
 import { Toaster,toast } from 'react-hot-toast';
 import { deleteOrder } from '../api/orders';
 import VerifySignedIn from "../utils/verify";
-
+import { useNavigate } from 'react-router-dom';
 
 export default function OrderScreen() {
     const {orderid} = useParams();
-
+    const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const add = searchParams.get("add")=== "true";
 
@@ -52,8 +52,8 @@ export default function OrderScreen() {
         setItemInstructions({});
         toast.success("Items added to order successfully");
         setTimeout(() => {
-            window.location.href= `/order/${orderid}`;
-        }, 1300);
+            navigate(`/order/${orderid}`);
+        }, 1000);
     }
     
 
@@ -66,7 +66,7 @@ export default function OrderScreen() {
                 setOrder(response);
             } catch (error) {
                 console.error("error getting order", error);
-                window.location.href = "/notfound"
+                navigate("/notfound");
             } finally {
                 setLoading(false);
             }
@@ -82,11 +82,10 @@ export default function OrderScreen() {
             await deleteOrder(order.id)
             toast.success("Order deleted successfully");
             setTimeout(() => {
-                window.location.href = "/home";
-            }, 1300);
+                navigate("/home");
+            }, 1000);
 
         } catch (error) {
-            console.log("error deleting order:", error);
             toast.error("Failed to delete order");
         }
     }
@@ -97,6 +96,7 @@ export default function OrderScreen() {
 
 
     return <div className="h-screen w-screen flex flex-col">
+            <title>Order #{order.id} - InOrder</title>
             <Toaster />
             <Navbar/>
             <div className='mt-5 p-5'>
@@ -139,7 +139,7 @@ export default function OrderScreen() {
             >
                 <ItemMenu itemOrders={itemOrders} setItemOrders={setItemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} pageSize={4}/>
                 <div className='flex flex-row gap-5 justify-end'>
-                    <button onClick={() => addItemsHandler()}>Add Items {"( +₹"+addedItemPrice+ " )"}</button>
+                    <button onClick={() => addItemsHandler()}>Add Items {"( +₹"+addedItemPrice.toFixed(2)+ " )"}</button>
                     <button onClick={() => setAddItemsModalIsOpen(false)}>Cancel</button>
                 </div>
             </Modal>

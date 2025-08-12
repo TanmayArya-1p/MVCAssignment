@@ -18,7 +18,6 @@ export default function UserHomeScreen() {
             try {
                 setOrdersLoading(true);
                 const response = await getMyOrders(null, 0);
-                console.log("orders:", response);
                 setOrders(response);
                 setOrdersLoading(false);
 

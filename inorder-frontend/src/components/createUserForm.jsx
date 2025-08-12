@@ -1,7 +1,5 @@
-import {useState, useEffect} from 'react'
 import {createUser} from "../api/users"
-import {toast, Toaster} from 'react-hot-toast'
-//TODO: BUMP USER ROLE
+import {toast} from 'react-hot-toast'
 
 export default function CreateUserForm({setUsers}) {    
 
@@ -21,7 +19,7 @@ export default function CreateUserForm({setUsers}) {
             setUsers((a) => [...a, resp])
             toast.success("User created successfully")
         } catch (error) {
-            toast.error("Failed to create user")    
+            toast.error("Username already taken or an error occurred")    
         }
     }
 

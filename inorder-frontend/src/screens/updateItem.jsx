@@ -7,15 +7,16 @@ import { Toaster } from "react-hot-toast";
 import { API_URL } from "../config";
 import { updateItem, uploadImage } from "../api/items";
 import {toast} from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
-//TODO: REPLACE WINDOW.LOCATIONS STUFF
 
 export default function UpdateItemScreen() {
+    const navigate = useNavigate();
     const {role} = useAuthStore.getState();
     useEffect(() => {
         if (role !== "admin") {
-            window.location.href = "/home";
+            navigate("/home");
         }
     }, [role]);
 
@@ -38,7 +39,6 @@ export default function UpdateItemScreen() {
         try {
             let resp = null
             if(image.name) {
-                console.log(image)
                 resp = await uploadImage(image);
             }
             const createResp = await updateItem({
@@ -49,24 +49,23 @@ export default function UpdateItemScreen() {
                 image: resp ? resp.url : itemImage,
                 itemId
             });
-            console.log("updating",createResp);
             toast.success("Successfully updated item");
-            window.location = "/items"
+            navigate("/items");
         } catch(error) {
-            console.error("error updating item:", error);
-            toast.error("Failed to update item");
+            toast.error("Failed to update item. Try a different Item Name");
         }
 
     }
 
     useEffect(() => {
         if (!itemId || !itemName || !itemPrice || !itemDescription || !itemImage || !itemTags) {
-            window.location.href = ("/notfound");
+            navigate("/notfound");
         }
     }, []);
 
     return <div className="h-screen w-screen flex flex-col">
         <Navbar></Navbar>
+        <title>Update Item - InOrder</title>
         <Toaster />
         <div className="mt-10 p-5 flex flex-col flex-wrap gap-10 items-center justify-center">
             <div className="ubuntu-bold text-4xl">Update Item #{itemId}</div>

@@ -84,7 +84,6 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
     }, [filteredItems]);
 
     useEffect(() => {
-        console.log(tags)
         let selected = Object.keys(tags).filter(tag => tags[tag]);
         if(selected.length === 0) {
             setItemsPage(1);

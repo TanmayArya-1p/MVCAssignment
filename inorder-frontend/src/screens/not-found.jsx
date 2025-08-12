@@ -1,5 +1,7 @@
+
 export default function NotFoundScreen() {
     return  <div className="min-h-screen min-w-screen flex flex-col items-center justify-center gap-10">
+        <title>Not Found - InOrder</title>
         <a className="text-red-500"></a>
         <a className="text-yellow-500"></a>
         <a className="text-teal-500"></a>

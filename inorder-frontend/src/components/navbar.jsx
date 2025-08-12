@@ -1,18 +1,18 @@
 import * as auth from "../api/auth";
 import useAuthStore from "../stores/authStore";
-
+import { useNavigate } from "react-router-dom";
 
 
 export default function Navbar() {
     const { role ,username} = useAuthStore.getState();
 
-
+    const navigate = useNavigate();
 
     const logoutHandler = async () => {
         if(!window.confirm("Are you sure you want to logout?")) {
             return
         }
-        const {setUsername, setAuthToken, setRefreshToken,setRole} = useAuthStore.getState();
+        const {setUsername, setAuthToken, setRefreshToken,setRole, setUserID} = useAuthStore.getState();
 
         setUsername("");
         setAuthToken("");
@@ -20,7 +20,7 @@ export default function Navbar() {
         setRole("");
 
         await auth.LogoutUser();
-        window.location.href = "/";
+        navigate("/");
     }
 
 

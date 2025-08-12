@@ -3,10 +3,12 @@ import {modalStyle} from '../utils/const';
 import { useState } from 'react';
 import { createOrder } from '../api/orders';
 import { toast, Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateOrderModal({ isOpen, setIsOpen }) {
 
     const [tableNo, setTableNo] = useState("");
+    const navigate = useNavigate();
 
     const createOrderHandler = () => {
         async function create() {
@@ -15,8 +17,8 @@ export default function CreateOrderModal({ isOpen, setIsOpen }) {
                 toast.success("Order Successfully Created");
                 setTimeout(() => {
                     setIsOpen(false);
-                    window.location.href = `/order/${resp.id}?add=true`;
-                }, 1300);
+                    navigate(`/order/${resp.id}?add=true`);
+                }, 1000);
             } catch (error) {
                 toast.error("Error Creating Order");
             }
@@ -25,7 +27,6 @@ export default function CreateOrderModal({ isOpen, setIsOpen }) {
     }
 
     return (<>
-        <Toaster />
         <Modal
             isOpen={isOpen}
             onRequestClose={() => setIsOpen(false)}

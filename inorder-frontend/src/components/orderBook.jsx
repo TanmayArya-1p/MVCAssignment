@@ -33,7 +33,6 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
     }, [filteredOrders, ordersPage]);
 
     useEffect(() => {
-        console.log(tags)
         let selected = Object.keys(tags).filter(tag => tags[tag]);
         let temp = []
         if(selected.length === 0) {

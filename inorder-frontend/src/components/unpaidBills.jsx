@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-
+import { useNavigate } from "react-router-dom";
 
 export default function UnpaidBills({orders}) {
 
     const [unpaidOrders, setUnpaidOrders] = useState([]);
-
+    const navigate = useNavigate();
 
     useEffect(()=> {
         setUnpaidOrders(orders.filter(order => order.status === "billed"));
@@ -27,7 +27,7 @@ export default function UnpaidBills({orders}) {
                             key={order.id}
                         >
                             <td className="px-3 text-center">
-                                <a className="order-link ubuntu-bold min-w-20" onClick={() => window.location.href = `/order/${order.id}`}>
+                                <a className="order-link ubuntu-bold min-w-20" onClick={() => navigate(`/order/${order.id}`)}>
                                     Order #{order.id}
                                 </a>
                             </td>
@@ -38,6 +38,7 @@ export default function UnpaidBills({orders}) {
                     ))}
                 </tbody>
             </table>
+            {unpaidOrders.length === 0 && <div className="ubuntu-regular text-xl mt-2">No Unpaid Orders</div>}
         </div>
     </>
 }

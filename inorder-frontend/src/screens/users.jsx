@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react";
 import useAuthStore from "../stores/authStore";
-import ItemMenu from "../components/itemMenu";
 import Navbar from "../components/navbar";
-import CreateItemForm from "../components/createItemForm";
-import {fetchAllUsers, createUser, deleteUser} from "../api/users"
+import {fetchAllUsers} from "../api/users"
 import UserList from "../components/userList";
 import Spinner from "../components/spinner"
 import CreateUserForm from "../components/createUserForm"
 import { Toaster } from "react-hot-toast";
 import VerifySignedIn from "../utils/verify";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+
 
 export default function UserScreen() {
-    const {role,username} = useAuthStore.getState();
+    const {authToken,role} = useAuthStore.getState();
+
+    const [userID, setUserID] = useState("");
+
     const [loading, setLoading] = useState(false)
     const [users, setUsers] = useState([]);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (role !== "admin") {
-            window.location.href = "/notfound"
+            navigate("/notfound");
         }
     },[])                   
 
@@ -33,6 +39,11 @@ export default function UserScreen() {
         fetchUsers();
     }, []);
 
+
+    useEffect(() => {
+        setUserID(jwtDecode(authToken).userID);
+    }, [authToken]);
+
     if(loading) {
         return <div className="h-screen w-screen flex items-center justify-center">
             <Spinner />
@@ -41,9 +52,10 @@ export default function UserScreen() {
 
     return <div className="h-screen w-screen flex flex-col">
         <Navbar></Navbar>
+        <title>Users - InOrder</title>
         <Toaster />
         <div className="mt-10 p-5 flex flex-row flex-wrap gap-10 items-center justify-center">
-            <UserList users={users} setUsers={setUsers}/>
+            <UserList users={users} setUsers={setUsers} authUserID={userID}/>
             <CreateUserForm setUsers={setUsers}/>
         </div>
     </div>

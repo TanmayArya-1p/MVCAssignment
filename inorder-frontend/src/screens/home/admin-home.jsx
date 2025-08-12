@@ -8,8 +8,10 @@ import ItemMenu from "../../components/itemMenu";
 import CreateOrderModal from "../../components/createOrderModal";
 import UnpaidBills from "../../components/unpaidBills";
 import { ItemQueue } from "../../components/itemQueue";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminHomeScreen() {
+    const navigate = useNavigate();
     const [ordersLoading, setOrdersLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [createModelOpen, setCreateModelOpen] = useState(false);
@@ -20,7 +22,6 @@ export default function AdminHomeScreen() {
             try {
                 setOrdersLoading(true);
                 const response = await getAllOrders(null, 0);
-                console.log("orders:", response);
                 setOrders(response);
                 setOrdersLoading(false);
 
@@ -56,7 +57,7 @@ export default function AdminHomeScreen() {
                     <div id="navigate-to-order" className="ubuntu-bold mt-5 p-2 w-fit flex flex-row gap-2 items-center bg-white shadow-md border-2 rounded">
                         Navigate to Order No:
                         <input type="number" id="navigate-order-id" placeholder="Order No" className="p-1 border-2 w-30 mx-2 rounded-sm"/>
-                        <button onClick={() => window.location.href = `/order/${document.getElementById("navigate-order-id").value}`}>
+                        <button onClick={() => navigate(`/order/${document.getElementById("navigate-order-id").value}`)}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
                             </svg>

@@ -7,6 +7,7 @@ import NotFoundScreen from "../../screens/not-found";
 import Navbar from "../../components/navbar";
 import { useEffect } from "react";
 import VerifySignedIn from "../../utils/verify";
+import { Toaster } from "react-hot-toast";
 
 const roleScreens = {
     [roles.CHEF]: <ChefHomeScreen />,
@@ -23,6 +24,8 @@ export default function HomeScreen() {
     let homeScreen = roleScreens[role] || <NotFoundScreen />;
     return <div className="h-screen w-screen flex flex-col">
         <Navbar/>
+        <Toaster/>
+        <title>Home - InOrder</title>
         {homeScreen}
     </div>
 }
