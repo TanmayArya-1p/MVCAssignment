@@ -5,3 +5,4 @@ inorder
 README.md
 sample.config.yaml
 database/mysql-init/schema.sql
+inorder-frontend

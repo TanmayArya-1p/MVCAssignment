@@ -76,8 +76,12 @@ export function ItemQueue() {
                             </td>
                         </tr>
                     ))}
+
                 </tbody>
             </table>
+            { orderedItems.length === 0 && (
+                <div className="ubuntu-bold text-center text-xl mt-5">No items in queue</div>
+            )}
         </div>
 
 

@@ -12,7 +12,7 @@ export default function CreateItemForm() {
         const image = formData.get("image");
         try {
             let resp = null
-            if(image) {
+            if(image.name.length > 0) {
                 resp = await uploadImage(image);
             }
             const createResp = await createItem({

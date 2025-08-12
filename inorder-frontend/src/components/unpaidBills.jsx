@@ -38,7 +38,7 @@ export default function UnpaidBills({orders}) {
                     ))}
                 </tbody>
             </table>
-            {unpaidOrders.length === 0 && <div className="ubuntu-regular text-xl mt-2">No Unpaid Orders</div>}
+            {unpaidOrders.length === 0 && <div className="ubuntu-bold w-full text-center text-lg mt-2">No Unpaid Orders</div>}
         </div>
     </>
 }

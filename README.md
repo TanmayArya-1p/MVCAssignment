@@ -1,5 +1,14 @@
 # InOrder
 
+### Quickstart
+
+Clone the repo and create a `config.yaml`
+
+
+The repository comes with dummy data to test with.
+
+
+
 ### Setup and Configuration
 
 Make a `config.yaml` in the root directory of the project based on the [sample config](https://github.com/TanmayArya-1p/MVCAssignment/blob/main/sample.config.yaml).
