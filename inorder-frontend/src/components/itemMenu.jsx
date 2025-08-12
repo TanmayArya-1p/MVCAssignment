@@ -5,7 +5,7 @@ import ItemCard from "./itemCard";
 import { getAllItems, getItemsOfTags } from "../api/items";
 import { getAllTags } from "../api/tags";
 
-export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setItemInstructions,setAddedItemPrice,pageSize}) {
+export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setItemInstructions,setAddedItemPrice,pageSize,admin}) {
 
     const [items, setItems] = useState([]);
     const [loading,setLoading] = useState(true);
@@ -142,8 +142,8 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
             </div>
         </div>
 
-        <div id="items-container" className="mt-3 flex flex-row flex-wrap gap-3 items-center">
-            {displayedItems.map(item => <ItemCard key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} />)}
+        <div id="items-container" className="mt-3 flex flex-row flex-wrap gap-3 items-center justify-center">
+            {displayedItems.map(item => <ItemCard setItems={setItems} admin={admin} key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} />)}
             {displayedItems.length === 0 && <div className="ubuntu-bold h-80 w-full text-center text-3xl flex justify-center items-center">No items found</div>}
          </div>
         <div className="flex flex-row gap-3 mt-12">

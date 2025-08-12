@@ -7,9 +7,6 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
     const [billableAmount, setBillableAmount] = useState(0);
     const [amountPaid, setAmountPaid] = useState(0);
 
-    //TODO: ASK CONFIRMATIONS VIA MODAL
-    //TODO: ASK AMOUNT PAID VIA MODAL
-
     const billHandler = async () => {
         if(!window.confirm("Are you sure you want to bill this order? Any pending items will no longer be processed.")) {
             return;

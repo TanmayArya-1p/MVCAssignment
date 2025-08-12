@@ -31,3 +31,36 @@ export async function bumpOrderItemStatus(itemId) {
     console.log(response.data);
     return response.data;
 }
+
+export async function deleteItem(itemId) {
+    const response = await axios.delete(`${API_URL}/api/items/${itemId}`, { withCredentials: true });
+    console.log(response.data);
+    return response.data;
+}
+
+
+export async function uploadImage(image) {
+    const formData = new FormData()
+    formData.append("image", image);
+    const response = await axios.post(`${API_URL}/api/items/upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        withCredentials: true
+    });
+    console.log(response.data);
+    return response.data;
+}
+
+
+export async function createItem({name,price,description,tags,image}) {
+    const response = await axios.post(`${API_URL}/api/items`, {
+        name,
+        price: parseFloat(price),
+        description,
+        tags: tags,
+        image
+    }, { withCredentials: true });
+    console.log(response.data);
+    return response.data;
+}   

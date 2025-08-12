@@ -48,7 +48,7 @@ export default function AdminHomeScreen() {
                     </div>
                     {ordersLoading && <Spinner />}
                     </div>
-                    <OrderBook orders={orders.filter(order => order.status !== "paid")} setOrders={setOrders} loading={ordersLoading} admin={true}/>
+                    <OrderBook orders={orders.filter(order => order.status !== "paid")} setOrders={setOrders} loading={ordersLoading} admin/>
 
                 </div>
 
@@ -74,12 +74,8 @@ export default function AdminHomeScreen() {
             </div>
             <div className="flex flex-col">
                 <div className="text-3xl ubuntu-bold mb-2">Previous Orders</div>
-                <OrderBook noFilter orders={orders.filter(order => order.status === "paid")} setOrders={setOrders} loading={ordersLoading} admin={true}/>
+                <OrderBook noFilter orders={orders.filter(order => order.status === "paid")} setOrders={setOrders} loading={ordersLoading} admin />
             </div>
-
-
-
-
             <CreateOrderModal isOpen={createModelOpen} setIsOpen={setCreateModelOpen} />
             
         </div>
