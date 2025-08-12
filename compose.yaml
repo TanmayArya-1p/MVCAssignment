@@ -26,9 +26,9 @@ services:
 
         environment:
             - MYSQL_PORT=3306
-            - MYSQL_USER=root
+            - MYSQL_USER=rootmysql
             - MYSQL_PASSWORD=pass
             - MYSQL_ROOT_PASSWORD=pass
             - MYSQL_DATABASE=mvc
         volumes:
-            - ./database/mysql-init/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+            - ${DB_VOLUME:-./database/migrations:/docker-entrypoint-initdb.d}

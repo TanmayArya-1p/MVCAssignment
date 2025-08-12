@@ -10,13 +10,19 @@ help:
 	@echo " make db-up - Run database migrations up"
 	@echo " make test - Run unit tests"
 	@echo " make clean - Clean up builds"
+	@echo " make quickstart - Start the server with dummy data (0 Configuration)"
+	@echo " make up - Start the server without dummy data"
+	@echo " make down - Stop the server"
 
 clean:
 	rm -f inorder
 
+quickstart:
+	touch config.yaml
+	cat sample.config.yaml > config.yaml
+	DB_VOLUME=./database/mysql-init/dump.sql:/docker-entrypoint-initdb.d/dump.sql docker compose up -d --build
 up:
-	docker compose up -d --build
-
+	DB_VOLUME=./database/migrations:/docker-entrypoint-initdb.d docker compose up -d --build
 down:
 	docker compose down
 

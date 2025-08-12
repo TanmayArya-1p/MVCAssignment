@@ -1,13 +1,13 @@
 MySQL:
-    USERNAME: user
+    USERNAME: rootmysql
     PASSWORD: pass
-    HOST: localhost:3306
+    HOST: db:3306
     DATABASE: mvc
 InOrder:
     PORT: 4000
     REFRESH_TOKEN_EXPIRE: 86400
-    JTI_CLEANUP_INTERVAL: 43200
-    JWT_SECRET: secret
+    JTI_CLEANUP_INTERVAL: 1800
+    JWT_SECRET: "jwt"
     AUTH_TOKEN_EXPIRY: 3600
     REFRESH_TOKEN_EXPIRY: 3600
     ITEM_IMAGE_DIRECTORY: public/images

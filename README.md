@@ -2,12 +2,27 @@
 
 ### Quickstart
 
-Clone the repo and create a `config.yaml`
+Clone the repository and run the quickstart using Make:
+```bash
+make quickstart
+```
+Quickstart loads dummy data into the database for testing.
+
+To run without any dummy data:
+
+```bash
+make up
+```
+
+To kill containers:
+```bash
+make down
+```
 
 
-The repository comes with dummy data to test with.
-
-
+By Default, InOrder makes 2 users:
+- `username:admin` with `password:admin`
+- `username:chef` with `password:chef`
 
 ### Setup and Configuration
 
@@ -24,8 +39,16 @@ make run
 If you would like to run it as a docker container then make sure to edit the `config.yaml` accordingly and run
 
 ```bash
-docker compose up -d
+make up
 ```
+
+By default, InOrder sets up 2 users:
+
+`username:admin password:admin`
+`username:chef password:chef`
+
+
+
 ### Database Migrations
 
 Migration files are located in the `/database/migrations` directory.
