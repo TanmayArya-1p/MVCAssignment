@@ -18,3 +18,16 @@ export async function getItemsOfTags(tags) {
     console.log(response.data);
     return response.data;
 }
+
+
+export async function getAllOrderedItems() {
+    const response = await axios.get(`${API_URL}/api/orders/items`, {withCredentials: true});
+    console.log(response.data);
+    return response.data;
+}
+
+export async function bumpOrderItemStatus(itemId) {
+    const response = await axios.post(`${API_URL}/api/orders/item/${itemId}/bump`,{}, { withCredentials: true });
+    console.log(response.data);
+    return response.data;
+}

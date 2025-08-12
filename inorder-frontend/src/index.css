@@ -73,6 +73,26 @@ button:hover {
     }
 }
 
+.order-link {
+  background-color: white;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  border-radius: 0.25rem;
+  padding-inline: 1rem;
+  padding-block: 0.2rem;
+  transition: transform 0.1s linear;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.order-link:hover {
+  cursor: pointer;
+  transform: translateY(-0.1rem);
+  transition: transform 0.1s linear;
+}
+
 
 .ubuntu-light {
   font-family: "Ubuntu", sans-serif;
@@ -145,7 +165,7 @@ button:hover {
   gap:1rem;
   align-items: center;
   justify-content: space-between;
-  min-width: 22rem;
+  min-width: 20rem;
 }
 
 .order-card:hover {
@@ -182,7 +202,7 @@ button:hover {
 
 
 .tag-selected {
-  background-color: rgb(243, 251, 255)
+  background-color: rgb(234, 248, 255)
 }
 
 

@@ -5,7 +5,7 @@ import ItemCard from "./itemCard";
 import { getAllItems, getItemsOfTags } from "../api/items";
 import { getAllTags } from "../api/tags";
 
-export default function ItemMenu({itemOrders,setItemOrders}) {
+export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setItemInstructions,setAddedItemPrice,pageSize}) {
 
     const [items, setItems] = useState([]);
     const [loading,setLoading] = useState(true);
@@ -75,7 +75,7 @@ export default function ItemMenu({itemOrders,setItemOrders}) {
     useEffect(() => {
         setFilteredItems(items);
         setIndexedItems(filteredItems);
-        setDisplayedItems(indexedItems.slice(0, ITEMS_PER_PAGE));
+        setDisplayedItems(indexedItems.slice(0, pageSize || ITEMS_PER_PAGE));
     },[items])
 
     useEffect(() => {
@@ -103,7 +103,7 @@ export default function ItemMenu({itemOrders,setItemOrders}) {
     }, [tags, items]);
 
     useEffect(() => {
-        setDisplayedItems(indexedItems.slice((itemsPage - 1) * ITEMS_PER_PAGE, itemsPage * ITEMS_PER_PAGE));
+        setDisplayedItems(indexedItems.slice((itemsPage - 1) *  (pageSize || ITEMS_PER_PAGE), itemsPage * (pageSize || ITEMS_PER_PAGE)));
     }, [indexedItems, itemsPage]);
 
     if(loading) {
@@ -111,7 +111,7 @@ export default function ItemMenu({itemOrders,setItemOrders}) {
     }
     return <>
         <div id="tag-container" className="mt-5 flex flex-row flex-wrap gap-3 items-center">
-            <div className="ubuntu-bold text-md">
+            <div className="ubuntu-bold text-md flex items-center">
                 Tags:
             </div>
             {Object.keys(tags).filter(tag => tags[tag]).map(tag => (
@@ -143,10 +143,11 @@ export default function ItemMenu({itemOrders,setItemOrders}) {
         </div>
 
         <div id="items-container" className="mt-3 flex flex-row flex-wrap gap-3 items-center">
-            {displayedItems.map(item => <ItemCard key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} />)}
-        </div>
-        <div className="flex flex-row gap-3 mt-2">
-            <Pagination color="standard" count={Math.ceil(indexedItems.length / ITEMS_PER_PAGE)} variant="outlined" shape="rounded" page={itemsPage} onChange={(event, value) => setItemsPage(value)} />
+            {displayedItems.map(item => <ItemCard key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} />)}
+            {displayedItems.length === 0 && <div className="ubuntu-bold h-80 w-full text-center text-3xl flex justify-center items-center">No items found</div>}
+         </div>
+        <div className="flex flex-row gap-3 mt-12">
+            <Pagination color="standard" count={Math.ceil(indexedItems.length / (pageSize || ITEMS_PER_PAGE))} variant="outlined" shape="rounded" page={itemsPage} onChange={(event, value) => setItemsPage(value)} />
         </div>
     </>
 }

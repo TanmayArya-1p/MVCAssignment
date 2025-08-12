@@ -17,6 +17,7 @@ func SetupOrdersRoutes(root *mux.Router) {
 	orderRouter.Handle("", chefAuth(http.HandlerFunc(controllers.GetAllOrdersController))).Methods("GET") // GET /api/orders -> Get all orders
 	orderRouter.Handle("", http.HandlerFunc(controllers.CreateOrderController)).Methods("POST")           // POST /api/orders -> Create a new order
 	orderRouter.Handle("/my", http.HandlerFunc(controllers.GetUserOrdersController)).Methods("GET")
+	orderRouter.Handle("/items", chefAuth(http.HandlerFunc(controllers.GetAllOrderedItemsController))).Methods("GET")
 	orderRouter.Handle("/item/{itemid}/bump", chefAuth(http.HandlerFunc(controllers.BumpOrderItemStatusController))).Methods("POST")
 	orderRouter.Handle("/{orderid}", chefAuth(http.HandlerFunc(controllers.DeleteOrderController))).Methods("DELETE")
 	orderRouter.Handle("/{orderid}", http.HandlerFunc(controllers.GetOrderController)).Methods("GET")

@@ -25,13 +25,18 @@ func GetAllOrderedItems() ([]*types.OrderItem, error) {
 		item := &types.OrderItem{}
 
 		var temp []byte
-		if err := rows.Scan(&item.ID, &item.OrderID, &item.ItemID, &item.Instructions, &item.Quantity, &item.Price, temp, &item.Status); err != nil {
+		if err := rows.Scan(&item.ID, &item.OrderID, &item.ItemID, &item.Instructions, &item.Quantity, &item.Price, &temp, &item.Status); err != nil {
 			return nil, err
 		}
 		item.IssuedAt, err = time.Parse(time.DateTime, string(temp))
 		if err != nil {
 			return nil, err
 		}
+		parentItem, err := GetItemByID(item.ItemID)
+		if err != nil {
+			return nil, err
+		}
+		item.Name = parentItem.Name
 		items = append(items, item)
 	}
 	if err := rows.Err(); err != nil {

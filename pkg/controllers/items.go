@@ -229,3 +229,13 @@ func GetItemsOfTagsController(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(items)
 }
+
+func GetAllOrderedItemsController(w http.ResponseWriter, r *http.Request) {
+	items, err := models.GetAllOrderedItems()
+	if err != nil {
+		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(items)
+}

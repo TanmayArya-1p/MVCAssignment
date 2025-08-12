@@ -2,19 +2,13 @@ import { markAsPaid, resolveBill } from "../api/orders";
 import { useEffect, useState } from "react";
 import { orderColourMap } from "../utils/const";
 import toast, { Toaster } from "react-hot-toast";
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
 export default function Bill({order, setBillLoading, billLoading, role}) {
     const [orderItems, setOrderItems] = useState([]);
     const [billableAmount, setBillableAmount] = useState(0);
     const [amountPaid, setAmountPaid] = useState(0);
-    const [open, setOpen] = useState(true);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
+    //TODO: ASK CONFIRMATIONS VIA MODAL
+    //TODO: ASK AMOUNT PAID VIA MODAL
 
     const billHandler = async () => {
         if(!window.confirm("Are you sure you want to bill this order? Any pending items will no longer be processed.")) {
@@ -47,7 +41,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
         }
     }
 
-    //TODO: REPLACE ROLE LITERALS EVERYWHERE
+    //TODO: REPLACE ROLE LITERALS EVERYWHEREzx`
     useEffect(() => {
         const fetchBill = async () => {
             setBillLoading(true);

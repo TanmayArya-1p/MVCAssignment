@@ -8,6 +8,9 @@ import RegisterScreen from './screens/register'
 import HomeScreen from './screens/home/home'
 import NotFoundScreen from './screens/not-found'
 import OrderScreen from './screens/order'
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 createRoot(document.getElementById('root')).render(
   <Router>
