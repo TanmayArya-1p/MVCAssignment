@@ -142,12 +142,12 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
             </div>
         </div>
 
-        <div id="items-container" className="mt-3 flex flex-row flex-wrap gap-3 items-center justify-center">
+        <div id="items-container" className={`mt-3 flex flex-row flex-wrap gap-3 items-center ${admin ? "justify-center" : ""}`}>
             {displayedItems.map(item => <ItemCard setItems={setItems} admin={admin} key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} />)}
             {displayedItems.length === 0 && <div className="ubuntu-bold h-80 w-full text-center text-3xl flex justify-center items-center">No items found</div>}
          </div>
         <div className="flex flex-row gap-3 mt-12">
-            <Pagination color="standard" count={Math.ceil(indexedItems.length / (pageSize || ITEMS_PER_PAGE))} variant="outlined" shape="rounded" page={itemsPage} onChange={(event, value) => setItemsPage(value)} />
+            <Pagination color="black" className="bg-white p-2 rounded-sm border-2" count={Math.ceil(indexedItems.length / (pageSize || ITEMS_PER_PAGE))} variant="outlined" shape="rounded" page={itemsPage} onChange={(event, value) => setItemsPage(value)} />
         </div>
     </>
 }

@@ -8,6 +8,7 @@ import UserList from "../components/userList";
 import Spinner from "../components/spinner"
 import CreateUserForm from "../components/createUserForm"
 import { Toaster } from "react-hot-toast";
+import VerifySignedIn from "../utils/verify";
 
 export default function UserScreen() {
     const {role,username} = useAuthStore.getState();
@@ -20,6 +21,7 @@ export default function UserScreen() {
         }
     },[])                   
 
+    useEffect(() => {VerifySignedIn()}, [])
 
     useEffect(() => {
         async function fetchUsers() {

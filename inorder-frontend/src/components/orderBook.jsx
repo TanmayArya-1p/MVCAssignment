@@ -13,8 +13,11 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
         "preparing": false,
         "served": false,
         "billed": false,
-        "paid": false,
     });
+
+    useEffect(() => {
+        if(!admin) setTags(t=> ({...t,"paid": false}));
+    },[])
 
     useEffect(() => {
         setFilteredOrders(orders);
@@ -75,7 +78,7 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
             {displayedOrders.map(order => <OrderCard key={order.id} order={order} admin={admin} setOrders={setOrders}/>)}
         </div>
         <div className="flex flex-row gap-3 mt-2">
-            <Pagination color="standard" count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
+            <Pagination color="standard" className="bg-white rounded-sm border-2 p-2" count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
         </div>
     </>
 }

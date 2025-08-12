@@ -64,3 +64,15 @@ export async function createItem({name,price,description,tags,image}) {
     console.log(response.data);
     return response.data;
 }   
+
+export async function updateItem({name,price,description,tags,image,itemId}) {
+    const response = await axios.put(`${API_URL}/api/items/${itemId}`, {
+        name,
+        price: parseFloat(price),
+        description,
+        tags: tags,
+        image
+    }, { withCredentials: true });
+    console.log(response.data);
+    return response.data;
+}

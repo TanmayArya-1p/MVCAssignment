@@ -4,10 +4,14 @@ import ItemMenu from "../components/itemMenu";
 import Navbar from "../components/navbar";
 import CreateItemForm from "../components/createItemForm";
 import Spinner from "../components/spinner";
+import VerifySignedIn from "../utils/verify";
+
 
 export default function ItemScreen() {
     const {role,username} = useAuthStore.getState();
     const [loading, setLoading] = useState(true)
+
+    useEffect(() => {VerifySignedIn()}, [])
 
     useEffect(() => {
         if (role !== "admin") {
@@ -29,7 +33,7 @@ export default function ItemScreen() {
         <div className="flex flex-col p-5 items-center w-full">
             <ItemMenu admin></ItemMenu>
             <div className="mt-10">
-                <h1 className="text-lg font-bold mb-2">Create Item</h1>
+                <div className="text-3xl font-bold mb-2">Create Item</div>
                 <CreateItemForm />
             </div>
         </div>

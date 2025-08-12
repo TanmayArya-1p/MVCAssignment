@@ -11,6 +11,7 @@ import ItemMenu from '../components/itemMenu';
 import { modalStyle } from '../utils/const';
 import { Toaster,toast } from 'react-hot-toast';
 import { deleteOrder } from '../api/orders';
+import VerifySignedIn from "../utils/verify";
 
 
 export default function OrderScreen() {
@@ -18,6 +19,9 @@ export default function OrderScreen() {
 
     const [searchParams] = useSearchParams();
     const add = searchParams.get("add")=== "true";
+
+    useEffect(() => {VerifySignedIn()}, [])
+
 
     const [loading, setLoading] = useState(true);
     const [order, setOrder] = useState(null);

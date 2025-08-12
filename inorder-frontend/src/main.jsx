@@ -11,6 +11,7 @@ import OrderScreen from './screens/order'
 import ItemScreen from './screens/items'
 import Modal from 'react-modal';
 import UserScreen from './screens/users';
+import UpdateItemScreen from './screens/updateItem'
 
 Modal.setAppElement('#root');
 
@@ -23,6 +24,8 @@ createRoot(document.getElementById('root')).render(
       <Route path="/home" element={<HomeScreen />} />
       <Route path="/order/:orderid" element={<OrderScreen />} />
       <Route path="/items" element={<ItemScreen />} />
+      <Route path="/items/update" element={<UpdateItemScreen />} />
+
       <Route path="/users" element={<UserScreen />} />
       <Route path="/*" element={<NotFoundScreen />} />
 
