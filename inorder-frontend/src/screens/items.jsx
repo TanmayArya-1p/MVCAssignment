@@ -7,6 +7,7 @@ import Spinner from "../components/spinner";
 import VerifySignedIn from "../utils/verify";
 import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { roles } from "../utils/const";
 
 
 export default function ItemScreen() {
@@ -16,7 +17,7 @@ export default function ItemScreen() {
     useEffect(() => {VerifySignedIn()}, [])
 
     useEffect(() => {
-        if (role !== "admin") {
+        if (role !== roles.ADMIN) {
             navigate("/notfound");
         } else {
             setLoading(false);

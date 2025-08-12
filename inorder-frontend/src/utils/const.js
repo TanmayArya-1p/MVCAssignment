@@ -24,13 +24,13 @@ export const bumpItemStatusMap = {
 }
 
 export const bumpRoleMap = {
-    chef: "admin",
-    customer: "chef",
+    [roles.CHEF]: roles.ADMIN,
+    [roles.CUSTOMER]: roles.CHEF,
 }
 
 export const bumpDownRoleMap = {
-    admin: "chef",
-    chef: "customer",
+    [roles.ADMIN]: roles.CHEF,
+    [roles.CHEF]: roles.CUSTOMER,
 }
 
 export const modalStyle = {

@@ -1,6 +1,6 @@
 import { markAsPaid, resolveBill } from "../api/orders";
 import { useEffect, useState } from "react";
-import { orderColourMap } from "../utils/const";
+import { orderColourMap, roles } from "../utils/const";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -119,7 +119,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
                             {order.status!=="billed" && order.status!=="paid" && (
                                 <button className="" onClick={() => billHandler(order.id)}>Bill Order</button>
                             )}
-                            {order.status==="billed" && (role==="chef" || role==="admin") && (
+                            {order.status==="billed" && (role===roles.CHEF || role===roles.ADMIN) && (
                                 <>
                                     <button className="" onClick={() => payHandler(order.id)}>Mark as Paid</button>
                                     <input type="number" id="paid-amount" value={amountPaid}

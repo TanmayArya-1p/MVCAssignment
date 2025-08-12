@@ -1,6 +1,7 @@
 import * as auth from "../api/auth";
 import useAuthStore from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
+import { roles } from "../utils/const";
 
 
 export default function Navbar() {
@@ -30,10 +31,10 @@ export default function Navbar() {
         <div className="max-w-screen flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="/home" className="flex items-center space-x-3 rtl:space-x-reverse">
                 <span className="self-center text-3xl ubuntu-bold">InOrder</span>
-                <span className="flex items-end text-lg ubuntu-regular self-end">{role == "customer" ? "" : role}</span>
+                <span className="flex items-end text-lg ubuntu-regular self-end">{role == roles.CUSTOMER ? "" : role}</span>
             </a>
             <div className="flex flex-row gap-4 text-lg">
-                    {role == "admin" && <>
+                    {role == roles.ADMIN && <>
                         <li className="items-center align-middle flex">
                             <a className='order-link' href="/items">Items</a>
                         </li>

@@ -1,5 +1,6 @@
 import {createUser} from "../api/users"
 import {toast} from 'react-hot-toast'
+import { roles } from "../utils/const";
 
 export default function CreateUserForm({setUsers}) {    
 
@@ -39,9 +40,9 @@ export default function CreateUserForm({setUsers}) {
                 <div>
                     <select id="role" name="role" required className="border p-2 rounded w-fit ubuntu-regular">
                         <option value="" disabled selected>Select Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="chef">Chef</option>
-                        <option value="customer">Customer</option>
+                        <option value={roles.ADMIN}>Admin</option>
+                        <option value={roles.CHEF}>Chef</option>
+                        <option value={roles.CUSTOMER}>Customer</option>
                     </select>
                 </div>
             </div>

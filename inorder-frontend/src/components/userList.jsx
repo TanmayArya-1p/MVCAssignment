@@ -1,16 +1,16 @@
 import {useEffect, useState} from "react"
 import {deleteUser, updateUserRole} from "../api/users"
 import {toast} from "react-hot-toast"
-import {bumpRoleMap,bumpDownRoleMap} from "../utils/const"
+import {bumpRoleMap,bumpDownRoleMap, roles} from "../utils/const"
 
 export default function UserList({ users,setUsers, authUserID }) {
     const [filteredUsers,setFilteredUsers] = useState(users)
     const [indexedUsers, setIndexedUsers] = useState(users)
     const [query, setQuery] = useState("")
     const [tags, setTags] = useState({
-        "admin" :false,
-        "chef": false,
-        "customer": false
+        [roles.ADMIN]: false,
+        [roles.CHEF]: false,
+        [roles.CUSTOMER]: false
     })
 
 
@@ -34,12 +34,12 @@ export default function UserList({ users,setUsers, authUserID }) {
         const user = users.find(user => user.id === userID);
         if(!user) return;
 
-        if(user.role === "customer") {
+        if(user.role === roles.CUSTOMER) {
             toast.error("Cannot bump down customer role");
             return;
         }
 
-        if(!window.confirm(`Are you sure you want to bump down this user's role to ${user.role === "chef" ? "customer" : "chef"}?`)) {
+        if(!window.confirm(`Are you sure you want to bump down this user's role to ${bumpDownRoleMap[user.role]}?`)) {
             return;
         }
         try {
@@ -56,12 +56,12 @@ export default function UserList({ users,setUsers, authUserID }) {
         const user = users.find(user => user.id === userID);
         if(!user) return;
 
-        if(user.role === "admin") {
+        if(user.role === roles.ADMIN) {
             toast.error("Cannot bump admin role");
             return;
         }
 
-        if(!window.confirm(`Are you sure you want to bump this user's role to ${user.role === "chef" ? "customer" : "chef"}?`)) {
+        if(!window.confirm(`Are you sure you want to bump this user's role to ${bumpRoleMap[user.role]}?`)) {
             return;
         }
         try {
@@ -159,7 +159,7 @@ export default function UserList({ users,setUsers, authUserID }) {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
                                     </svg>
                                 </button>
-                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role==="customer" || user.id === authUserID} onClick={() => bumpDownUserHandler(user.id)}>
+                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role===roles.CUSTOMER || user.id === authUserID} onClick={() => bumpDownUserHandler(user.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
                                     </svg>

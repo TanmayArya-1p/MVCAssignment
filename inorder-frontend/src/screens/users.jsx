@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import VerifySignedIn from "../utils/verify";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { roles } from "../utils/const";
 
 
 export default function UserScreen() {
@@ -22,7 +23,7 @@ export default function UserScreen() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (role !== "admin") {
+        if (role !== roles.ADMIN) {
             navigate("/notfound");
         }
     },[])                   

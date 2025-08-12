@@ -8,6 +8,7 @@ import { API_URL } from "../config";
 import { updateItem, uploadImage } from "../api/items";
 import {toast} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { roles } from "../utils/const";
 
 
 
@@ -15,7 +16,7 @@ export default function UpdateItemScreen() {
     const navigate = useNavigate();
     const {role} = useAuthStore.getState();
     useEffect(() => {
-        if (role !== "admin") {
+        if (role !== roles.ADMIN) {
             navigate("/home");
         }
     }, [role]);
