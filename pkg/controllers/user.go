@@ -129,13 +129,14 @@ func UpdateUserController(w http.ResponseWriter, r *http.Request) {
 
 	username := body.Username
 	password := body.Password
+	role := body.Role
 
-	if username == "" && password == "" {
+	if username == "" && password == "" && role == "" {
 		http.Error(w, "Missing atleast 1 field to update", http.StatusBadRequest)
 		return
 	}
 
-	if body.Role != types.AdminRole && body.Role != types.UserRole && body.Role != types.ChefRole {
+	if role != types.AdminRole && role != types.UserRole && role != types.ChefRole {
 		http.Error(w, utils.ErrInvalidRole.Error(), http.StatusBadRequest)
 		return
 	}
@@ -156,7 +157,7 @@ func UpdateUserController(w http.ResponseWriter, r *http.Request) {
 		User:              user,
 		Username:          username,
 		PlaintextPassword: password,
-		Role:              body.Role,
+		Role:              role,
 	})
 	if err != nil {
 		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)

@@ -18,3 +18,9 @@ export async function deleteUser(userID) {
     console.log(response.data);
     return response.data;
 }
+
+export async function updateUserRole(userID, newRole) {
+    const response = await axios.put(`${API_URL}/api/users/${userID}`, {role: newRole}, {withCredentials: true})
+    console.log(response.data);
+    return response.data;
+}

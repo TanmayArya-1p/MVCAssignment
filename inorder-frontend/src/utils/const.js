@@ -23,6 +23,11 @@ export const bumpItemStatusMap = {
     preparing: "served"
 }
 
+export const bumpRoleMap = {
+    chef: "admin",
+    customer: "chef",
+}
+
 export const modalStyle = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.25)',
@@ -30,7 +35,7 @@ export const modalStyle = {
     content: {
     top: '50%',
     left: '50%',
-    width: '50%',
+    width: '60%',
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
