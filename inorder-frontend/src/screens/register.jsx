@@ -22,28 +22,14 @@ export default function RegisterScreen() {
                 return;
             }
 
-
             let resp = await auth.RegisterUser(username, password);
-            if (resp.Status !== 200) {
-                toast.error("User already exists or an error occurred", {
-                    style: {
-                        minWidth: '250px',
-                    }
-                });    
-                return;
-            }
-
-            setStoreUsername(username);
             toast.success("Successfully registered");
             setTimeout(() => {
                 navigate("/login");
             }, 1000);
         } catch(err) {
-            toast.error("User already exists or an error occurred", {
-                style: {
-                    minWidth: '250px',
-                }
-            });        
+            console.error("Registration failed:", err);
+            toast.error("User already exists or an error occurred");        
         }
     }
 

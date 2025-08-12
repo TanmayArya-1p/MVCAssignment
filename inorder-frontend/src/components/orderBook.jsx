@@ -75,6 +75,7 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
 
         <div id="orders-container" className="flex flex-row mt-2 flex-wrap gap-3 items-center">
             {displayedOrders.map(order => <OrderCard key={order.id} order={order} admin={admin} setOrders={setOrders}/>)}
+            {displayedOrders.length === 0 && <div className="ubuntu-bold text-lg mt-2">No Orders Yet</div>}
         </div>
         <div className="flex flex-row gap-3 mt-2">
             <Pagination color="standard" className="bg-white rounded-sm border-2 p-2" count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
