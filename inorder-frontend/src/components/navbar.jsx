@@ -32,7 +32,7 @@ export default function Navbar() {
                 <span className="self-center text-3xl ubuntu-bold">InOrder</span>
                 <span className="flex items-end text-lg ubuntu-regular self-end">{role == "customer" ? "" : role}</span>
             </a>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-4 text-lg">
                     {role == "admin" && <>
                         <li className="items-center align-middle flex">
                             <a className='order-link' href="/items">Items</a>
