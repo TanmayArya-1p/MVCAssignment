@@ -17,6 +17,7 @@ export default async function VerifySignedIn() {
     } catch (error) {
         if(!ONBOARDING_PATHS.includes(window.location.pathname)) {
             window.location.pathname = "/";
+            throw error
         }
     }
 }

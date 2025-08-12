@@ -50,3 +50,9 @@ export async function createOrder(tableNo) {
     console.log(response.data);
     return response.data;
 }
+
+export async function deleteOrder(orderID) {
+    const response = await axios.delete(`${API_URL}/api/orders/${orderID}`, { withCredentials: true });
+    console.log(response.data);
+    return response.data;
+}

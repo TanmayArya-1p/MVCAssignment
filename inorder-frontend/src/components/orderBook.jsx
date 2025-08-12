@@ -3,11 +3,11 @@ import { Pagination } from '@mui/material';
 import { useEffect, useState } from "react";
 import OrderCard from "./orderCard";
 
-export default function OrderBook({orders,loading}) {
+export default function OrderBook({noFilter, setOrders,orders, loading, admin}) {
 
     const [displayedOrders, setDisplayedOrders] = useState(orders.slice(0, ORDERS_PER_PAGE));
+    const [filteredOrders, setFilteredOrders] = useState(orders);
     const [ordersPage, setOrdersPage] = useState(1);
-    const [displayedOrdersLength, setDisplayedOrdersLength] = useState();
     const [tags,setTags] = useState({
         "pending": false,
         "preparing": false,
@@ -17,8 +17,17 @@ export default function OrderBook({orders,loading}) {
     });
 
     useEffect(() => {
-        setDisplayedOrdersLength(orders.length);
+        setFilteredOrders(orders);
     },[orders])
+
+    useEffect(() => {
+        setDisplayedOrders(filteredOrders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE));
+        setOrdersPage(1);
+    },[filteredOrders])
+
+    useEffect(() => {
+        setDisplayedOrders(filteredOrders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE));
+    }, [filteredOrders, ordersPage]);
 
     useEffect(() => {
         console.log(tags)
@@ -29,48 +38,44 @@ export default function OrderBook({orders,loading}) {
         } else {
             temp = orders.filter(order => selected.includes(order.status))
         }
-        setOrdersPage(1);
-        setDisplayedOrders(temp.slice(0, ORDERS_PER_PAGE));
-        setDisplayedOrdersLength(temp.length);
-
+        setFilteredOrders(temp);
     }, [tags]);
 
-    useEffect(() => {
-        setDisplayedOrders(orders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE));
-    }, [orders, ordersPage]);
 
     if(loading) {
         return <></>
     }
     return <>
-        <div id='tag-container' className="mt-5 flex flex-row gap-3 items-center">
-            <div className="ubuntu-bold text-md">
-                Filters:
-            </div>
-            {Object.keys(tags).filter(tag => tags[tag]).map(tag => (
-                <div key={tag} className='tag tag-selected' onClick={() => setTags((prevTags) => ({
-                    ...prevTags,
-                    [tag]: !prevTags[tag],
-                }))}>
-                    {tag}
+        {!noFilter && 
+            <div id='tag-container' className="mt-5 flex flex-row gap-3 items-center">
+                <div className="ubuntu-bold text-md">
+                    Filters:
                 </div>
-            ))}
-            {Object.keys(tags).filter(tag => !tags[tag]).map(tag => (
-                <div key={tag} className='tag' onClick={() => setTags((prevTags) => ({
-                    ...prevTags,
-                    [tag]: !prevTags[tag],
-                }))}>
-                    {tag}
-                </div>
-            ))}
+                {Object.keys(tags).filter(tag => tags[tag]).map(tag => (
+                    <div key={tag} className='tag tag-selected' onClick={() => setTags((prevTags) => ({
+                        ...prevTags,
+                        [tag]: !prevTags[tag],
+                    }))}>
+                        {tag}
+                    </div>
+                ))}
+                {Object.keys(tags).filter(tag => !tags[tag]).map(tag => (
+                    <div key={tag} className='tag' onClick={() => setTags((prevTags) => ({
+                        ...prevTags,
+                        [tag]: !prevTags[tag],
+                    }))}>
+                        {tag}
+                    </div>
+                ))}
 
-        </div>
+            </div>
+        }
 
         <div id="orders-container" className="flex flex-row mt-2 flex-wrap gap-3 items-center">
-            {displayedOrders.map(order => <OrderCard key={order.id} order={order} />)}
+            {displayedOrders.map(order => <OrderCard key={order.id} order={order} admin={admin} setOrders={setOrders}/>)}
         </div>
         <div className="flex flex-row gap-3 mt-2">
-            <Pagination color="standard" count={Math.ceil(displayedOrdersLength / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
+            <Pagination color="standard" count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
         </div>
     </>
 }

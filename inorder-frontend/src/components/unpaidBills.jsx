@@ -11,24 +11,23 @@ export default function UnpaidBills({orders}) {
     }, [orders]);
 
 
-
     return <>
         <div id="unpaid-bills-container" className="overflow-x-auto max-w-fit p-2 bg-white rounded-xl shadow-md border-2" style={{ maxHeight: "40rem" }}>
-            <table>
+            <table className="">
                 <thead>
                     <tr className="text-center text-lg">
-                        <th className="ubuntu-bold px-3 text-left">Order</th>
+                        <th className="ubuntu-bold px-3 text-center">Order</th>
                         <th className="ubuntu-bold px-3 text-center">Amount</th>
                     </tr>
                 </thead>
-                <tbody className="text-md ubuntu-regular p-2">
+                <tbody className="text-md ubuntu-regular p-2" >
                     {unpaidOrders.map(order => (
                         <tr
-                            className="ubuntu-regular text-left p-2 m-10"
+                            className="ubuntu-regular text-left p-2 my-2"
                             key={order.id}
                         >
-                            <td className="px-3">
-                                <a className="order-link ubuntu-bold w-full" onClick={() => window.location.href = `/order/${order.id}`}>
+                            <td className="px-3 text-center">
+                                <a className="order-link ubuntu-bold min-w-20" onClick={() => window.location.href = `/order/${order.id}`}>
                                     Order #{order.id}
                                 </a>
                             </td>

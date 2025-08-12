@@ -6,7 +6,7 @@ import { toast, Toaster } from 'react-hot-toast';
 
 export default function CreateOrderModal({ isOpen, setIsOpen }) {
 
-    const [tableNo, setTableNo] = useState(1);
+    const [tableNo, setTableNo] = useState("");
 
     const createOrderHandler = () => {
         async function create() {

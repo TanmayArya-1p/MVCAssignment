@@ -54,8 +54,8 @@ export default function ChefHomeScreen() {
                     Navigate to Order No:
                     <input type="number" id="navigate-order-id" placeholder="Order No" className="p-1 border-2 w-30 mx-2 rounded-sm"/>
                     <button onClick={() => window.location.href = `/order/${document.getElementById("navigate-order-id").value}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
                         </svg>
                     </button>
                 </div>
@@ -71,6 +71,8 @@ export default function ChefHomeScreen() {
                 <ItemQueue />
 
             </div>
+            <CreateOrderModal isOpen={createModelOpen} setIsOpen={setCreateModelOpen} />
+            
         </div>
 
     </>
