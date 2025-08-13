@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 @import "tailwindcss";
-
+@source inline("text-red-500");
+@source inline("text-yellow-500");
+@source inline("text-green-500");
+@source inline("text-teal-500");
 
 
 :root {
