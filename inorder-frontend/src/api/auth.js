@@ -4,109 +4,38 @@ import { API_URL } from '../config';
 
 
 export async function RegisterUser(username, password) {
-    let data = JSON.stringify({
-        "username": username,
-        "password": password
+    const response = await axios.post(`${API_URL}/api/auth/register`, {username, password}, {
+        withCredentials: true
     });
-
-    let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: `${API_URL}/api/auth/register`,
-    headers: { 
-        'Content-Type': 'application/json'
-    },
-    data : data,
-    withCredentials: true
-    };
-    try {
-        const response = await axios.request(config);
-        return response.data;
-    } catch (error) {
-        console.error(error);
-    }
-
+    return response.data;
 }
 
 
 export async function LoginUser(username, password) {
-    let data = JSON.stringify({
-    "username": username,
-    "password": password
+    const response = await axios.post(`${API_URL}/api/auth/login`, {username, password}, {
+        withCredentials: true
     });
-
-    let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: `${API_URL}/api/auth/login`,
-    headers: { 
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json'
-    },
-    data : data,
-    withCredentials: true
-    };
-
-    try {
-        const response = await axios.request(config);
-        return response.data;
-    }
-    catch (error) {
-        throw(error);
-    }
+    return response.data;
 }
 
 
 export async function RefreshToken() {
-
-    let config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: `${API_URL}/api/auth/refresh`,
-    withCredentials: true
-    };
-
-    try {
-        let response = await axios.request(config);
-        return response.data;
-    }
-    catch (error) {
-        throw(error);
-    }
-}
+    const response = await axios.get(`${API_URL}/api/auth/refresh`, {
+        withCredentials: true
+    });
+    return response.data;
+}   
 
 export async function VerifyToken() {
-
-    let config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: `${API_URL}/api/auth/verify`,
-    withCredentials: true
-    };
-
-    try {
-        let response = await axios.request(config);
-        return response.data;
-    }
-    catch (error) {
-        throw(error);
-    }
+    const response = await axios.get(`${API_URL}/api/auth/verify`, {
+        withCredentials: true
+    });
+    return response.data;
 }
 
 export async function LogoutUser() {
-
-    let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: `${API_URL}/api/auth/logout`,
-    withCredentials: true
-    };
-
-    try {
-        let response = await axios.request(config);
-        return response.data;
-    }
-    catch (error) {
-        throw(error);
-    }
+    const response = await axios.post(`${API_URL}/api/auth/logout`, {}, {
+        withCredentials: true
+    });
+    return response.data;
 }
