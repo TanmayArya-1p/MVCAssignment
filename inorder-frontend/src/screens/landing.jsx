@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Spinner from "../components/spinner";
-import VerifySignedIn from "../utils/verify";
+import Spinner from "@/components/spinner";
+import VerifySignedIn from "@/utils/verify";
 import { useEffect, useState } from "react";
 
 

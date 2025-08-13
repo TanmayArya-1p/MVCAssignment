@@ -1,20 +1,20 @@
 import { useParams,useSearchParams } from 'react-router-dom';
-import Navbar from '../components/navbar';
-import Spinner from '../components/spinner';
+import Navbar from '@/components/navbar';
+import Spinner from '@/components/spinner';
 import {  useEffect,useState } from 'react';
-import { addItemToOrder, getOrder } from '../api/orders';
-import { orderColourMap, roles } from '../utils/const';
-import Bill from '../components/bill';
-import useAuthStore from '../stores/authStore';
+import { addItemToOrder, getOrder } from '@/api/orders';
+import { orderColourMap, roles } from '@/utils/const';
+import Bill from '@/components/bill';
+import useAuthStore from '@/stores/authStore';
 import Modal from 'react-modal';
-import ItemMenu from '../components/itemMenu';
-import { modalStyle } from '../utils/const';
+import ItemMenu from '@/components/itemMenu';
+import { modalStyle } from '@/utils/const';
 import { Toaster,toast } from 'react-hot-toast';
-import { deleteOrder } from '../api/orders';
-import VerifySignedIn from "../utils/verify";
+import { deleteOrder } from '@/api/orders';
+import VerifySignedIn from "@/utils/verify";
 import { useNavigate } from 'react-router-dom';
-import DeleteIcon from '../icons/deleteIcon';
-import AddIcon from '../icons/addIcon';
+import DeleteIcon from '@/icons/deleteIcon';
+import AddIcon from '@/icons/addIcon';
 
 export default function OrderScreen() {
     const {orderid} = useParams();

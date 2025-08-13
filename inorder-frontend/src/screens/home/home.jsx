@@ -1,12 +1,12 @@
-import useAuthStore from "../../stores/authStore";
-import { roles } from "../../utils/const";
+import useAuthStore from "@/stores/authStore";
+import { roles } from "@/utils/const";
 import ChefHomeScreen from "./chefHome";
 import UserHomeScreen from "./userHome";
 import AdminHomeScreen from "./adminHome";
-import NotFoundScreen from "../../screens/notFound";
-import Navbar from "../../components/navbar";
+import NotFoundScreen from "@/screens/notFound";
+import Navbar from "@/components/navbar";
 import { useEffect } from "react";
-import VerifySignedIn from "../../utils/verify";
+import VerifySignedIn from "@/utils/verify";
 import { Toaster } from "react-hot-toast";
 
 const roleScreens = {

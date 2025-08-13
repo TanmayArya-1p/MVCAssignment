@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import * as auth from '../api/auth';
-import useAuthStore from '../stores/authStore';
+import * as auth from '@/api/auth';
+import useAuthStore from '@/stores/authStore';
 import toast, { Toaster } from 'react-hot-toast';
 import { jwtDecode } from "jwt-decode";
-import { roles } from '../utils/const';
-import VerifySignedIn from '../utils/verify';
+import VerifySignedIn from '@/utils/verify';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginScreen() {

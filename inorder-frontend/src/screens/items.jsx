@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import useAuthStore from "../stores/authStore";
-import ItemMenu from "../components/itemMenu";
-import Navbar from "../components/navbar";
-import CreateItemForm from "../components/createItemForm";
-import Spinner from "../components/spinner";
-import VerifySignedIn from "../utils/verify";
+import useAuthStore from "@/stores/authStore";
+import ItemMenu from "@/components/itemMenu";
+import Navbar from "@/components/navbar";
+import CreateItemForm from "@/components/createItemForm";
+import Spinner from "@/components/spinner";
+import VerifySignedIn from "@/utils/verify";
 import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { roles } from "../utils/const";
+import { roles } from "@/utils/const";
 
 
 export default function ItemScreen() {

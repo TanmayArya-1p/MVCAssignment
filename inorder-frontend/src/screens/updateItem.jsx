@@ -1,14 +1,14 @@
 import { useSearchParams } from "react-router-dom";
-import Navbar from "../components/navbar";
-import VerifySignedIn from "../utils/verify";
-import useAuthStore from "../stores/authStore";
+import Navbar from "@/components/navbar";
+import VerifySignedIn from "@/utils/verify";
+import useAuthStore from "@/stores/authStore";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { API_URL } from "../config";
-import { updateItem, uploadImage } from "../api/items";
+import { API_URL } from "@/config";
+import { updateItem, uploadImage } from "@/api/items";
 import {toast} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { roles } from "../utils/const";
+import { roles } from "@/utils/const";
 
 
 

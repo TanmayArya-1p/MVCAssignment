@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import useAuthStore from "../stores/authStore";
-import Navbar from "../components/navbar";
-import {fetchAllUsers} from "../api/users"
-import UserList from "../components/userList";
-import Spinner from "../components/spinner"
-import CreateUserForm from "../components/createUserForm"
+import useAuthStore from "@/stores/authStore";
+import Navbar from "@/components/navbar";
+import {fetchAllUsers} from "@/api/users"
+import UserList from "@/components/userList";
+import Spinner from "@/components/spinner"
+import CreateUserForm from "@/components/createUserForm"
 import { Toaster } from "react-hot-toast";
-import VerifySignedIn from "../utils/verify";
+import VerifySignedIn from "@/utils/verify";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { roles } from "../utils/const";
+import { roles } from "@/utils/const";
 
 
 export default function UserScreen() {

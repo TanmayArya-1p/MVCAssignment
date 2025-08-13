@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import OrderCard from "../../components/orderCard";
-import Spinner from "../../components/spinner";
-import { getMyOrders } from "../../api/orders";
-import OrderBook from "../../components/orderBook";
-import ItemMenu from "../../components/itemMenu";
-import CreateOrderModal from "../../components/createOrderModal";
-import CreateOrderButton from "../../components/createOrderButton";
+import Spinner from "@/components/spinner";
+import { getMyOrders } from "@/api/orders";
+import OrderBook from "@/components/orderBook";
+import ItemMenu from "@/components/itemMenu";
+import CreateOrderModal from "@/components/createOrderModal";
+import CreateOrderButton from "@/components/createOrderButton";
 
 export default function UserHomeScreen() {
     const [ordersLoading, setOrdersLoading] = useState(true);

@@ -1,5 +1,5 @@
-import * as auth from '../api/auth';
-import useAuthStore from '../stores/authStore';
+import * as auth from '@/api/auth';
+import useAuthStore from '@/stores/authStore';
 import { ONBOARDING_PATHS } from './const';
 
 

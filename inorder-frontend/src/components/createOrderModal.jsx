@@ -2,7 +2,7 @@ import Modal from 'react-modal';
 import {modalStyle} from '../utils/const';
 import { useState } from 'react';
 import { createOrder } from '../api/orders';
-import { toast, Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateOrderModal({ isOpen, setIsOpen }) {

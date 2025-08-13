@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_URL } from '../config'
+import { API_URL } from '@/config'
 
 export async function fetchAllUsers() {
     const response = await axios.get(`${API_URL}/api/users` , {withCredentials : true})

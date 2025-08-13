@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import OrderCard from "../../components/orderCard";
-import Spinner from "../../components/spinner";
-import { getAllOrders, getMyOrders } from "../../api/orders";
-import OrderBook from "../../components/orderBook";
-import ItemMenu from "../../components/itemMenu";
-import CreateOrderModal from "../../components/createOrderModal";
-import UnpaidBills from "../../components/unpaidBills";
-import { ItemQueue } from "../../components/itemQueue";
+import Spinner from "@/components/spinner";
+import { getAllOrders, getMyOrders } from "@/api/orders";
+import OrderBook from "@/components/orderBook";
+import CreateOrderModal from "@/components/createOrderModal";
+import UnpaidBills from "@/components/unpaidBills";
 import { useNavigate } from "react-router-dom";
-import AddIcon from "../../icons/addIcon";
-import NavigateIcon from "../../icons/navigateIcon";
-import NavigateOrder from "../../components/navigateOrder";
-import CreateOrderButton from "../../components/createOrderButton";
+import NavigateOrder from "@/components/navigateOrder";
+import CreateOrderButton from "@/components/createOrderButton";
 
 export default function AdminHomeScreen() {
     const navigate = useNavigate();
