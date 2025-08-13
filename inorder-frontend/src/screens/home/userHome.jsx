@@ -34,10 +34,15 @@ export default function UserHomeScreen() {
     return <>
         <div className="flex flex-col mt-7 p-5 mb-20">
             <div>
-                <div className="text-3xl ubuntu-bold flex flex-row gap-5">Your Orders
+                <div className="text-3xl ubuntu-bold flex flex-row gap-5 items-center">Your Orders
                 <CreateOrderButton setCreateModelOpen={setCreateModelOpen} />
             </div>
-            {ordersLoading && <Spinner />}
+
+            {ordersLoading && <div className="w-full justify-center flex">
+                <Spinner />
+            </div>}
+
+
             </div>
             <OrderBook orders={orders} loading={ordersLoading}/>
 

@@ -28,7 +28,6 @@ export default function UserScreen() {
         }
     },[])                   
 
-    useEffect(() => {VerifySignedIn()}, [])
 
     useEffect(() => {
         async function fetchUsers() {

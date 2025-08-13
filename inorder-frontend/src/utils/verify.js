@@ -9,9 +9,6 @@ export default async function VerifySignedIn() {
         const {setAuthToken, setRefreshToken} = useAuthStore.getState();
         setAuthToken(resp.authToken);
         setRefreshToken(resp.refreshToken);
-        if(ONBOARDING_PATHS.includes(window.location.pathname)) {
-            window.location.pathname = "/home";
-        }
     } catch (error) {
         if(!ONBOARDING_PATHS.includes(window.location.pathname)) {
             window.location.pathname = "/";

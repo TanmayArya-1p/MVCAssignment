@@ -11,26 +11,6 @@ import { roles } from "@/utils/const";
 
 
 export default function ItemScreen() {
-    const {role,username} = useAuthStore.getState();
-    const [loading, setLoading] = useState(true)
-    const navigate = useNavigate();
-    useEffect(() => {VerifySignedIn()}, [])
-
-    useEffect(() => {
-        if (role !== roles.ADMIN) {
-            navigate("/notfound");
-        } else {
-            setLoading(false);
-        }
-    },[])
-
-    if (loading) {
-        return <div className="h-screen w-screen flex items-center justify-center">
-            <Spinner />
-        </div>
-    }
-
-
     return <div className="h-screen w-screen flex flex-col">
         <title>Items - InOrder</title>
         <Navbar></Navbar>

@@ -21,8 +21,6 @@ export default function UpdateItemScreen() {
         }
     }, [role]);
 
-    useEffect(() => {VerifySignedIn()}, [])
-
 
     const [searchParams] = useSearchParams();
     const itemId = searchParams.get("id");

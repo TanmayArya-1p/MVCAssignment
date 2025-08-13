@@ -12,7 +12,10 @@ export default function LandingScreen() {
 
     useEffect(() => {    
         setLoading(true);
-        VerifySignedIn().then(() => setLoading(true)).catch(() => setLoading(false));
+        VerifySignedIn().then(() => {
+            setLoading(true);
+            navigate("/home");
+        }).catch(() => setLoading(false));
 
     }, [])
     return <>
