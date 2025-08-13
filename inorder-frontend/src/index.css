@@ -13,7 +13,8 @@
     background-color: rgb(255, 243, 234);
 
     --std-padding: 0.5rem;
-    --std-border-radius: 0.25rem
+    --std-border-radius: 0.25rem;
+    --std-transition: transform 0.1s linear;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -48,10 +49,10 @@ button {
     border-width: 2px;
     border-style: solid;
     border-color: black;
-    border-radius: 0.25rem;
+    border-radius: var(--std-border-radius);
     padding-inline: 1rem;
     padding-block: var(--std-padding);
-    transition: transform 0.1s linear;
+    transition: var(--std-transition);
     font-family: "Ubuntu", sans-serif;
     font-weight: 500;
     font-style: normal;
@@ -64,7 +65,7 @@ input {
 
 button:hover {
     transform: translateY(-0.1rem);
-    transition: transform 0.1s linear;
+    transition: var(--std-transition);
 }
 
 @media (prefers-color-scheme: light) {
@@ -85,10 +86,10 @@ button:hover {
   border-width: 2px;
   border-style: solid;
   border-color: black;
-  border-radius: 0.25rem;
+  border-radius: var(--std-border-radius);
   padding-inline: 1rem;
   padding-block: 0.2rem;
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
   font-family: "Ubuntu", sans-serif;
   font-weight: 500;
   font-style: normal;
@@ -97,7 +98,7 @@ button:hover {
 .order-link:hover {
   cursor: pointer;
   transform: translateY(-0.1rem);
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
 }
 
 
@@ -166,11 +167,11 @@ button:hover {
 
 .order-card {
   background-color: white;
-  border-radius: 0.25rem;
+  border-radius: var(--std-border-radius);
   border-width: 2px;
   padding: 1rem;
   box-shadow: white;
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
   cursor: pointer;
   flex-direction: row;
   display: flex;
@@ -182,33 +183,33 @@ button:hover {
 
 .order-card:hover {
   transform: translateY(-0.2rem);
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
 }
 
 
 
 .tag {
   border: 2px solid;
-  border-radius: 0.25rem;
+  border-radius: var(--std-border-radius);
   text-align: center;
   font-family: "Ubuntu", sans-serif;
   padding: 0.1rem var(--std-padding);
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
 }
 
 
 .tag-no-hover {
   border: 2px solid;
-  border-radius: 0.25rem;
+  border-radius: var(--std-border-radius);
   text-align: center;
   font-family: "Ubuntu", sans-serif;
   padding: 0.1rem var(--std-padding);
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
 }
 
 .tag:hover {
   transform: translateY(-0.1rem);
-  transition: transform 0.1s linear;
+  transition: var(--std-transition);
 }
 
 
