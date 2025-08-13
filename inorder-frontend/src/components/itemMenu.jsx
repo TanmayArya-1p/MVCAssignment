@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ItemCard from "./itemCard";
 import { getAllItems, getItemsOfTags } from "../api/items";
 import { getAllTags } from "../api/tags";
+import SearchIcon from "../icons/searchIcon";
 
 export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setItemInstructions,setAddedItemPrice,pageSize,admin}) {
 
@@ -134,9 +135,7 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
 
         <div id="query-container">
             <div className="flex flex-row gap-2 items-center mt-3 bg-white border-2 rounded-sm p-2 w-fit">
-                <svg xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
+                <SearchIcon className="size-6 text-gray-500" />
                 <input type="text" id="search-input" value={query} onChange={handleSearch} placeholder="Search Items" className="focus:outline-0"/>
             </div>
         </div>
