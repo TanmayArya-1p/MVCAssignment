@@ -1,6 +1,6 @@
-import { markAsPaid, resolveBill } from "../api/orders";
+import { markAsPaid, resolveBill } from "@/api/orders";
 import { useEffect, useState } from "react";
-import { orderColourMap, roles } from "../utils/const";
+import { orderColourMap, roles } from "@/utils/const";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

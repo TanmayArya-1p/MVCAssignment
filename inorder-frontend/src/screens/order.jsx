@@ -103,7 +103,10 @@ export default function OrderScreen() {
             <div className='mt-5 p-5'>
                 <div>
                     <div className='ubuntu-bold text-4xl flex flex-row gap-3'>
-                        Order #{order.id} ( <span className={'text-'+orderColourMap[order.status]}>{order.status}</span> )
+                        Order #{order.id} ( 
+                            <span className={'text-'+orderColourMap[order.status]}>
+                                {order.status}
+                            </span> )
                         {role===roles.ADMIN &&
                             <button className='delete-button' onClick={deleteOrderHandler}>
                                 <DeleteIcon className="size-6" />
@@ -118,10 +121,16 @@ export default function OrderScreen() {
                     <div className='ubuntu-bold text-4xl mt-9 flex flex-row gap-3 items-center'>
                         Current Bill
                     </div>
-                    <Bill order={order} setBillLoading={setBillLoading} billLoading={billLoading} role={role} />
+                    <Bill order={order} 
+                        setBillLoading={setBillLoading} 
+                        billLoading={billLoading} role={role} 
+                    />
                 </div>
                 {(order.status !== "paid" && order.status !=="billed") ?
-                <button onClick={() => setAddItemsModalIsOpen(true)} className='mt-6 flex flex-row items-center gap-2 text-xl w-fit'>
+                <button 
+                    onClick={() => setAddItemsModalIsOpen(true)} 
+                    className='mt-6 flex flex-row items-center gap-2 text-xl w-fit'
+                >
                     <AddIcon className="size-6" />
                     Add Items to Order
                 </button>       
@@ -135,9 +144,19 @@ export default function OrderScreen() {
                 ariaHideApp={false}
                 contentLabel="Add Items"
             >
-                <ItemMenu itemOrders={itemOrders} setItemOrders={setItemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} pageSize={4}/>
+                <ItemMenu 
+                    itemOrders={itemOrders} 
+                    setItemOrders={setItemOrders} 
+                    itemInstructions={itemInstructions} 
+                    setItemInstructions={setItemInstructions} 
+                    setAddedItemPrice={setAddedItemPrice} 
+                    pageSize={4}
+                />
                 <div className='flex flex-row gap-5 justify-end'>
-                    <button onClick={() => addItemsHandler()}>Add Items {"( +₹"+addedItemPrice.toFixed(2)+ " )"}</button>
+                    <button onClick={() => addItemsHandler()}>
+                        Add Items {"( +₹"+addedItemPrice.toFixed(2)+ " )"}
+                    </button>
+
                     <button onClick={() => setAddItemsModalIsOpen(false)}>Cancel</button>
                 </div>
             </Modal>

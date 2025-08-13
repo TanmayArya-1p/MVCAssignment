@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react"
-import {deleteUser, updateUserRole} from "../api/users"
+import {deleteUser, updateUserRole} from "@/api/users"
 import {toast} from "react-hot-toast"
-import {bumpRoleMap,bumpDownRoleMap, roles} from "../utils/const"
-import SearchIcon from "../icons/searchIcon"
-import DeleteIcon from "../icons/deleteIcon"
+import {bumpRoleMap,bumpDownRoleMap, roles} from "@/utils/const"
+import SearchIcon from "@/icons/searchIcon"
+import DeleteIcon from "@/icons/deleteIcon"
 
 export default function UserList({ users,setUsers, authUserID }) {
     const [filteredUsers,setFilteredUsers] = useState(users)
@@ -111,7 +111,14 @@ export default function UserList({ users,setUsers, authUserID }) {
     <div className="flex flex-col gap-2 w-fit max-w-200 p-2">
         <div className="flex flex-row gap-2 items-center mt-3 bg-white border-2 rounded-sm p-2 w-full">
                 <SearchIcon className="size-6 text-gray-500" />
-                <input type="text" id="search-input" className="w-full" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Username"/>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    className="w-full" 
+                    value={query} 
+                    onChange={(e) => setQuery(e.target.value)} 
+                    placeholder="Search Username"
+                />
         </div>
         <div id="tags-container" className="flex flex-row gap-2 items-center w-fit">
             <div className="text-lg ubuntu-bold">
@@ -119,7 +126,12 @@ export default function UserList({ users,setUsers, authUserID }) {
             </div>
             {   
                 Object.keys(tags).filter(k=> tags[k]).map(k=>(
-                    <div key={k} className="tag tag-selected" onClick={() => setTags({...tags, [k]: false})}>{k}</div>
+                    <div 
+                        key={k} 
+                        className="tag tag-selected" 
+                        onClick={() => setTags({...tags, [k]: false})}>
+                            {k}
+                    </div>
                 ))
             }
             {   
@@ -146,18 +158,26 @@ export default function UserList({ users,setUsers, authUserID }) {
                         <tr key={user.id} className="border-b ubuntu-regular">
                             <td className="px-4 py-2 text-center truncate">{user.username}</td>
                             <td className="px-4 py-2 text-center ubuntu-bold truncate">{user.role}</td>
-                            <td className="px-4 py-2 text-center truncate">{new Date(user.created_at).toLocaleDateString()}</td>
+                            <td className="px-4 py-2 text-center truncate">
+                                {new Date(user.created_at).toLocaleDateString()}
+                            </td>
                             <td className="px-4 py-2 text-center flex flex-row gap-2">
-                                <button className="delete-button disabled:opacity-30" disabled={user.id === authUserID} onClick={() => deleteUserHandler(user.id)}>
+                                <button className="delete-button disabled:opacity-30" 
+                                    disabled={user.id === authUserID} 
+                                    onClick={() => deleteUserHandler(user.id)}>
                                     <DeleteIcon className="size-6" />
                                 </button>
-                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role==="admin" || user.id === authUserID} onClick={() => bumpUserHandler(user.id)}>
+                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" 
+                                    disabled={user.role==="admin" || user.id === authUserID} 
+                                    onClick={() => bumpUserHandler(user.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
                                     </svg>
                                 </button>
-                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" disabled={user.role===roles.CUSTOMER || user.id === authUserID} onClick={() => bumpDownUserHandler(user.id)}>
+                                <button className="bump-button flex flex-row gap-2 disabled:opacity-30" 
+                                    disabled={user.role===roles.CUSTOMER || user.id === authUserID} 
+                                    onClick={() => bumpDownUserHandler(user.id)}>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
                                     </svg>
@@ -167,7 +187,10 @@ export default function UserList({ users,setUsers, authUserID }) {
                     ))}
                 </tbody>
             </table>
-            {indexedUsers.length == 0 && <div className="ubuntu-thin mt-2 text-xl w-full align-middle justify-center flex">No Users Found</div>}
+            {indexedUsers.length == 0 && 
+            <div className="ubuntu-thin mt-2 text-xl w-full align-middle justify-center flex">
+                No Users Found
+            </div>}
 
         </div>
     </div>

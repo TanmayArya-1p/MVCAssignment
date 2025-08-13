@@ -1,9 +1,9 @@
 import { Toaster,toast } from "react-hot-toast";
-import { deleteItem } from "../api/items";
-import { API_URL } from "../config"
+import { deleteItem } from "@/api/items";
+import { API_URL } from "@/config"
 import { useNavigate } from "react-router-dom";
-import DeleteIcon from "../icons/deleteIcon";
-import EditIcon from "../icons/editIcon";
+import DeleteIcon from "@/icons/deleteIcon";
+import EditIcon from "@/icons/editIcon";
 
 export default function ItemCard({admin,setItems, item,setItemOrders,itemOrders,itemInstructions,setItemInstructions, setAddedItemPrice}) {
     const navigate = useNavigate();
@@ -77,7 +77,8 @@ export default function ItemCard({admin,setItems, item,setItemOrders,itemOrders,
                 <button className="justify-center flex delete-button w-full" onClick={deleteItemHandler}>
                     <DeleteIcon className="size-6" />
                 </button>
-                <button className="justify-center flex w-full gap-2" onClick={()=> navigate(`/items/update?id=${item.id}&name=${item.name}&price=${item.price}&description=${item.description}&image=${item.image}&tags=${item.tags.join(",")}`)}>
+                <button className="justify-center flex w-full gap-2" 
+                        onClick={()=> navigate(`/items/update?id=${item.id}&name=${item.name}&price=${item.price}&description=${item.description}&image=${item.image}&tags=${item.tags.join(",")}`)}>
                     Edit
                     <EditIcon className="size-6" />
                 </button>

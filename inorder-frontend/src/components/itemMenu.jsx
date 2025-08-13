@@ -1,10 +1,10 @@
-import { ITEMS_PER_PAGE } from "../config";
+import { ITEMS_PER_PAGE } from "@/config";
 import { Pagination } from '@mui/material';
 import { useEffect, useState } from "react";
 import ItemCard from "./itemCard";
-import { getAllItems, getItemsOfTags } from "../api/items";
-import { getAllTags } from "../api/tags";
-import SearchIcon from "../icons/searchIcon";
+import { getAllItems, getItemsOfTags } from "@/api/items";
+import { getAllTags } from "@/api/tags";
+import SearchIcon from "@/icons/searchIcon";
 
 export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setItemInstructions,setAddedItemPrice,pageSize,admin}) {
 
@@ -12,20 +12,14 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
     const [loading,setLoading] = useState(true);
     const [tags,setTags] = useState({});
 
-    const [displayedItems, setDisplayedItems] = useState([]); //subset of indexed items
     const [filteredItems, setFilteredItems] = useState([]); //subset of items
     const [indexedItems, setIndexedItems] = useState([]); //subset of filtered items
-
 
     const [itemsPage, setItemsPage] = useState(1);
 
     const [query, setQuery] = useState("");
     
     const handleSearch = (e) => {
-        // if (e.key == "Enter") {
-        //     triggerSearch();
-        //     return;
-        // }
         setQuery(e.target.value);
     };
 
@@ -42,7 +36,6 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
     
     useEffect(() => {
         triggerSearch();
-    
     }, [query]);
 
 
@@ -76,7 +69,6 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
     useEffect(() => {
         setFilteredItems(items);
         setIndexedItems(filteredItems);
-        setDisplayedItems(indexedItems.slice(0, pageSize || ITEMS_PER_PAGE));
     },[items])
 
     useEffect(() => {
@@ -102,9 +94,6 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
         setQuery("");
     }, [tags, items]);
 
-    useEffect(() => {
-        setDisplayedItems(indexedItems.slice((itemsPage - 1) *  (pageSize || ITEMS_PER_PAGE), itemsPage * (pageSize || ITEMS_PER_PAGE)));
-    }, [indexedItems, itemsPage]);
 
     if(loading) {
         return <></>
@@ -141,11 +130,31 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
         </div>
 
         <div id="items-container" className={`mt-3 flex flex-row flex-wrap gap-3 items-center ${admin ? "justify-center" : ""}`}>
-            {displayedItems.map(item => <ItemCard setItems={setItems} admin={admin} key={item.id} item={item} setItemOrders={setItemOrders} itemOrders={itemOrders} itemInstructions={itemInstructions} setItemInstructions={setItemInstructions} setAddedItemPrice={setAddedItemPrice} />)}
-            {displayedItems.length === 0 && <div className="ubuntu-bold h-80 w-full text-center text-3xl flex justify-center items-center">No items found</div>}
+            {indexedItems.slice((itemsPage - 1) * (pageSize || ITEMS_PER_PAGE), itemsPage * (pageSize || ITEMS_PER_PAGE))
+            .map(item => <ItemCard 
+                            setItems={setItems} 
+                            admin={admin} 
+                            key={item.id} 
+                            item={item} 
+                            setItemOrders={setItemOrders} 
+                            itemOrders={itemOrders} 
+                            itemInstructions={itemInstructions} 
+                            setItemInstructions={setItemInstructions} 
+                            setAddedItemPrice={setAddedItemPrice} />)}
+            {indexedItems.length === 0 && 
+            <div className="ubuntu-bold h-80 w-full text-center text-3xl flex justify-center items-center">
+                No items found
+            </div>}
          </div>
         <div className="flex flex-row gap-3 mt-12">
-            <Pagination color="black" className="bg-white p-2 rounded-sm border-2" count={Math.ceil(indexedItems.length / (pageSize || ITEMS_PER_PAGE))} variant="outlined" shape="rounded" page={itemsPage} onChange={(event, value) => setItemsPage(value)} />
+            <Pagination 
+            color="black" 
+            className="bg-white p-2 rounded-sm border-2" 
+            count={Math.ceil(indexedItems.length / (pageSize || ITEMS_PER_PAGE))} 
+            variant="outlined" 
+            shape="rounded" 
+            page={itemsPage} 
+            onChange={(event, value) => setItemsPage(value)} />
         </div>
     </>
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getAllOrderedItems } from '../api/items';
-import { orderItemStatusPriority, orderColourMap, bumpItemStatusMap } from '../utils/const';
-import { bumpOrderItemStatus } from '../api/items';
+import { getAllOrderedItems } from '@/api/items';
+import { orderItemStatusPriority, orderColourMap, bumpItemStatusMap } from '@/utils/const';
+import { bumpOrderItemStatus } from '@/api/items';
 import {toast, Toaster} from 'react-hot-toast';
 
 export function ItemQueue() {
@@ -66,10 +66,14 @@ export function ItemQueue() {
                             <td className="px-3 truncate">{item.instructions || "No instructions"}</td>
                             <td className="px-3">{new Date(item.issued_at).toLocaleString()}</td>
                             <td className="px-3">
-                                <a className="text-bold order-link" href={`/order/${item.order_id}`}>Order #{item.order_id}</a>
+                                <a className="text-bold order-link" href={`/order/${item.order_id}`}>
+                                    Order #{item.order_id}
+                                </a>
                             </td>
                             <td className="px-3 text-lg font-bold ubuntu-bold text-center">
-                                <span className={`text-${orderColourMap ? orderColourMap[item.status] : ''}`}>{item.status}</span>
+                                <span className={`text-${orderColourMap ? orderColourMap[item.status] : ''}`}>
+                                    {item.status}
+                                </span>
                             </td>
                             <td className="px-3 py-1">
                                 <button onClick={() => bumpItemStatus(item.id)} className='!py-0'>Bump Status</button>

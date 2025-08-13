@@ -1,6 +1,6 @@
-import {createUser} from "../api/users"
+import {createUser} from "@/api/users"
 import {toast} from 'react-hot-toast'
-import { roles } from "../utils/const";
+import { roles } from "@/utils/const";
 
 export default function CreateUserForm({setUsers}) {    
 

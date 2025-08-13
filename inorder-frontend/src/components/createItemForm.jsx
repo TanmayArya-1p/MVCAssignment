@@ -1,5 +1,5 @@
 
-import { uploadImage, createItem } from "../api/items";
+import { uploadImage, createItem } from "@/api/items";
 import {toast,Toaster} from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

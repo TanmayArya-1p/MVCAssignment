@@ -12,6 +12,9 @@
     color: rgb(27, 27, 27);
     background-color: rgb(255, 243, 234);
 
+    --std-padding: 0.5rem;
+    --std-border-radius: 0.25rem
+
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -47,7 +50,7 @@ button {
     border-color: black;
     border-radius: 0.25rem;
     padding-inline: 1rem;
-    padding-block: 0.5rem;
+    padding-block: var(--std-padding);
     transition: transform 0.1s linear;
     font-family: "Ubuntu", sans-serif;
     font-weight: 500;
@@ -189,7 +192,7 @@ button:hover {
   border-radius: 0.25rem;
   text-align: center;
   font-family: "Ubuntu", sans-serif;
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem var(--std-padding);
   transition: transform 0.1s linear;
 }
 
@@ -199,7 +202,7 @@ button:hover {
   border-radius: 0.25rem;
   text-align: center;
   font-family: "Ubuntu", sans-serif;
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem var(--std-padding);
   transition: transform 0.1s linear;
 }
 
@@ -217,7 +220,7 @@ button:hover {
 
 .item-card {
   background-color: white;
-  border-radius: 0.5rem;
+  border-radius: var(--std-padding);
   border-width: 2px;
   padding: 1rem;
   box-shadow: white;
@@ -228,4 +231,11 @@ button:hover {
   height: 20rem;
   width: 12rem;
   align-items: center;
+}
+
+
+.form-div {
+  flex-direction: row;
+  display: flex;
+  justify-content: space-between;
 }

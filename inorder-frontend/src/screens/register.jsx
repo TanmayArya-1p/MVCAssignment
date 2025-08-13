@@ -120,7 +120,9 @@ export default function RegisterScreen() {
 
                     <p className="mt-10 text-center text-sm/6 -400">
                         Already have an account?{' '}
-                        <a href="/login" className="links font-semibold text-indigo-400 hover:text-indigo-300">
+                        <a href="/login" 
+                            className="links font-semibold text-indigo-400 hover:text-indigo-300"
+                        >
                             Login
                         </a>
                     </p>

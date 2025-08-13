@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
-import {modalStyle} from '../utils/const';
+import {modalStyle} from '@/utils/const';
 import { useState } from 'react';
-import { createOrder } from '../api/orders';
+import { createOrder } from '@/api/orders';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 

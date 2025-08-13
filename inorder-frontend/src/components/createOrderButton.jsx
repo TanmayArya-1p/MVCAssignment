@@ -1,4 +1,4 @@
-import AddIcon from "../icons/addIcon";
+import AddIcon from "@/icons/addIcon";
 
 export default function CreateOrderButton({setCreateModelOpen}) {
     return <>

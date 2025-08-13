@@ -27,7 +27,8 @@ export default function UnpaidBills({orders}) {
                             key={order.id}
                         >
                             <td className="px-3 text-center">
-                                <a className="order-link ubuntu-bold min-w-20" onClick={() => navigate(`/order/${order.id}`)}>
+                                <a className="order-link ubuntu-bold min-w-20" 
+                                onClick={() => navigate(`/order/${order.id}`)}>
                                     Order #{order.id}
                                 </a>
                             </td>
@@ -38,7 +39,9 @@ export default function UnpaidBills({orders}) {
                     ))}
                 </tbody>
             </table>
-            {unpaidOrders.length === 0 && <div className="ubuntu-bold w-full text-center text-lg mt-2">No Unpaid Orders</div>}
+            {unpaidOrders.length === 0 && <div className="ubuntu-bold w-full text-center text-lg mt-2">
+                No Unpaid Orders
+            </div>}
         </div>
     </>
 }

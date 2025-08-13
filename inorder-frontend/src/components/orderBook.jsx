@@ -1,11 +1,10 @@
-import { ORDERS_PER_PAGE } from "../config";
+import { ORDERS_PER_PAGE } from "@/config";
 import { Pagination } from '@mui/material';
 import { useEffect, useState } from "react";
 import OrderCard from "./orderCard";
 
 export default function OrderBook({noFilter, setOrders,orders, loading, admin}) {
 
-    const [displayedOrders, setDisplayedOrders] = useState(orders.slice(0, ORDERS_PER_PAGE));
     const [filteredOrders, setFilteredOrders] = useState(orders);
     const [ordersPage, setOrdersPage] = useState(1);
     const [tags,setTags] = useState({
@@ -24,13 +23,8 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
     },[orders])
 
     useEffect(() => {
-        setDisplayedOrders(filteredOrders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE));
         setOrdersPage(1);
     },[filteredOrders])
-
-    useEffect(() => {
-        setDisplayedOrders(filteredOrders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE));
-    }, [filteredOrders, ordersPage]);
 
     useEffect(() => {
         let selected = Object.keys(tags).filter(tag => tags[tag]);
@@ -74,11 +68,19 @@ export default function OrderBook({noFilter, setOrders,orders, loading, admin}) 
         }
 
         <div id="orders-container" className="flex flex-row mt-2 flex-wrap gap-3 items-center">
-            {displayedOrders.map(order => <OrderCard key={order.id} order={order} admin={admin} setOrders={setOrders}/>)}
-            {displayedOrders.length === 0 && <div className="ubuntu-bold text-lg mt-2">No Orders Yet</div>}
+            {filteredOrders.slice((ordersPage - 1) * ORDERS_PER_PAGE, ordersPage * ORDERS_PER_PAGE)
+            .map(order => <OrderCard key={order.id} order={order} admin={admin} setOrders={setOrders}/>)
+            }
+            {filteredOrders.length === 0 && <div className="ubuntu-bold text-lg mt-2">No Orders Yet</div>}
         </div>
         <div className="flex flex-row gap-3 mt-2">
-            <Pagination color="standard" className="bg-white rounded-sm border-2 p-2" count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} variant="outlined" shape="rounded" page={ordersPage} onChange={(event, value) => setOrdersPage(value)} />
+            <Pagination 
+            color="standard" 
+            className="bg-white rounded-sm border-2 p-2" 
+            count={Math.ceil(filteredOrders.length / ORDERS_PER_PAGE)} 
+            variant="outlined" shape="rounded" 
+            page={ordersPage} 
+            onChange={(event, value) => setOrdersPage(value)} />
         </div>
     </>
 }

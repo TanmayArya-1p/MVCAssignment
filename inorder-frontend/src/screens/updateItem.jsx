@@ -65,31 +65,34 @@ export default function UpdateItemScreen() {
     }, []);
 
     return <div className="h-screen w-screen flex flex-col">
-        <Navbar></Navbar>
+        <Navbar/>
         <title>Update Item - InOrder</title>
         <Toaster />
         <div className="mt-10 p-5 flex flex-col flex-wrap gap-10 items-center justify-center">
             <div className="ubuntu-bold text-4xl">Update Item #{itemId}</div>
             <div className="bg-white rounded-sm border-2 p-3">
                 <div className="flex flex-row gap-5">
-                    <form onSubmit={handleSubmit} id="create-item-form" className="flex flex-col gap-3 ubuntu-regular bg-white border-2 p-3 rounded" style={{width:"30rem"}}>
-                        <div className="flex flex-row justify-between">
+                    <form onSubmit={handleSubmit} 
+                        className="flex flex-col gap-3 ubuntu-regular bg-white border-2 p-3 rounded" 
+                        style={{width:"30rem"}}
+                    >
+                        <div className="form-div">
                             <div>Name:</div>
                             <input type="text" id="name" name="name" required placeholder={itemName}/>
                         </div>
-                        <div className="flex flex-row justify-between">
+                        <div className="form-div">
                             <div>Description:</div>
                             <input type="text" id="description" name="description" required placeholder={itemDescription}/>
                         </div>
-                        <div className="flex flex-row justify-between">
+                        <div className="form-div">
                             <div>Price:</div>
                             <input type="text" id="price" name="price" required placeholder={itemPrice}/>
                         </div>
-                        <div className="flex flex-row justify-between">
+                        <div className="form-div">
                             <div>Tags:</div>
                             <input type="text" id="item-tags" name="item-tags" required placeholder={itemTags}/>
                         </div>
-                        <div className="flex flex-row justify-between">
+                        <div className="form-div">
                             <div>New Image:</div>
                             <input type="file" id="file" name="image" accept="image/*" className="file-input"/>
                         </div>
