@@ -1,9 +1,9 @@
 import useAuthStore from "../../stores/authStore";
 import { roles } from "../../utils/const";
-import ChefHomeScreen from "./chef-home";
-import UserHomeScreen from "./user-home";
-import AdminHomeScreen from "./admin-home";
-import NotFoundScreen from "../../screens/not-found";
+import ChefHomeScreen from "./chefHome";
+import UserHomeScreen from "./userHome";
+import AdminHomeScreen from "./adminHome";
+import NotFoundScreen from "../../screens/notFound";
 import Navbar from "../../components/navbar";
 import { useEffect } from "react";
 import VerifySignedIn from "../../utils/verify";

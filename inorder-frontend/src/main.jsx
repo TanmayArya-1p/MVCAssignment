@@ -6,7 +6,7 @@ import LoginScreen from './screens/login'
 import LandingScreen from './screens/landing'
 import RegisterScreen from './screens/register'
 import HomeScreen from './screens/home/home'
-import NotFoundScreen from './screens/not-found'
+import NotFoundScreen from './screens/notFound'
 import OrderScreen from './screens/order'
 import ItemScreen from './screens/items'
 import Modal from 'react-modal';
