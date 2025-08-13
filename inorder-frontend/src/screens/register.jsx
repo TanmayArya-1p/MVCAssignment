@@ -64,7 +64,7 @@ export default function RegisterScreen() {
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
                                     autoComplete="username"
-                                    className="w-full bg-white rounded-sm border-2 p-2 "
+                                    className="w-full"
                                 />
                             </div>
                         </div>
@@ -84,7 +84,7 @@ export default function RegisterScreen() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     autoComplete="current-password"
-                                    className="w-full bg-white rounded-sm border-2 p-2 "
+                                    className="w-full"
                                 />
                             </div>
                         </div>
@@ -103,7 +103,7 @@ export default function RegisterScreen() {
                                     value={repeatPassword}
                                     onChange={(e) => setRepeatPassword(e.target.value)}
                                     autoComplete="current-password"
-                                    className="w-full bg-white rounded-sm border-2 p-2 "
+                                    className="w-full"
                                 />
                             </div>
                         </div>

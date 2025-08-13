@@ -69,7 +69,7 @@ export default function ItemCard({admin,setItems, item,setItemOrders,itemOrders,
                             ...prevInstructions,
                             [item.id]: e.target.value
                         }));
-                    }} className="bg-white border-2 w-45 rounded-sm mt-3 p-1 px-2" placeholder="Instructions" />
+                    }} className="w-45 mt-3 !p-0.5 !px-2" placeholder="Instructions" />
                 ) : null}
         </div>
         {(admin) && (

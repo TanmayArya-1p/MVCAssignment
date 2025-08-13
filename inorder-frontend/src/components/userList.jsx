@@ -111,7 +111,7 @@ export default function UserList({ users,setUsers, authUserID }) {
     <div className="flex flex-col gap-2 w-fit max-w-200 p-2">
         <div className="flex flex-row gap-2 items-center mt-3 bg-white border-2 rounded-sm p-2 w-full">
                 <SearchIcon className="size-6 text-gray-500" />
-                <input type="text" id="search-input" className="w-full focus:outline-0" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Username"/>
+                <input type="text" id="search-input" className="w-full" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Username"/>
         </div>
         <div id="tags-container" className="flex flex-row gap-2 items-center w-fit">
             <div className="text-lg ubuntu-bold">

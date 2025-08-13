@@ -136,7 +136,7 @@ export default function ItemMenu({itemOrders,setItemOrders,itemInstructions,setI
         <div id="query-container">
             <div className="flex flex-row gap-2 items-center mt-3 bg-white border-2 rounded-sm p-2 w-fit">
                 <SearchIcon className="size-6 text-gray-500" />
-                <input type="text" id="search-input" value={query} onChange={handleSearch} placeholder="Search Items" className="focus:outline-0"/>
+                <input type="text" id="search-input" value={query} onChange={handleSearch} placeholder="Search Items"/>
             </div>
         </div>
 

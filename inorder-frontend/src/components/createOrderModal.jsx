@@ -37,7 +37,7 @@ export default function CreateOrderModal({ isOpen, setIsOpen }) {
             <div className='ubuntu-bold text-lg text-center'>Create Order</div>
             <div>
                 <div className='flex flex-row gap-5 mt-5 align-center justify-center'>
-                    <input type="number" placeholder='Table No' value={tableNo} className='bg-white p-2 border-2' onChange={(e) => setTableNo(e.target.value>=0 ? e.target.value : 1)} />
+                    <input type="number" placeholder='Table No' value={tableNo} onChange={(e) => setTableNo(e.target.value>=0 ? e.target.value : 1)} />
                     <button onClick={createOrderHandler}>Create</button>
                     <button onClick={() => setIsOpen(false)}>Close</button>
                 </div>

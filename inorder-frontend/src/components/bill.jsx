@@ -125,7 +125,7 @@ export default function Bill({order, setBillLoading, billLoading, role}) {
                                     <input type="number" id="paid-amount" value={amountPaid}
                                     placeholder="Amount Paid" 
                                     onChange={(e) => setAmountPaid(e.target.value >= 0 ? e.target.value : 0)}
-                                    className="mx-5 w-40 focus:outline-0 bg-white p-2 rounded-sm border-2" />
+                                    className="mx-5 w-30" />
                                 </>
                             )}
                             {order.status==="paid" && (

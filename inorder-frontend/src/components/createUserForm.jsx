@@ -32,10 +32,10 @@ export default function CreateUserForm({setUsers}) {
         <form onSubmit={handleCreate} className="space-y-4 flex flex-col gap-2 justify-center align-middle">
             <div className="flex flex-row gap-2 justify-center align-middle">
                 <div>
-                    <input type="text" id="username" name="username" placeholder="Username" required className="border p-2 b-2 rounded-sm w-full ubuntu-regular"/>
+                    <input type="text" id="username" name="username" placeholder="Username" required/>
                 </div>
                 <div>
-                    <input type="password" id="password" name="password" placeholder="Password" required className="border p-2 b-2 rounded-sm w-full ubuntu-regular"/>
+                    <input type="password" id="password" name="password" placeholder="Password" required/>
                 </div>
                 <div>
                     <select id="role" name="role" required className="border p-2 rounded w-fit ubuntu-regular">

@@ -75,25 +75,25 @@ export default function UpdateItemScreen() {
                     <form onSubmit={handleSubmit} id="create-item-form" className="flex flex-col gap-3 ubuntu-regular bg-white border-2 p-3 rounded" style={{width:"30rem"}}>
                         <div className="flex flex-row justify-between">
                             <div>Name:</div>
-                            <input type="text" id="name" name="name" className="border-2 rounded-sm p-1 px-2"required placeholder={itemName}/>
+                            <input type="text" id="name" name="name" required placeholder={itemName}/>
                         </div>
                         <div className="flex flex-row justify-between">
                             <div>Description:</div>
-                            <input type="text" id="description" name="description" className="border-2 rounded-sm p-1 px-2" required placeholder={itemDescription}/>
+                            <input type="text" id="description" name="description" required placeholder={itemDescription}/>
                         </div>
                         <div className="flex flex-row justify-between">
                             <div>Price:</div>
-                            <input type="text" id="price" name="price" className="border-2 rounded-sm p-1 px-2" required placeholder={itemPrice}/>
+                            <input type="text" id="price" name="price" required placeholder={itemPrice}/>
                         </div>
                         <div className="flex flex-row justify-between">
                             <div>Tags:</div>
-                            <input type="text" id="item-tags" name="item-tags" className="border-2 rounded-sm p-1 px-2" required placeholder={itemTags}/>
+                            <input type="text" id="item-tags" name="item-tags" required placeholder={itemTags}/>
                         </div>
                         <div className="flex flex-row justify-between">
                             <div>New Image:</div>
                             <input type="file" id="file" name="image" accept="image/*" className="file-input"/>
                         </div>
-                        <button type="submit" className="sbutton ubuntu-bold">Update Item</button>
+                        <button type="submit" className="ubuntu-bold">Update Item</button>
                     </form>
                     <div className="flex items-center justify-center p-5">
                         <img src={API_URL+"/public"+itemImage} alt="Item Image" className="w-80 max-h-80"/>

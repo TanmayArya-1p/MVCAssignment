@@ -66,7 +66,7 @@ export default function LoginScreen() {
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
                                     autoComplete="username"
-                                    className="w-full bg-white rounded-sm border-2 p-2 "
+                                    className="w-full "
                                 />
                             </div>
                         </div>
@@ -87,7 +87,7 @@ export default function LoginScreen() {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                     autoComplete="current-password"
-                                    className="w-full bg-white rounded-sm border-2 p-2 "
+                                    className="w-full"
                                 />
                             </div>
                         </div>
