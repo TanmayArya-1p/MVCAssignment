@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom' // Add this import
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './index.css'
 import LoginScreen from './screens/login'
 import LandingScreen from './screens/landing'
