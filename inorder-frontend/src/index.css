@@ -6,6 +6,16 @@
 @source inline("text-teal-500");
 
 
+
+@theme {
+    --bg-peach: rgb(255, 243, 234);
+    --std-padding: 0.5rem;
+    --std-border-radius: 0.25rem;
+    --std-transition: transform 0.1s linear;
+}
+
+
+
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
@@ -13,11 +23,7 @@
 
     color-scheme: light;
     color: rgb(27, 27, 27);
-    background-color: rgb(255, 243, 234);
-
-    --std-padding: 0.5rem;
-    --std-border-radius: 0.25rem;
-    --std-transition: transform 0.1s linear;
+    background-color: var(--bg-peach);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
