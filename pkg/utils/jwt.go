@@ -13,7 +13,7 @@ type JSONWebToken string
 
 type JWTClaimVerification struct {
 	Expired bool
-	Content map[string]interface{}
+	Content map[string]any
 }
 
 func CreateAuthToken(user *types.User) (JSONWebToken, error) {

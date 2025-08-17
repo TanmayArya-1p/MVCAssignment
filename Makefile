@@ -1,6 +1,6 @@
 dsn := $(shell cat .dsn)
 
-.PHONY: db-down db-up run build clean up
+.PHONY: db-down db-up run build clean up down bench
 
 help:
 	@echo "Commands:"
@@ -13,6 +13,7 @@ help:
 	@echo " make quickstart - Start the server with dummy data (0 Configuration)"
 	@echo " make up - Start the server without dummy data"
 	@echo " make down - Stop the server"
+	@echo " make bench - Run benchmarks using apache workbench on GET: /api/items && POST: /api/orders"
 
 clean:
 	rm -f inorder
@@ -44,3 +45,6 @@ build:
 
 test:
 	@env INORDER_CONFIG=../../config.yaml go test -v ./...
+
+
+bench:

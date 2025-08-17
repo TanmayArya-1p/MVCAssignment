@@ -17,13 +17,7 @@ import (
 )
 
 func GetAllItemsController(w http.ResponseWriter, r *http.Request) {
-	pg, err := utils.Paginate(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	items, err := models.GetAllItems(pg)
+	items, err := models.GetAllItems()
 	if err != nil {
 		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
 		return

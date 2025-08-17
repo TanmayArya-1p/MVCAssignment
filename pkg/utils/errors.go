@@ -13,4 +13,5 @@ var (
 	ErrOrderNotFound = errors.New("order not found")
 	ErrInvalidLimit  = errors.New("invalid limit parameter")
 	ErrInvalidOffset = errors.New("invalid offset parameter")
+	ErrCacheFull     = errors.New("cache is full")
 )

@@ -14,6 +14,7 @@ func CreateTag(name types.TagName) (*types.Tag, error) {
 	if err != nil {
 		return nil, err
 	}
+	TagsCache.Delete()
 	return &types.Tag{ID: types.TagID(id), Name: name}, nil
 }
 
@@ -40,6 +41,7 @@ func DeleteTag(tag *types.Tag) error {
 	if err != nil {
 		return err
 	}
+	TagsCache.Delete()
 	return nil
 }
 
@@ -64,6 +66,8 @@ func GiveItemTagByName(tag_name types.TagName, itemID types.ItemID) error {
 		if err != nil {
 			return err
 		}
+		TagsCache.Delete()
+
 	}
 	return GiveItemTag(tag, itemID)
 }
@@ -101,6 +105,10 @@ func DeleteAllItemTags(itemID types.ItemID) error {
 }
 
 func GetAllTags() ([]*types.Tag, error) {
+	if val := TagsCache.Get(); val != nil {
+		return (*val), nil
+	}
+
 	var tags []*types.Tag = make([]*types.Tag, 0)
 	rows, err := db.Query("SELECT id,name FROM tags")
 	if err != nil {
@@ -123,6 +131,9 @@ func GetAllTags() ([]*types.Tag, error) {
 			break
 		}
 	}
+
+	TagsCache.Set(tags)
+
 	return tags, nil
 }
 

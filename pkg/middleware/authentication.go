@@ -7,6 +7,7 @@ import (
 	"inorder/pkg/types"
 	"inorder/pkg/utils"
 	"net/http"
+	"time"
 )
 
 func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Handler {
@@ -18,6 +19,14 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 			authToken, err = utils.ExtractAuthToken(r)
 			if err != nil {
 				http.Error(w, "Unauthorized: "+err.Error(), http.StatusUnauthorized)
+				return
+			}
+
+			if val := authTokenCache.Get(authToken); val != nil {
+				ctx := context.WithValue(r.Context(), types.AuthTokenContextKey, authToken)
+				usr := val.(types.User)
+				ctx = context.WithValue(r.Context(), types.UserContextKey, &usr)
+				next.ServeHTTP(w, r.WithContext(ctx))
 				return
 			}
 
@@ -76,11 +85,17 @@ func AuthenticationMiddleware(RefreshAuthToken bool) func(http.Handler) http.Han
 					Secure:   true,
 					Path:     "/api/auth",
 				})
-				ctx = context.WithValue(ctx, "authToken", newAuthToken)
-				ctx = context.WithValue(ctx, "refreshToken", newRefreshToken)
+				ctx = context.WithValue(ctx, types.AuthTokenContextKey, newAuthToken)
+				ctx = context.WithValue(ctx, types.RefreshTokenContextKey, newRefreshToken)
 			} else {
-				ctx = context.WithValue(ctx, "authToken", authToken)
+				ctx = context.WithValue(ctx, types.AuthTokenContextKey, authToken)
 			}
+
+			expClaim := claim.Content["exp"].(float64)
+			expUnix := time.Unix(int64(expClaim), 0)
+			ttl := time.Until(expUnix)
+			authTokenCache.Set(authToken, *user, ttl)
+
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

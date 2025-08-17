@@ -8,6 +8,7 @@ import (
 	"inorder/pkg/utils"
 	"slices"
 	"strings"
+	"time"
 )
 
 func CreateItem(item *types.Item) (types.ItemID, error) {
@@ -63,10 +64,19 @@ func DeleteItem(item *types.Item) error {
 	if err != nil {
 		return err
 	}
+	ItemsCache.Delete(item.ID)
+	MenuCache.Delete()
+
 	return nil
 }
 
 func GetItemByID(itemID types.ItemID) (*types.Item, error) {
+
+	if cacheVal := ItemsCache.Get(itemID); cacheVal != nil {
+		cacheItem := cacheVal.(types.Item)
+		return &(cacheItem), nil
+	}
+
 	var row *sql.Row
 	var err error
 
@@ -88,16 +98,20 @@ func GetItemByID(itemID types.ItemID) (*types.Item, error) {
 	for _, tag := range tempTags {
 		item.Tags = append(item.Tags, tag.Name)
 	}
+	ItemsCache.Set(item.ID, item, -1*time.Second)
 	return &item, err
 }
 
-func GetAllItems(page types.Page) ([]*types.Item, error) {
+func GetAllItems() ([]*types.Item, error) {
+	if val := MenuCache.Get(); val != nil {
+		return (*val), nil
+	}
 	var rows *sql.Rows
 	var err error
 
 	var otpt []*types.Item = make([]*types.Item, 0)
 
-	rows, err = db.Query("SELECT id,name, description, price, image FROM items LIMIT ? OFFSET ?", page.Limit, page.Offset)
+	rows, err = db.Query("SELECT id,name, description, price, image FROM items")
 	if err != nil {
 		return otpt, err
 	}
@@ -106,7 +120,7 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 		return otpt, nil
 	}
 	for {
-		var curr types.Item
+		var curr types.Item = *new(types.Item)
 		rows.Scan(&curr.ID, &curr.Name, &curr.Description, &curr.Price, &curr.Image)
 
 		var tempTags []*types.Tag = make([]*types.Tag, 0)
@@ -126,11 +140,11 @@ func GetAllItems(page types.Page) ([]*types.Item, error) {
 			break
 		}
 	}
+	MenuCache.Set(otpt)
 	return otpt, nil
 }
 
 func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
-
 	var inPl []string
 	for _ = range len(tags) {
 		inPl = append(inPl, "?")
@@ -141,7 +155,7 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 	var prep string = strings.Join(inPl, ",")
 	var queryString string = fmt.Sprintf("SELECT DISTINCT  items.id,items.name,items.description,items.price,items.image FROM items INNER JOIN tag_rel ON items.id=tag_rel.item_id LEFT JOIN tags ON tags.id=tag_rel.tag_id WHERE tags.name IN (%s)", prep)
 
-	var args []interface{}
+	var args []any
 	for _, tag := range tags {
 		args = append(args, tag)
 	}
@@ -181,7 +195,6 @@ func GetAllItemsOfTag(tags []types.TagName) ([]*types.Item, error) {
 			andRes = append(andRes, item)
 		}
 	}
-
 	return andRes, nil
 }
 
@@ -226,5 +239,7 @@ func UpdateItem(item *types.Item, upd *types.UpdateItemInstruction) error {
 		}
 		item.Tags = upd.Tags
 	}
+	ItemsCache.Set(item.ID, item, -1*time.Second)
+	MenuCache.Delete()
 	return err
 }

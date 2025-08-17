@@ -160,8 +160,8 @@ func RefreshController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]any{
 		"message":      "tokens refreshed",
-		"authToken":    r.Context().Value("authToken"),
-		"refreshToken": r.Context().Value("refreshToken"),
+		"authToken":    r.Context().Value(types.AuthTokenContextKey),
+		"refreshToken": r.Context().Value(types.RefreshTokenContextKey),
 	})
 }
 
