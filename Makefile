@@ -38,13 +38,10 @@ run:
 	@cat logo.txt
 	@echo "\n"
 
-	go run cmd/main.go
+	go run -ldflags="-s -w" cmd/main.go
 
 build:
-	go build -o inorder cmd/main.go
+	go build -o inorder -ldflags="-s -w" cmd/main.go
 
 test:
 	@env INORDER_CONFIG=../../config.yaml go test -v ./...
-
-
-bench:

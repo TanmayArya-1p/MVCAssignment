@@ -59,7 +59,7 @@ func (c *CacheController) Set(key any, value any, customTTL time.Duration) error
 
 	prev, loaded := c.cache.Swap(key, CacheEntry{
 		Value:     value,
-		ExpiresAt: time.Now().Add(c.TTL),
+		ExpiresAt: time.Now().Add(ttl),
 		Ticker: time.AfterFunc(ttl, func() {
 			c.Delete(key)
 		}),
