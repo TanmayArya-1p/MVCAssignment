@@ -9,6 +9,8 @@ Potentially high traffic routes are stress tested using apache workbench to simu
 ab -n 100000 -c 1000 -H "Authorization: Bearer <AuthToken>" http://localhost:4000/api/<whatever-route>
 ```
 
+**To replicate these benchmarks follow the steps [here](#replicating-benchmarks)**
+
 ## GET /api/items : Fetches all items on the menu
 
 ```
@@ -184,3 +186,15 @@ Percentage of the requests served within a certain time (ms)
 ### Optimizations Currently Implemented
 - In-memory cache for critical routes
 - Cached authentication middleware
+
+
+# Replicating Benchmarks
+
+*Prerequisites: docker, go, ApacheBench*
+
+***Disclaimer: The following steps describe replicating the above benchmarks using docker. Docker incurs an additional cost due to its networking stack and therefore can produce worse results.***
+
+1. #### Clone the Repo
+2. #### Run `make bench`
+
+`make bench` loads dummy data into the database and performs 2/3 of the tests mentioned above.

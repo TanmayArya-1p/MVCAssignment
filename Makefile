@@ -2,6 +2,9 @@ dsn := $(shell cat .dsn)
 
 .PHONY: db-down db-up run build clean up down bench
 
+.ONESHELL:
+SHELL := /bin/bash
+
 help:
 	@echo "Commands:"
 	@echo " make run - Run the InOrder server"
@@ -34,9 +37,9 @@ db-up:
 	migrate -path database/migrations/ -database "mysql://${dsn}" -verbose up
 
 run:
-	@echo "\n"
+	@echo ""
 	@cat logo.txt
-	@echo "\n"
+	@echo ""
 
 	go run -ldflags="-s -w" cmd/main.go
 
@@ -45,3 +48,22 @@ build:
 
 test:
 	@env INORDER_CONFIG=../../config.yaml go test -v ./...
+
+bench:
+	$(MAKE) quickstart
+	@echo "Waiting for 10 seconds before starting benchmark"
+	@sleep 10
+	@echo "Logging in to get AuthToken"
+	@AUTH=$$(curl -s -X POST http://localhost:4000/api/auth/login -H "Content-Type: application/json" -d '{"username":"admin", "password":"admin"}' | jq -r '.authToken');
+	@echo "Extracted AuthToken: $${AUTH}";
+	@echo ""
+	@echo "Running Apache Benchmark on GET /api/items"
+	ab -n 100000 -c 1000 -H "Authorization: Bearer $$AUTH" http://localhost:4000/api/items;
+	@echo ""
+	@echo "Waiting for 10 seconds before starting next benchmark"
+	@sleep 10;
+	@echo ""
+	@echo "Running Apache Benchmark on POST /api/orders";
+	@echo ""
+	ab -l -n 100000 -c 1000 -p ./benchmark/create_order_body.json -T application/json  -H "Authorization: Bearer $$AUTH" http://localhost:4000/api/orders
+	$(MAKE) down
