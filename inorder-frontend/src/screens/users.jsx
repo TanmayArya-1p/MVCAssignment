@@ -41,7 +41,11 @@ export default function UserScreen() {
 
 
     useEffect(() => {
-        setUserID(jwtDecode(authToken).userID);
+        async function verifyUser() {
+            await authToken;
+            setUserID(jwtDecode(authToken).userID);
+        }
+        verifyUser()
     }, [authToken]);
 
     if(loading) {

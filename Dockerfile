@@ -11,5 +11,6 @@ COPY --from=0 /app/inorder .
 COPY config.yaml .
 COPY logo.txt .
 RUN chmod +x /app/inorder
+ENV INORDER_PORT=4000
 EXPOSE 4000
 CMD ["/app/inorder"]

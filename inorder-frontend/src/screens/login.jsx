@@ -23,6 +23,7 @@ export default function LoginScreen() {
             setAuthToken(resp.authToken);
             setRefreshToken(resp.refreshToken);
             setRole(jwtDecode(resp.authToken).role);
+
             toast.success("Successfully logged in");
             setTimeout(() => {
                 navigate("/home");
